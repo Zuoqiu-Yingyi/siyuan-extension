@@ -5,7 +5,11 @@ import DragBall from "./components/DragBall.vue";
 
 <template>
     <HelloWorld msg="Vite + Vue" />
-    <DragBall style="z-index: 1;" :top="'2em'" :right="'2em'">
+    <DragBall
+        style="z-index: 1"
+        :top="'2em'"
+        :right="'2em'"
+    >
         <img
             src="./assets/siyuan-32.png"
             alt="siyuan logo"

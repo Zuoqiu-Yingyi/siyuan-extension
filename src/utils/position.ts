@@ -3,7 +3,7 @@ export type {
 };
 export {
     Position,
-}
+};
 
 interface IPosition {
     top: number; // 拖拽元素上方距离 (单位: px)

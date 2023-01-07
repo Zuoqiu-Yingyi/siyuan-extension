@@ -8,7 +8,7 @@ enum MODE {
     desktop = 'desktop',
     export = 'export',
     mobile = 'mobile',
-};
+}
 
 /**
  * @params server: 思源服务 URL 对象
@@ -43,9 +43,9 @@ async function getSiyuanStyleURL(server: URL, token: string, mode: MODE = MODE.d
         // console.error(response);
         throw new Error(response.statusText);
     }
-    
+
     const html = await response.text();
-    
+
     /* 在 index.html 中匹配 base.*.css 文件名 */
     const result = /<link href="(?<style>base\.[0-9a-f]{20}\.css)" rel="stylesheet">/.exec(html);
     if (!result?.groups?.style) {
