@@ -15,6 +15,7 @@ import zh_Hant from "./locales/zh-Hant";
 
 const app = createApp(App);
 
+/* 语言包 */
 const messages = {
     en,
 
@@ -27,7 +28,19 @@ const messages = {
     "zh-HK": zh_Hant,
 };
 
-const locale = navigator.language.startsWith("en") ? "en" : navigator.language;
+let locale: string = navigator.language;
+switch (true) {
+    case locale in messages:
+        break;
+    case locale.startsWith("en"):
+        locale = "en";
+        break;
+    case locale.startsWith("zh"):
+        locale = "zh";
+        break;
+    default:
+        break;
+}
 
 const i18n = createI18n({
     locale, // set locale
@@ -35,7 +48,7 @@ const i18n = createI18n({
     messages,
 });
 
-app.use(i18n);
-app.use(ArcoVue);
-app.use(ArcoVueIcon);
+app.use(i18n); // 国际化
+app.use(ArcoVue); // Arco 组件库
+app.use(ArcoVueIcon); // Arco 组件库图标
 app.mount("#app");

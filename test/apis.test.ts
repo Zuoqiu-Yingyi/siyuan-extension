@@ -5,16 +5,21 @@ import {
 } from "vitest";
 
 import {
+    SERVER,
     TOKEN,
 } from './custom';
 
-describe('import vue components', () => {
+describe('APIs Test', async () => {
+    const siyuan = await import('../src/utils/siyuan');
+    const client = new siyuan.SiyuanClient(new URL(SERVER), TOKEN);
     test('getSiyuanStyleURL', async () => {
-        const apis = await import('../src/utils/apis');
-        const server = new URL('http://localhost:6806');
-        for (const mode of Object.values(apis.MODE)) {
-            const style_url = await apis.getSiyuanStyleURL(server, TOKEN, mode);
+        for (const mode of Object.values(siyuan.MODE)) {
+            const style_url = await client.getSiyuanStyleURL(mode);
             expect(/base(\.[0-9a-f]+)?\.css$/.test(style_url?.pathname.split('/').pop() ?? '')).toEqual(true);
         }
-    })
+    });
+    test('lsNotebooks', async () => {
+        const response = await client.lsNotebooks();
+        expect(response?.code).toEqual(0);
+    });
 })

@@ -5,3 +5,4 @@
 - 添加 `.eslintrc.cjs`, `.prettierignore` 与 `.prettierrc.toml` 配置文件 | Add `.eslintrc.cjs`, `.prettierignore` and `.prettierrc.toml` config files.
 - 实现搜索抽屉组件 `SearchDrawer` | Implement search drawer component `SearchDrawer`.
 - 支持 `i18n` | Support `i18n`.
+- 实现用户设置中的 `连接思源客户端` 组件 | Implement `Connect SiYuan Client` component in user settings.
