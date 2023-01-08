@@ -6,9 +6,13 @@ import MainDrawerVue from "./components/MainDrawer.vue";
 import { ref, provide, reactive, watch } from "vue";
 import { IConfig } from "./types/config";
 import { SiyuanClient } from "./utils/siyuan";
+import { Status } from "./utils/status";
 
 const visible = ref(false); // 抽屉是否可见
 const size = ref(0.5); // 抽屉宽度占比
+const status = ref(Status.normal); // 连接状态
+const message = ref(""); // 连接状态消息
+const version = ref(""); // 内核版本
 
 const config: IConfig = reactive({
     server: {
@@ -19,7 +23,7 @@ const config: IConfig = reactive({
         url: new URL("http://localhost:6806"),
     },
 });
-const client = new SiyuanClient(config.server.url, config.server.token);
+const client = new SiyuanClient(config.server.url, config.server.token, status, message);
 
 watch(
     () => config.server,
@@ -29,6 +33,16 @@ watch(
         config.server.url.port = String(newVal.port);
 
         client.update(config.server.url, config.server.token);
+        setTimeout(async () => {
+            try {
+                const r = await client.version();
+                version.value = `v${r.data}`;
+                status.value = Status.normal;
+            } catch (error) {
+                version.value = "";
+                status.value = Status.danger;
+            }
+        }, 0);
     },
     {
         immediate: true, // 立即执行一次
@@ -40,6 +54,9 @@ watch(
 provide("visible", visible);
 provide("config", config);
 provide("client", client);
+provide("status", status);
+provide("message", message);
+provide("version", version);
 </script>
 
 <template>

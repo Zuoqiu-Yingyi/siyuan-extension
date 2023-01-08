@@ -1,6 +1,6 @@
 <!-- REF [Arco Design Vue](https://arco.design/vue/component/tabs) -->
 <script setup lang="ts">
-import { inject } from "vue";
+import { inject, watch } from "vue";
 import { VueI18nTranslation } from "vue-i18n";
 import { Notification } from "@arco-design/web-vue";
 import { IConfig } from "./../types/config";
@@ -22,13 +22,20 @@ async function testSiyuanServer($t: VueI18nTranslation): Promise<void> {
     } catch (e) {
         console.warn(e);
         Notification.error({
-            title: $t('conect_siyuan_client'),
+            title: $t("conect_siyuan_client"),
             content: String(e),
             closable: true,
             duration: 3000,
         });
     }
 }
+
+watch(
+    () => config.server.protocol,
+    (protocol: string) => {
+        config.server.port = protocol === "https" ? 443 : 6806;
+    },
+);
 </script>
 
 <template>

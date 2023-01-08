@@ -18,7 +18,9 @@ export default {
     settings: "User Settings",
     siyuan: "SiYuan",
     siyuan_server: "@:siyuan@:server",
+    status: "Status",
     success: "Success",
+    status_server: "@:server @:status",
     test: "Test",
     token: "API Token"
 };

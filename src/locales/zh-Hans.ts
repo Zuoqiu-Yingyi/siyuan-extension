@@ -18,6 +18,8 @@ export default {
     settings: "用户设置",
     siyuan: "思源",
     siyuan_server: "@:siyuan@:server",
+    status: "状态",
+    status_server: "@:server@:status",
     success: "成功",
     test: "测试",
     token: "API Token"

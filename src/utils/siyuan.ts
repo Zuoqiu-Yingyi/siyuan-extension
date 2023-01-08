@@ -3,8 +3,11 @@ export {
     MODE,
 };
 
+import { Ref } from "vue";
+import { Status } from "./status";
 import {
     IResponse,
+    IResponse_version,
     IResponse_lsNotebooks,
 } from "../types/siyuan";
 
@@ -27,6 +30,8 @@ class SiyuanClient {
     constructor(
         public url: URL,
         public token: string,
+        protected _status?: Ref<Status>,
+        protected _message?: Ref<string>,
     ) {
         this.headers = {
             Authorization: `Token ${this.token}`,
@@ -43,8 +48,19 @@ class SiyuanClient {
         this.headers.Authorization = `Token ${this.token}`;
     }
 
-    /* 获得思源样式文件 URL */
+    /* 更新状态 */
+    public set status(status: Status) {
+        if (this._status?.value) {
+            this._status.value = status;
+        }
+    }
+    public set message(message: string) {
+        if (this._message?.value !== undefined) {
+            this._message.value = message;
+        }
+    }
 
+    /* 获得思源样式文件 URL */
     public async getSiyuanStyleURL(mode: MODE = MODE.desktop): Promise<URL> {
         const style_url = new URL(this.url);
         switch (mode) {
@@ -84,10 +100,15 @@ class SiyuanClient {
         }
     }
 
+    /* 获得内核版本 */
+    public async version(): Promise<IResponse_version> {
+        const response = await this._request("/api/system/version") as IResponse_version;
+        return response;
+    }
 
     /* 列出笔记本信息 */
     public async lsNotebooks(): Promise<IResponse_lsNotebooks> {
-        const response = await this._request("/api/notebook/lsNotebooks");
+        const response = await this._request("/api/notebook/lsNotebooks") as IResponse_lsNotebooks;
         return response;
     }
 
@@ -95,26 +116,47 @@ class SiyuanClient {
         pathname: string,
         data: object = {},
     ): Promise<IResponse> {
+        this.status = Status.processing;
+        this.message = "";
+
         this.url.pathname = pathname;
-        const response = await fetch(
-            this.url.href,
-            {
-                body: JSON.stringify(data),
-                method: this.method,
-                headers: this.headers,
-            },
-        );
+        let response;
+
+        try {
+            response = await fetch(
+                this.url.href,
+                {
+                    body: JSON.stringify(data),
+                    method: this.method,
+                    headers: this.headers,
+                },
+            );
+        } catch (error) {
+            this.status = Status.danger;
+            this.message = String(error);
+            throw error;
+        }
+
         if (response.ok) {
             const body: IResponse = await response.json();
+            
             if (body.code === 0) {
+                this.status = Status.success;
+                this.message = body.msg;
                 return body;
             }
             else {
-                throw new Error(body.msg);
+                const error = new Error(body.msg);
+                this.status = Status.warning;
+                this.message = String(error);
+                throw error;
             }
         }
         else {
-            throw new Error(response.statusText);
+            const error = new Error(response.statusText);
+            this.status = Status.danger;
+            this.message = String(error);
+            throw error;
         }
     }
 }

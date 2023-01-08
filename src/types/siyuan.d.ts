@@ -2,7 +2,7 @@
 export interface IResponse {
     code: number;
     msg: string;
-    data: object | null;
+    data: object | string | number | null;
 }
 
 // /api/notebook/lsNotebooks
@@ -23,4 +23,12 @@ export interface IResponse_lsNotebooks {
     code: number;
     msg: string;
     data: Data;
+}
+
+// /api/system/version
+
+export interface IResponse_version {
+	code: number;
+	msg: string;
+	data: string;
 }
