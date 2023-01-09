@@ -3,17 +3,18 @@ import HelloWorldVue from "./components/HelloWorld.vue";
 import DragBallVue from "./components/DragBall.vue";
 import MainDrawerVue from "./components/MainDrawer.vue";
 
-import { ref, provide, reactive, watch } from "vue";
+import { ref, provide, reactive, inject, watch } from "vue";
+import { I18n } from "vue-i18n";
+
 import { IConfig } from "./types/config";
-import { SiyuanClient } from "./utils/siyuan";
+
+import { GroupBy, Method, OrderBy, SiyuanClient } from "./utils/siyuan";
 import { Status } from "./utils/status";
+import { mapLabel } from "./utils/language";
 
-const visible = ref(false); // 抽屉是否可见
-const size = ref(0.5); // 抽屉宽度占比
-const status = ref(Status.normal); // 连接状态
-const message = ref(""); // 连接状态消息
-const version = ref(""); // 内核版本
+const i18n = inject("i18n") as I18n;
 
+/* 用户配置 */
 const config: IConfig = reactive({
     server: {
         protocol: "http",
@@ -22,7 +23,54 @@ const config: IConfig = reactive({
         token: "",
         url: new URL("http://localhost:6806"),
     },
+    search: {
+        groupBy: GroupBy.group,
+        method: Method.keyword,
+        orderBy: OrderBy.sortByRankDesc,
+        paths: [],
+        types: {
+            heading: true,
+            paragraph: true,
+            mathBlock: true,
+            table: true,
+            codeBlock: true,
+            htmlBlock: true,
+
+            document: true,
+            superBlock: false,
+            blockquote: false,
+            list: false,
+            listItem: true,
+        },
+    },
+    other: {
+        language: {
+            tag: i18n.global.locale,
+            label: "",
+        },
+        languages: [
+            {
+                tag: "en",
+                label: "English",
+            },
+            {
+                tag: "zh-Hans",
+                label: "简体中文",
+            },
+            {
+                tag: "zh-Hant",
+                label: "繁体中文",
+            },
+        ],
+    },
 });
+
+const visible = ref(false); // 抽屉是否可见
+const size = ref(0.5); // 抽屉宽度占比
+const status = ref(Status.normal); // 连接状态
+const message = ref(""); // 连接状态消息
+const version = ref(""); // 内核版本
+
 const client = new SiyuanClient(config.server.url, config.server.token, status, message);
 
 watch(
@@ -50,9 +98,21 @@ watch(
     },
 );
 
+watch(
+    () => config.other.language.tag,
+    tag => {
+        config.other.language.label = mapLabel(tag);
+        // @ts-ignore
+        i18n.global.locale = tag in i18n.global.messages ? tag : i18n.global.fallbackLocale;
+    },
+    {
+        immediate: true, // 立即执行一次
+    },
+);
+
 // REF: [依赖注入 | Vue.js](https://cn.vuejs.org/guide/components/provide-inject.html#provide)
-provide("visible", visible);
 provide("config", config);
+provide("visible", visible);
 provide("client", client);
 provide("status", status);
 provide("message", message);

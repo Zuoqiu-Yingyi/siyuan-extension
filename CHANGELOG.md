@@ -7,3 +7,4 @@
 - 支持 `i18n` | Support `i18n`.
 - 实现用户设置中的 `连接思源客户端` 组件 | Implement `Connect SiYuan Client` component in user settings.
 - 主界面显示服务状态 | Show service status in main interface.
+- 实现用户设置中的 `搜索设置` 与 `其他设置` 组件 | Implement `Search Settings` and `Additional Settings` components in User Settings.

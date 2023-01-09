@@ -9,8 +9,72 @@ import {
     IResponse,
     IResponse_version,
     IResponse_lsNotebooks,
+    IPayload_fullTextSearchBlock,
+    IResponse_fullTextSearchBlock,
 } from "../types/siyuan";
 
+/* 叶子块 */
+export enum Leaf {
+    /* 可搜索时过滤 */
+    h, // 标题块
+    p, // 段落块
+    m, // 公式块
+    t, // 表格块
+    c, // 代码块
+    html, // HTML 块
+
+    /* 不可搜索时过滤 */
+    tb, // 分隔线
+    audio, // 音频块
+    video, // 视频块
+    iframe, // iframe
+    widget, // 挂件块
+    query_embed, // 嵌入块
+}
+
+/* 容器块 */
+export enum Container {
+    d, // 文档块
+    s, // 超级块
+    b, // 引述块
+    l, // 列表块
+    i, // 列表项
+}
+
+/**
+ * 搜索方案
+ * REF: https://github.com/siyuan-note/siyuan/blob/145243e0583b7259fed143833a648e61f8863528/kernel/api/search.go#L221
+ */
+export enum Method {
+    keyword, // 关键字
+    querySyntax, // 查询语法
+    sql, // SQL
+    regex, // 正则表达式
+}
+
+/**
+ * 搜索结果分组方案
+ * REF: https://github.com/siyuan-note/siyuan/blob/145243e0583b7259fed143833a648e61f8863528/kernel/api/search.go#L231
+ */
+export enum GroupBy {
+    noGroupBy, // 不分组
+    group, // 按文档分组
+}
+
+/**
+ * 搜索结果排序方案
+ * REF: https://github.com/siyuan-note/siyuan/blob/145243e0583b7259fed143833a648e61f8863528/kernel/api/search.go#L226
+ */
+export enum OrderBy {
+    type, // 按块类型（默认）
+    createdASC, // 创建时间升序
+    createdDESC, // 创建时间降序
+    modifiedASC, // 修改时间升序
+    modifiedDESC, // 修改时间降序
+    sortByContent, // 按原文内容顺序（仅限按文档分组）
+    sortByRankAsc, // 按相关度升序
+    sortByRankDesc, // 按相关度降序
+}
 
 enum MODE {
     app = "app",
@@ -111,10 +175,16 @@ class SiyuanClient {
         const response = await this._request("/api/notebook/lsNotebooks") as IResponse_lsNotebooks;
         return response;
     }
+    
+    /* 全局搜索 */
+    public async fullTextSearchBlock(payload: IPayload_fullTextSearchBlock): Promise<IResponse_fullTextSearchBlock> {
+        const response = await this._request("/api/search/fullTextSearchBlock", payload) as IResponse_fullTextSearchBlock; 
+        return response;
+    }
 
     protected async _request(
         pathname: string,
-        data: object = {},
+        payload: object = {},
     ): Promise<IResponse> {
         this.status = Status.processing;
         this.message = "";
@@ -126,7 +196,7 @@ class SiyuanClient {
             response = await fetch(
                 this.url.href,
                 {
-                    body: JSON.stringify(data),
+                    body: JSON.stringify(payload),
                     method: this.method,
                     headers: this.headers,
                 },
@@ -139,7 +209,7 @@ class SiyuanClient {
 
         if (response.ok) {
             const body: IResponse = await response.json();
-            
+
             if (body.code === 0) {
                 this.status = Status.success;
                 this.message = body.msg;
