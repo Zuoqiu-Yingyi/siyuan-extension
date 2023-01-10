@@ -167,9 +167,7 @@ function handleContainers(values: (string | number | boolean)[]): void {
                     <!-- REF [Arco Design Vue](https://arco.design/vue/component/form) -->
                     <!-- 服务 -->
                     <a-form-item :label="$t('siyuan_server')">
-                        <template #help>
-                            {{ $t("help.server") }}
-                        </template>
+                        <template #help>{{ $t("help.server") }}</template>
 
                         <!-- 协议名 -->
                         <a-select
@@ -206,9 +204,7 @@ function handleContainers(values: (string | number | boolean)[]): void {
 
                     <!-- 令牌 -->
                     <a-form-item :label="$t('token')">
-                        <template #help>
-                            {{ $t("help.token") }}
-                        </template>
+                        <template #help>{{ $t("help.token") }}</template>
 
                         <!-- 令牌输入框 -->
                         <a-input-search
@@ -219,6 +215,7 @@ function handleContainers(values: (string | number | boolean)[]): void {
                         >
                             <!-- 按钮图标 -->
                             <template #button-icon><icon-experiment /></template>
+
                             <!-- 按钮文本 -->
                             <template #button-default>{{ $t("test") }}</template>
                         </a-input-search>
@@ -244,9 +241,8 @@ function handleContainers(values: (string | number | boolean)[]): void {
 
                     <!-- 分组方案 -->
                     <a-form-item :label="$t('search_config.groupBy.label')">
-                        <template #help>
-                            {{ $t("search_config.groupBy.details") }}
-                        </template>
+                        <template #help>{{ $t("search_config.groupBy.details") }}</template>
+
                         <a-select v-model="config.search.groupBy">
                             <a-option :value="GroupBy.noGroupBy">{{ $t("search_config.groupBy.noGroupBy") }}</a-option>
                             <a-option :value="GroupBy.group">{{ $t("search_config.groupBy.group") }}</a-option>
@@ -255,9 +251,8 @@ function handleContainers(values: (string | number | boolean)[]): void {
 
                     <!-- 排序方案 -->
                     <a-form-item :label="$t('search_config.orderBy.label')">
-                        <template #help>
-                            {{ $t("search_config.orderBy.details") }}
-                        </template>
+                        <template #help>{{ $t("search_config.orderBy.details") }}</template>
+
                         <a-select v-model="config.search.orderBy">
                             <a-optgroup :label="$t('content')">
                                 <a-option :value="OrderBy.type">{{ $t("search_config.orderBy.type") }}</a-option>
@@ -278,9 +273,8 @@ function handleContainers(values: (string | number | boolean)[]): void {
 
                     <!-- 块类型筛选 -->
                     <a-form-item :label="$t('search_config.block_types.label')">
-                        <template #help>
-                            {{ $t("search_config.block_types.details") }}
-                        </template>
+                        <template #help>{{ $t("search_config.block_types.details") }}</template>
+
                         <a-space class="search-types">
                             <!-- 叶子块 -->
                             <fieldset>
@@ -368,6 +362,7 @@ function handleContainers(values: (string | number | boolean)[]): void {
 }
 
 .collapse-item {
+    // 折叠面板标题
     > :first-child {
         background-color: var(--color-fill-1);
 
@@ -376,6 +371,7 @@ function handleContainers(values: (string | number | boolean)[]): void {
         padding-bottom: 2px;
     }
 
+    // 折叠面板内容
     > :last-child {
         background-color: transparent;
         padding: 0 0.5em;

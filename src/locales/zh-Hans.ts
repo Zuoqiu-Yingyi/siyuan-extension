@@ -51,7 +51,7 @@ export default {
         },
         block_types: {
             label: "块类型",
-            details: "根据@:search_config.block_types.label筛选@:search_result",
+            details: "根据 @:search_config.block_types.label 筛选@:search_result",
 
             leaf: "叶子块",
             heading: "标题块",

@@ -24,7 +24,9 @@ function handleCancel() {
 <template>
     <!-- REF [Arco Design Vue](https://arco.design/vue/component/drawer) -->
     <a-drawer
+        id="siyuan-drawer"
         :visible="visible"
+        :mask="false"
         @ok="handleOk"
         @cancel="handleCancel"
         unmountOnClose
@@ -91,8 +93,10 @@ function handleCancel() {
                 />
             </div>
         </template>
+
         <!-- REF [Arco Design Vue](https://arco.design/vue/component/tabs) -->
         <a-tabs
+            class="tabs"
             :type="'card-gutter'"
             :size="'mini'"
             :justify="true"
@@ -103,25 +107,44 @@ function handleCancel() {
     </a-drawer>
 </template>
 
-<style scoped lang="less">
-.title {
-    display: flex;
-    align-items: center;
+<style lang="less">
+// 支持 .arco-* 选择器需要移除 scoped 标签
+#siyuan-drawer {
+    .title {
+        display: flex;
+        align-items: center;
 
-    .title-icon {
-        width: 1em;
-        height: 1em;
-        line-height: inherit;
-        flex: none;
+        .title-icon {
+            width: 1em;
+            height: 1em;
+            line-height: inherit;
+            flex: none;
+        }
+
+        .title-label {
+            margin: 0 0.5em;
+            font-size: inherit;
+            flex: none;
+        }
+        .title-input {
+            flex: auto;
+        }
     }
 
-    .title-label {
-        margin: 0 0.5em;
-        font-size: inherit;
-        flex: none;
-    }
-    .title-input {
-        flex: auto;
+    // 抽屉本体
+    .arco-drawer {
+        // 抽屉内容
+        > .arco-drawer-body {
+            padding: 0.5em;
+
+            // 标签页
+            .tabs {
+                // 标签页内容
+                > .arco-tabs-content {
+                    padding: 0;
+                }
+            }
+        }
     }
 }
 </style>

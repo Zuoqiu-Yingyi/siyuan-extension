@@ -37,7 +37,7 @@ export default {
             group: "按文檔分組",
         },
         orderBy: {
-            label: "搜索結果排序方案",
+            label: "排序方案",
             details: "@:search_result@:search_config.orderBy.label",
 
             type: "塊類型",
@@ -51,7 +51,7 @@ export default {
         },
         block_types: {
             label: "塊類型",
-            details: "根據@:search_config.block_types.label篩選@:search_result",
+            details: "根據 @:search_config.block_types.label 篩選@:search_result",
 
             leaf: "葉子塊",
             heading: "標題塊",

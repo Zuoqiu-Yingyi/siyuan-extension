@@ -140,6 +140,7 @@ provide("version", version);
                 />
             </a-button>
         </DragBallVue>
+
         <!--
             REF [Arco Design Vue](https://arco.design/vue/component/split)
             分割面板, 用于调整抽屉的宽度
@@ -158,6 +159,7 @@ provide("version", version);
                 >
                 </a-layout>
             </template>
+
             <template #second>
                 <!-- 抽屉容器 -->
                 <a-layout

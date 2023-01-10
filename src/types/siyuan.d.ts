@@ -41,7 +41,6 @@ export interface IResponse_version {
 
 // /api/search/fullTextSearchBlock
 
-
 /* 块类型 */
 export interface BlockTypes {
     heading: boolean; // 标题块

@@ -64,7 +64,7 @@ export default {
             container: "Container Block",
             document: "Document Block",
             superBlock: "Super Block",
-            Blockquote: "Quote Block",
+            blockquote: "Quote Block",
             list: "List Block",
             listItem: "List Item",
         },
