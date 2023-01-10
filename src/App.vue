@@ -11,8 +11,9 @@ import { IConfig } from "./types/config";
 import { GroupBy, Method, OrderBy, SiyuanClient } from "./utils/siyuan";
 import { Status } from "./utils/status";
 import { mapLabel } from "./utils/language";
+import { Theme } from "./utils/theme";
 
-const i18n = inject("i18n") as I18n;
+const i18n = inject("i18n") as I18n; // 国际化引擎
 
 /* 用户配置 */
 const config: IConfig = reactive({
@@ -65,8 +66,6 @@ const config: IConfig = reactive({
     },
 });
 
-const visible = ref(false); // 抽屉是否可见
-const size = ref(0.5); // 抽屉宽度占比
 const status = ref(Status.normal); // 连接状态
 const message = ref(""); // 连接状态消息
 const version = ref(""); // 内核版本
@@ -112,11 +111,21 @@ watch(
 
 // REF: [依赖注入 | Vue.js](https://cn.vuejs.org/guide/components/provide-inject.html#provide)
 provide("config", config);
-provide("visible", visible);
 provide("client", client);
 provide("status", status);
 provide("message", message);
 provide("version", version);
+
+/* 👇 主题状态 👇 */
+const theme = reactive(new Theme());
+provide("theme", theme);
+/* 👆 主题状态 👆 */
+
+/* 👇 抽屉状态 👇 */
+const visible = ref(false); // 抽屉是否可见
+const size = ref(0.5); // 抽屉宽度占比
+provide("visible", visible);
+/* 👆 抽屉状态 👆 */
 </script>
 
 <template>

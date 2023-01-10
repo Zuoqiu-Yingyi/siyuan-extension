@@ -79,6 +79,13 @@ export default {
     status: "狀態",
     success: "成功",
     test: "測試",
+    theme: {
+        label: "主題",
+
+        dark: "深色@:theme.label",
+        light: "淺色@:theme.label",
+        system: "跟隨系統",
+    },
     time: "時間",
     token: "API Token",
     user: "用戶",

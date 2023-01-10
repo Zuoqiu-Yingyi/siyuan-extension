@@ -7,6 +7,7 @@ import { Notification } from "@arco-design/web-vue";
 import { IConfig } from "./../types/config";
 
 import { Method, GroupBy, OrderBy, Leaf, Container, SiyuanClient } from "../utils/siyuan";
+import { Theme, THEME_MOD } from "../utils/theme";
 
 const config = inject("config") as IConfig; // 用户配置
 const client = inject("client") as InstanceType<typeof SiyuanClient>; // 思源客户端
@@ -41,7 +42,7 @@ watch(
     },
 );
 
-/* 类型过滤 */
+/* 👇 搜索型过滤 👇 */
 const leafs_init: Leaf[] = []; // 叶子块初值
 config.search.types.heading && leafs_init.push(Leaf.h);
 config.search.types.paragraph && leafs_init.push(Leaf.p);
@@ -138,6 +139,11 @@ function handleContainers(values: (string | number | boolean)[]): void {
     config.search.types.list = Container.l in values;
     config.search.types.listItem = Container.i in values;
 }
+/* 👆 搜索型过滤 👆 */
+
+/* 👇 主题 👇 */
+const theme = inject("theme") as InstanceType<typeof Theme>; // 用户配置
+/* 👆 主题 👆 */
 </script>
 
 <template>
@@ -336,10 +342,7 @@ function handleContainers(values: (string | number | boolean)[]): void {
                     <template #header>{{ $t("other_settings") }}</template>
 
                     <!-- 界面语言 -->
-                    <a-form-item
-                        style="margin-bottom: 0"
-                        :label="$t('language')"
-                    >
+                    <a-form-item :label="$t('language')">
                         <!-- 语言选择 -->
                         <a-select v-model="config.other.language.tag">
                             <a-option
@@ -348,6 +351,25 @@ function handleContainers(values: (string | number | boolean)[]): void {
                                 :key="item.tag"
                             >
                                 {{ item.label }}
+                            </a-option>
+                        </a-select>
+                    </a-form-item>
+
+                    <!-- 主题模式 -->
+                    <a-form-item
+                        style="margin-bottom: 0"
+                        :label="$t('theme.label')"
+                    >
+                        <!-- 主题模式选择 -->
+                        <a-select v-model="theme.mode">
+                            <a-option :value="THEME_MOD.dark">
+                                {{ $t("theme.dark") }}
+                            </a-option>
+                            <a-option :value="THEME_MOD.light">
+                                {{ $t("theme.light") }}
+                            </a-option>
+                            <a-option :value="THEME_MOD.system">
+                                {{ $t("theme.system") }}
                             </a-option>
                         </a-select>
                     </a-form-item>

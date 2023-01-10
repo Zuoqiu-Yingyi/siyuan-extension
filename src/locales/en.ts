@@ -79,6 +79,13 @@ export default {
     status: "Status",
     success: "Success",
     test: "Test",
+    theme: {
+        label: "Theme",
+
+        dark: "Dark @:theme.label",
+        light: "Light @:theme.label",
+        system: "Follow System",
+    },
     time: "Time",
     token: "API Token",
     user: "User",
