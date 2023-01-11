@@ -10,3 +10,4 @@
 - 实现用户设置中的 `搜索设置` 与 `其他设置` 组件 | Implement `Search Settings` and `Additional Settings` components in User Settings.
 - 调整用户设置界面样式 | Adjust user settings interface style.
 - 添加主题设置选项 | Add theme setting options.
+- 搜索结果支持显示文档数与块数 | Search results support displaying the number of documents and blocks.

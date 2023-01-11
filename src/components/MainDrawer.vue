@@ -37,6 +37,7 @@ function handleCancel() {
                     class="title-icon"
                     src="./../assets/siyuan-32.png"
                 />
+
                 <!-- REF [Arco Design Vue](https://arco.design/vue/component/popover) -->
                 <!-- 鼠标悬浮气泡卡片 -->
                 <a-popover position="bl">
@@ -47,6 +48,7 @@ function handleCancel() {
                         :status="status"
                         :text="$t('siyuan')"
                     />
+
                     <!-- 气泡卡片标题 -->
                     <template #title>
                         {{ $t("server_status") }}
@@ -71,6 +73,7 @@ function handleCancel() {
                             </a-tag>
                         </a-tooltip>
                     </template>
+
                     <!-- 气泡卡片内容 -->
                     <template #content>
                         <!-- REF [Arco Design Vue](https://arco.design/vue/component/alert) -->
@@ -83,6 +86,7 @@ function handleCancel() {
                         </a-alert>
                     </template>
                 </a-popover>
+
                 <!-- REF [Arco Design Vue](https://arco.design/vue/component/input-tag) -->
                 <!-- 搜索输入框 -->
                 <a-input-tag

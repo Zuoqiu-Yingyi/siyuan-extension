@@ -69,6 +69,10 @@ export default {
             listItem: "List Item",
         },
     },
+    search_description: {
+        doc_count: "Number of Documents",
+        block_count: "Number of Blocks",
+    },
     search_result: "@:search @:result",
     search_settings: "@:search @:settings",
     server: "Server",

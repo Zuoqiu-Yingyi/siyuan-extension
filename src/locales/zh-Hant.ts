@@ -69,6 +69,10 @@ export default {
             listItem: "列表項",
         },
     },
+    search_description: {
+        doc_count: "文檔數",
+        block_count: "塊數",
+    },
     search_result: "@:search@:result",
     search_settings: "@:search@:settings",
     server: "服務",
