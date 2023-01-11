@@ -21,6 +21,11 @@ export interface Notebook {
     closed: boolean;
 }
 
+export interface INotebooks {
+    list: Notebook[]; // 笔记本对象列表
+    map: Map<string, Notebook>; // 笔记本 ID => 笔记本对象
+}
+
 export interface Data_lsNotebooks {
     notebooks: Notebook[];
 }
@@ -62,7 +67,7 @@ export interface IPayload_fullTextSearchBlock {
     method: Method; // 搜索方案
     orderBy: OrderBy; // 搜索结果排序方案
     paths: string[]; // 指定搜索路径(以 *.sy 结尾不包含子文档)
-    query: string; // 搜索关键词
+    query: string; // 查询语句
     types: BlockTypes; // 搜索块类型
 }
 

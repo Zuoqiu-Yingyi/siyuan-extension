@@ -1,22 +1,28 @@
 <!-- REF [Arco Design Vue](https://arco.design/vue/component/tabs) -->
 <script setup lang="ts">
-import { inject, watch, ref } from "vue";
+import { inject, watch, ref, ShallowReactive } from "vue";
 import { VueI18nTranslation } from "vue-i18n";
+
 import { Notification } from "@arco-design/web-vue";
 
 import { IConfig } from "./../types/config";
+import { INotebooks } from "./../types/siyuan";
 
 import { Method, GroupBy, OrderBy, Leaf, Container, SiyuanClient } from "../utils/siyuan";
 import { Theme, THEME_MOD } from "../utils/theme";
 
 const config = inject("config") as IConfig; // 用户配置
+const notebooks = inject("notebooks") as ShallowReactive<INotebooks>; // 笔记本列表
 const client = inject("client") as InstanceType<typeof SiyuanClient>; // 思源客户端
 
 /* 测试思源服务 */
 async function testSiyuanServer($t: VueI18nTranslation): Promise<void> {
     // console.log(config.server.url);
     try {
-        await client.lsNotebooks();
+        const r = await client.lsNotebooks();
+
+        notebooks.list = r.data.notebooks;
+
         Notification.success({
             title: $t("conect_siyuan_client"),
             content: $t("conect_success"),
@@ -155,6 +161,7 @@ const theme = inject("theme") as InstanceType<typeof Theme>; // 用户配置
             <icon-settings />
             {{ $t("user_settings") }}
         </template>
+
         <a-form
             class="form"
             size="mini"
@@ -215,7 +222,7 @@ const theme = inject("theme") as InstanceType<typeof Theme>; // 用户配置
                         <!-- 令牌输入框 -->
                         <a-input-search
                             search-button
-                            @search="testSiyuanServer($t)"
+                            @search="(_value: string, _e: MouseEvent) => testSiyuanServer($t)"
                             v-model="config.server.token"
                             placeholder="0123456789abcdef"
                         >

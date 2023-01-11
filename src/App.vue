@@ -7,6 +7,7 @@ import { ref, provide, reactive, inject, watch } from "vue";
 import { I18n } from "vue-i18n";
 
 import { IConfig } from "./types/config";
+import { INotebooks } from "./types/siyuan";
 
 import { GroupBy, Method, OrderBy, SiyuanClient } from "./utils/siyuan";
 import { Status } from "./utils/status";
@@ -14,6 +15,22 @@ import { mapLabel } from "./utils/language";
 import { Theme } from "./utils/theme";
 
 const i18n = inject("i18n") as I18n; // 国际化引擎
+
+/* 笔记本列表 */
+const notebooks = reactive<INotebooks>({
+    list: [],
+    map: new Map(),
+});
+watch(
+    () => notebooks.list,
+    list => {
+        notebooks.map.clear();
+        list.forEach(notebook => {
+            notebooks.map.set(notebook.id, notebook);
+        });
+    },
+);
+provide("notebooks", notebooks);
 
 /* 用户配置 */
 const config: IConfig = reactive({

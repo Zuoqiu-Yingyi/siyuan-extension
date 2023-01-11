@@ -7,7 +7,7 @@ export {
     Theme,
 };
 
-import { reactive, UnwrapNestedRefs, watch } from "vue";
+import { reactive, watch, watchEffect, UnwrapNestedRefs } from "vue";
 
 /* 主题状态接口 */
 interface ITheme {
@@ -127,13 +127,7 @@ class Theme implements ITheme {
         );
 
         /* 监听当前主题状态变更 */
-        watch(
-            () => this._r.state,
-            Theme.setTheme,
-            {
-                immediate: true,
-            },
-        );
+        watchEffect(() => Theme.setTheme(this._r.state));
     }
 
     public get mode(): THEME_MOD {

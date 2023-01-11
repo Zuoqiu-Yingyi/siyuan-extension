@@ -11,3 +11,4 @@
 - 调整用户设置界面样式 | Adjust user settings interface style.
 - 添加主题设置选项 | Add theme setting options.
 - 搜索结果支持显示文档数与块数 | Search results support displaying the number of documents and blocks.
+- 搜索结果支持按文档分组 | Search results support grouping by document.

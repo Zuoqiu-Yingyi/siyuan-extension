@@ -1,14 +1,18 @@
 <!-- REF [Arco Design Vue](https://arco.design/vue/component/tabs) -->
 <script setup lang="ts">
-import { ref } from "vue";
+import SearchResultsVue from "./SearchResults.vue";
 
-/* 搜索结果信息描述 */
-const doc_count = ref(0); // 搜索结果文档数
-const block_count = ref(0); // 搜索结果块数
+import { inject, ShallowReactive } from "vue";
+
+import { Data_fullTextSearchBlock } from "./../types/siyuan";
+
+/* 查询结果 */
+const results = inject('results') as ShallowReactive<Data_fullTextSearchBlock>; // 查询结果
 </script>
 
 <template>
     <a-tab-pane key="1">
+        <!-- 标签页标题 -->
         <template #title>
             <a-popover position="bl">
                 <icon-search /> {{ $t("search_result") }}
@@ -22,17 +26,20 @@ const block_count = ref(0); // 搜索结果块数
                     >
                         <!-- 搜索结果文档数 -->
                         <a-descriptions-item :label="$t('search_description.doc_count')">
-                            {{ doc_count }}
+                            {{ results.matchedRootCount }}
                         </a-descriptions-item>
 
                         <!-- 搜索结果块数 -->
                         <a-descriptions-item :label="$t('search_description.block_count')">
-                            {{ block_count }}
+                            {{ results.matchedBlockCount }}
                         </a-descriptions-item>
                     </a-descriptions>
                 </template>
             </a-popover>
         </template>
+
+        <!-- 标签页内容 -->
+        <SearchResultsVue />
     </a-tab-pane>
 </template>
 

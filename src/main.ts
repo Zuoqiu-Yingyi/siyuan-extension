@@ -9,9 +9,9 @@ import ArcoVue from "@arco-design/web-vue";
 import ArcoVueIcon from "@arco-design/web-vue/es/icon";
 import "@arco-design/web-vue/dist/arco.css";
 
-import en from "./locales/en";
-import zh_Hans from "./locales/zh-Hans";
-import zh_Hant from "./locales/zh-Hant";
+import en from "./locales/en.json";
+import zh_Hans from "./locales/zh-Hans.json";
+import zh_Hant from "./locales/zh-Hant.json";
 
 import { mapLocal } from "./utils/language";
 
