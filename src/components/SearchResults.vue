@@ -1,12 +1,13 @@
 <!-- 搜索结果列表(未分组) -->
 <script setup lang="ts">
+import DocBreadcrumbVue from "./DocBreadcrumb.vue";
+
 import { inject, ShallowReactive, computed } from "vue";
 
-import { INotebooks, Data_fullTextSearchBlock } from "./../types/siyuan";
+import { Data_fullTextSearchBlock } from "./../types/siyuan";
 
 /* 查询结果 */
 const results = inject("results") as ShallowReactive<Data_fullTextSearchBlock>; // 查询结果
-const notebooks = inject("notebooks") as ShallowReactive<INotebooks>; // 笔记本列表
 
 /* 是否分组 */
 const grouped = computed(() => {
@@ -33,11 +34,7 @@ const grouped = computed(() => {
                     >
                         <!-- 文档 -->
                         <template #header>
-                            <span
-                                class="icon"
-                                v-html="notebooks.map.get(item.box)?.icon ?? '📔'"
-                            ></span>
-                            {{ `${notebooks.map.get(item.box)?.name ?? $t("notebook")}${item.hPath}` }}
+                            <DocBreadcrumbVue :doc="item"/>
                         </template>
 
                         <!-- 块 -->

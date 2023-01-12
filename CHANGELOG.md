@@ -13,3 +13,4 @@
 - 搜索结果支持显示文档数与块数 | Search results support displaying the number of documents and blocks.
 - 搜索结果支持按文档分组 | Search results support grouping by document.
 - 搜索结果支持显示笔记本图标 | Search results support displaying notebook icon.
+- 按文档分组的搜索结果添加面包屑 | Add breadcrumbs to search results grouped by document.
