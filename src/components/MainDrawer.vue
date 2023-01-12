@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import TabSearchVue from "./TabSearch.vue";
-import TabSettingsVue from "./TabSettings.vue";
+import TabSearch from "./TabSearch.vue";
+import TabSettings from "./TabSettings.vue";
 
 import { ref, shallowReactive, toRaw, inject, provide, watch, Ref, ShallowReactive } from "vue";
 import { VueI18nTranslation } from "vue-i18n";
@@ -186,8 +186,8 @@ provide("results", results);
             :size="'mini'"
             :justify="true"
         >
-            <TabSearchVue />
-            <TabSettingsVue />
+            <tab-search />
+            <tab-settings />
         </a-tabs>
     </a-drawer>
 </template>

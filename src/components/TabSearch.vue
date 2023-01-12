@@ -1,6 +1,6 @@
 <!-- REF [Arco Design Vue](https://arco.design/vue/component/tabs) -->
 <script setup lang="ts">
-import SearchResultsVue from "./SearchResults.vue";
+import SearchResults from "./SearchResults.vue";
 
 import { inject, ShallowReactive } from "vue";
 
@@ -48,7 +48,7 @@ const results = inject("results") as ShallowReactive<Data_fullTextSearchBlock>; 
             outer-class="scrollbar"
             type="track"
         >
-            <SearchResultsVue />
+            <search-results />
         </a-scrollbar>
     </a-tab-pane>
 </template>

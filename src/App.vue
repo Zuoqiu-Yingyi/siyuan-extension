@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import HelloWorldVue from "./components/HelloWorld.vue";
-import DragBallVue from "./components/DragBall.vue";
-import MainDrawerVue from "./components/MainDrawer.vue";
+import HelloWorld from "./components/HelloWorld.vue";
+import DragBall from "./components/DragBall.vue";
+import MainDrawer from "./components/MainDrawer.vue";
 
 import { ref, provide, reactive, inject, watch } from "vue";
 import { I18n } from "vue-i18n";
@@ -148,10 +148,10 @@ provide("visible", visible);
 </script>
 
 <template>
-    <HelloWorldVue msg="Vite + Vue" />
+    <hello-world msg="Vite + Vue" />
     <Teleport to="body">
         <!-- 打开抽屉的悬浮球 -->
-        <DragBallVue
+        <drag-ball
             style="z-index: 1"
             :top="'2em'"
             :right="'2em'"
@@ -167,7 +167,7 @@ provide("visible", visible);
                     alt="siyuan logo"
                 />
             </a-button>
-        </DragBallVue>
+        </drag-ball>
 
         <!--
             REF [Arco Design Vue](https://arco.design/vue/component/split)
@@ -195,7 +195,7 @@ provide("visible", visible);
                     class="split-panel"
                 >
                     <!-- 抽屉内容 -->
-                    <MainDrawerVue
+                    <main-drawer
                         style="z-index: unset; position: unset"
                         :width="'100%'"
                         :footer="false"

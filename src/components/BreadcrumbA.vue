@@ -1,30 +1,10 @@
 <script setup lang="ts">
-import { inject, ShallowReactive } from "vue";
 import { BreadcrumbRoute } from "@arco-design/web-vue";
-
-import { INotebooks, Block_fullTextSearchBlock } from "./../types/siyuan";
 
 // REF: [Props | Vue.js](https://cn.vuejs.org/guide/components/props.html)
 const props = defineProps<{
-    doc: Block_fullTextSearchBlock;
+    routes: BreadcrumbRoute[],
 }>();
-
-const notebooks = inject("notebooks") as ShallowReactive<INotebooks>; // 笔记本列表
-const paths = props.doc.path.substring(0, props.doc.path.lastIndexOf(".")).split("/"); // 文档 ID 路径
-const hPath = props.doc.hPath.split("/"); // 可读路径
-hPath[0] = notebooks.map.get(props.doc.box)?.name as string; // 笔记名
-
-/* 路由 */
-const routes: BreadcrumbRoute[] = paths.map((path, index) => {
-    return {
-        path,
-        label: hPath[index],
-    };
-});
-// routes.push({
-//     path: "",
-//     label: "",
-// });
 
 /* 将路由转换为超链接 href */
 function paths2href(paths: string[]): string {
@@ -36,13 +16,15 @@ function paths2href(paths: string[]): string {
     <!-- REF [Arco Design Vue 参数化配置](https://arco.design/vue/component/breadcrumb#routes) -->
     <a-breadcrumb
         class="breadcrumb"
-        :routes="routes"
+        :routes="props.routes"
     >
         <!-- 使用插槽可以为最后一个面包屑项设置超链接 -->
         <template #item-render="{ route, paths }">
-            <a-link :href="paths2href(paths)">
-                {{ route.label }}
-            </a-link>
+            <!-- eslint-disable vue/no-v-text-v-html-on-component -->
+            <a-link
+                :href="paths2href(paths)"
+                v-html="route.label"
+            ></a-link>
         </template>
     </a-breadcrumb>
 </template>

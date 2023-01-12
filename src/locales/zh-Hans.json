@@ -1,15 +1,20 @@
 {
+    "alias": "别名",
     "check_all": "全选",
     "client": "客户端",
     "conect_siyuan_client": "连接@:siyuan@:client",
     "conect_success": "连接@:success",
     "content": "内容",
     "help": {
+        "block_attrs_exist": "存在块属性",
+        "search_march": "匹配的搜索结果",
         "server": "@:siyuan_server URL 源",
         "token": "可在 @:path.token 中获取"
     },
     "hostname": "IP 地址 {'|'} 域名 {'|'} 主机名",
     "language": "语言",
+    "memo": "备注",
+    "name": "命名",
     "notebook": "笔记本",
     "other": "其他",
     "other_settings": "@:other@:settings",
@@ -22,52 +27,52 @@
     "result": "结果",
     "search": "搜索",
     "search_config": {
-        "method": {
-            "label": "搜索方案",
-            "keyword": "关键字",
-            "querySyntax": "查询语法",
-            "sql": "SQL 语句",
-            "regex": "正则表达式"
+        "block_types": {
+            "blockquote": "引述块",
+            "codeBlock": "代码块",
+            "container": "容器块",
+            "details": "根据 @:search_config.block_types.label 筛选@:search_result",
+            "document": "文档块",
+            "heading": "标题块",
+            "htmlBlock": "HTML块",
+            "label": "块类型",
+            "leaf": "叶子块",
+            "list": "列表块",
+            "listItem": "列表项",
+            "mathBlock": "公式块",
+            "paragraph": "段落块",
+            "superBlock": "超级块",
+            "table": "表格块"
         },
         "groupBy": {
-            "label": "分组方案",
             "details": "@:search_result@:search_config.groupBy.label",
-            "noGroupBy": "不分组",
-            "group": "按文档分组"
+            "group": "按文档分组",
+            "label": "分组方案",
+            "noGroupBy": "不分组"
+        },
+        "method": {
+            "keyword": "关键字",
+            "label": "搜索方案",
+            "querySyntax": "查询语法",
+            "regex": "正则表达式",
+            "sql": "SQL 语句"
         },
         "orderBy": {
-            "label": "排序方案",
-            "details": "@:search_result@:search_config.orderBy.label",
-            "type": "块类型",
             "createdASC": "创建时间升序",
             "createdDESC": "创建时间降序",
+            "details": "@:search_result@:search_config.orderBy.label",
+            "label": "排序方案",
             "modifiedASC": "修改时间升序",
             "modifiedDESC": "修改时间降序",
             "sortByContent": "原文内容顺序",
             "sortByRankAsc": "相关度升序",
-            "sortByRankDesc": "相关度降序"
-        },
-        "block_types": {
-            "label": "块类型",
-            "details": "根据 @:search_config.block_types.label 筛选@:search_result",
-            "leaf": "叶子块",
-            "heading": "标题块",
-            "paragraph": "段落块",
-            "mathBlock": "公式块",
-            "table": "表格块",
-            "codeBlock": "代码块",
-            "htmlBlock": "HTML块",
-            "container": "容器块",
-            "document": "文档块",
-            "superBlock": "超级块",
-            "blockquote": "引述块",
-            "list": "列表块",
-            "listItem": "列表项"
+            "sortByRankDesc": "相关度降序",
+            "type": "块类型"
         }
     },
     "search_description": {
-        "doc_count": "文档数",
-        "block_count": "块数"
+        "block_count": "块数",
+        "doc_count": "文档数"
     },
     "search_result": "@:search@:result",
     "search_settings": "@:search@:settings",
@@ -80,8 +85,8 @@
     "success": "成功",
     "test": "测试",
     "theme": {
-        "label": "主题",
         "dark": "深色@:theme.label",
+        "label": "主题",
         "light": "浅色@:theme.label",
         "system": "跟随系统"
     },

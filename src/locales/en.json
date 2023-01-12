@@ -1,15 +1,20 @@
 {
+    "alias": "Alias",
     "check_all": "Check All",
     "client": "Client",
     "conect_siyuan_client": "Connect @:siyuan @:client",
     "conect_success": "Connect @:success",
     "content": "Content",
     "help": {
+        "block_attrs_exist": "Exise Block Attributes",
+        "search_march": "Matching Search Result",
         "server": "@:siyuan_server URL Origin",
         "token": "Available in @:path.token"
     },
     "hostname": "IP Address {'|'} Domain Name {'|'} Host Name",
     "language": "Language",
+    "memo": "Memo",
+    "name": "Name",
     "notebook": "Notebook",
     "other": "Other",
     "other_settings": "@:other @:settings",
@@ -22,52 +27,52 @@
     "result": "Results",
     "search": "Search",
     "search_config": {
-        "method": {
-            "label": "@:search Scheme",
-            "keyword": "Keyword",
-            "querySyntax": "Query Syntax",
-            "sql": "SQL Statement",
-            "regex": "Regular Expression"
+        "block_types": {
+            "blockquote": "Quote Block",
+            "codeBlock": "Code Block",
+            "container": "Container Block",
+            "details": "Filter @:search_result Based on @:search_config.block_types.label",
+            "document": "Document Block",
+            "heading": "Heading Block",
+            "htmlBlock": "HTML Block",
+            "label": "Block Type",
+            "leaf": "Leaf Block",
+            "list": "List Block",
+            "listItem": "List Item",
+            "mathBlock": "Formula Block",
+            "paragraph": "Paragraph Block",
+            "superBlock": "Super Block",
+            "table": "Table Block"
         },
         "groupBy": {
-            "label": "Grouping Scheme",
             "details": "@:search_result @:search_config.groupBy.label",
-            "noGroupBy": "No Grouping",
-            "group": "Group by Document"
+            "group": "Group by Document",
+            "label": "Grouping Scheme",
+            "noGroupBy": "No Grouping"
+        },
+        "method": {
+            "keyword": "Keyword",
+            "label": "@:search Scheme",
+            "querySyntax": "Query Syntax",
+            "regex": "Regular Expression",
+            "sql": "SQL Statement"
         },
         "orderBy": {
-            "label": "Sorting Scheme",
-            "details": "@:search_result @:search_config.orderBy.label",
-            "type": "Block Type",
             "createdASC": "Ascending by Creation Time",
             "createdDESC": "Descending by Creation Time",
+            "details": "@:search_result @:search_config.orderBy.label",
+            "label": "Sorting Scheme",
             "modifiedASC": "Ascending by Modification Time",
             "modifiedDESC": "Descending by Modification Time",
             "sortByContent": "Original Content Order",
             "sortByRankAsc": "Ascending by Relevance",
-            "sortByRankDesc": "Descending by Relevance"
-        },
-        "block_types": {
-            "label": "Block Type",
-            "details": "Filter @:search_result Based on @:search_config.block_types.label",
-            "leaf": "Leaf Block",
-            "heading": "Heading Block",
-            "paragraph": "Paragraph Block",
-            "mathBlock": "Formula Block",
-            "table": "Table Block",
-            "codeBlock": "Code Block",
-            "htmlBlock": "HTML Block",
-            "container": "Container Block",
-            "document": "Document Block",
-            "superBlock": "Super Block",
-            "blockquote": "Quote Block",
-            "list": "List Block",
-            "listItem": "List Item"
+            "sortByRankDesc": "Descending by Relevance",
+            "type": "Block Type"
         }
     },
     "search_description": {
-        "doc_count": "Number of Documents",
-        "block_count": "Number of Blocks"
+        "block_count": "Number of Blocks",
+        "doc_count": "Number of Documents"
     },
     "search_result": "@:search @:result",
     "search_settings": "@:search @:settings",
@@ -80,8 +85,8 @@
     "success": "Success",
     "test": "Test",
     "theme": {
-        "label": "Theme",
         "dark": "Dark @:theme.label",
+        "label": "Theme",
         "light": "Light @:theme.label",
         "system": "Follow System"
     },
