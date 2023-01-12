@@ -10,31 +10,34 @@ const notebooks = inject("notebooks") as ShallowReactive<INotebooks>; // 笔记�
 
 /* 是否分组 */
 const grouped = computed(() => {
-    console.log(notebooks.map);
     return results.blocks?.[0].children?.length > 0 ?? false;
 });
 </script>
 
 <template>
     <a-list
-        id="searchResultsList"
+        class="list"
         size="small"
-        :virtualListProps="{
-            height: '100%',
-            fixedSize: true,
-        }"
         :data="results.blocks"
     >
         <template #item="{ item, index }">
             <a-list-item
+                class="list-item"
                 :key="index"
                 size="mini"
             >
                 <a-collapse v-if="grouped">
-                    <a-collapse-item key="1">
+                    <a-collapse-item
+                        class="collapse-item"
+                        key="1"
+                    >
                         <!-- 文档 -->
                         <template #header>
-                            {{ `${notebooks.map.get(item.box)?.name ?? $t("notebook") }${item.hPath}` }}
+                            <span
+                                class="icon"
+                                v-html="notebooks.map.get(item.box)?.icon ?? '📔'"
+                            ></span>
+                            {{ `${notebooks.map.get(item.box)?.name ?? $t("notebook")}${item.hPath}` }}
                         </template>
 
                         <!-- 块 -->
@@ -51,22 +54,45 @@ const grouped = computed(() => {
                         </a-list>
                     </a-collapse-item>
                 </a-collapse>
+                <div
+                    v-else
+                    class="content"
+                    v-html="item.content"
+                ></div>
             </a-list-item>
         </template>
     </a-list>
 </template>
 
 <style lang="less">
-#searchResultsList {
-    overflow: auto;
-    height: 100%;
+.list {
+    .list-item {
+        padding: 0 !important;
+        overflow-x: auto;
 
-    .arco-scrollbar {
-        &,
-        > .arco-list {
-            &,
-            > .arco-list-content-wrapper {
-                height: 100%;
+        .collapse-item {
+            // 折叠面板标题
+            > :first-child {
+                background-color: var(--color-fill-1);
+
+                border-color: var(--color-border-2);
+                padding-top: 2px;
+                padding-bottom: 2px;
+            }
+
+            // 折叠面板内容
+            > :last-child {
+                background-color: transparent;
+                padding: 0 0.5em;
+            }
+        }
+
+        .icon {
+            img {
+                width: 18px;
+                height: 18px;
+                // REF: [CSS vertical-align 属性](https://www.w3school.com.cn/cssref/pr_pos_vertical-align.asp)
+                vertical-align: text-bottom;
             }
         }
     }
@@ -79,23 +105,6 @@ const grouped = computed(() => {
             padding: 0 0.25em;
             outline: 1px solid;
         }
-    }
-}
-
-.collapse-item {
-    // 折叠面板标题
-    > :first-child {
-        background-color: var(--color-fill-1);
-
-        border-color: var(--color-border-2);
-        padding-top: 2px;
-        padding-bottom: 2px;
-    }
-
-    // 折叠面板内容
-    > :last-child {
-        background-color: transparent;
-        padding: 0 0.5em;
     }
 }
 </style>

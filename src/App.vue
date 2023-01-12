@@ -13,6 +13,7 @@ import { GroupBy, Method, OrderBy, SiyuanClient } from "./utils/siyuan";
 import { Status } from "./utils/status";
 import { mapLabel } from "./utils/language";
 import { Theme } from "./utils/theme";
+import { Icon } from "./utils/icon";
 
 const i18n = inject("i18n") as I18n; // 国际化引擎
 
@@ -26,6 +27,7 @@ watch(
     list => {
         notebooks.map.clear();
         list.forEach(notebook => {
+            notebook.icon = Icon.icon2emojis(notebook.icon, client.url);
             notebooks.map.set(notebook.id, notebook);
         });
     },

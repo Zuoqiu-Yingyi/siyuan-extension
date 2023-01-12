@@ -7,11 +7,14 @@ import { inject, ShallowReactive } from "vue";
 import { Data_fullTextSearchBlock } from "./../types/siyuan";
 
 /* 查询结果 */
-const results = inject('results') as ShallowReactive<Data_fullTextSearchBlock>; // 查询结果
+const results = inject("results") as ShallowReactive<Data_fullTextSearchBlock>; // 查询结果
 </script>
 
 <template>
-    <a-tab-pane key="1">
+    <a-tab-pane
+        class="panel"
+        key="1"
+    >
         <!-- 标签页标题 -->
         <template #title>
             <a-popover position="bl">
@@ -39,8 +42,22 @@ const results = inject('results') as ShallowReactive<Data_fullTextSearchBlock>; 
         </template>
 
         <!-- 标签页内容 -->
-        <SearchResultsVue />
+        <!-- REF [Arco Design Vue](https://arco.design/vue/component/scrollbar) -->
+        <!-- 滚动条 -->
+        <a-scrollbar
+            outer-class="scrollbar"
+            type="track"
+        >
+            <SearchResultsVue />
+        </a-scrollbar>
     </a-tab-pane>
 </template>
 
-<style scoped lang="less"></style>
+<style scoped lang="less">
+.panel {
+    .scrollbar {
+        height: 100%;
+        overflow: auto;
+    }
+}
+</style>
