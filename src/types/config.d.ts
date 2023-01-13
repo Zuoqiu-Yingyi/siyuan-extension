@@ -8,6 +8,14 @@ export interface IConfig {
         url: URL,
     },
     search: Omit<IPayload_fullTextSearchBlock, 'query'>, // 省略 query 属性
+    render: {
+        breadcrumb: {
+            wrap: boolean,
+            item: {
+                wrap: boolean,
+            },
+        },
+    },
     other: {
         language: ILanguage,
         languages: ILanguage[],

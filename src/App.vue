@@ -63,6 +63,14 @@ const config: IConfig = reactive({
             listItem: true,
         },
     },
+    render: {
+        breadcrumb: {
+            wrap: true,
+            item: {
+                wrap: true,
+            },
+        },
+    },
     other: {
         language: {
             tag: i18n.global.locale,

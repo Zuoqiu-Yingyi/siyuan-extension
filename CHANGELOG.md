@@ -17,3 +17,4 @@
 - 鼠标悬浮显示块属性 | Mouse hover to display block attributes.
 - 为搜索结果添加开关以控制面包屑换行 | Add a switch for the search results to control the line break of the breadcrumbs.
 - 重构面包屑渲染实现 | Refactor breadcrumb rendering implementation.
+- 搜索结果样式开关绑定至 `config` | Search result style switch bound to `config`.

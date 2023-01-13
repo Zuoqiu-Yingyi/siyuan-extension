@@ -2,17 +2,14 @@
 <script setup lang="ts">
 import SearchResults from "./SearchResults.vue";
 
-import { inject, provide, ref, ShallowReactive } from "vue";
+import { inject, ShallowReactive } from "vue";
 
+import { IConfig } from "./../types/config";
 import { Data_fullTextSearchBlock } from "./../types/siyuan";
 
 /* 查询结果 */
+const config = inject("config") as IConfig; // 用户配置
 const results = inject("results") as ShallowReactive<Data_fullTextSearchBlock>; // 查询结果
-
-const wrap_breadcrumb = ref(true); // 面包屑是否换行
-const wrap_breadcrumb_item = ref(true); // 面包屑项是否换行
-provide("wrap_breadcrumb", wrap_breadcrumb);
-provide("wrap_breadcrumb_item", wrap_breadcrumb_item);
 </script>
 
 <template>
@@ -57,7 +54,7 @@ provide("wrap_breadcrumb_item", wrap_breadcrumb_item);
                             {{ $t("label.wrap_breadcrumb") }}
                             <a-switch
                                 style="margin-left: 0.5em"
-                                v-model="wrap_breadcrumb"
+                                v-model="config.render.breadcrumb.wrap"
                                 size="small"
                             />
                         </a-tag>
@@ -70,7 +67,7 @@ provide("wrap_breadcrumb_item", wrap_breadcrumb_item);
                             {{ $t("label.wrap_breadcrumb_item") }}
                             <a-switch
                                 style="margin-left: 0.5em"
-                                v-model="wrap_breadcrumb_item"
+                                v-model="config.render.breadcrumb.item.wrap"
                                 size="small"
                             />
                         </a-tag>

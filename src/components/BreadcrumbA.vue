@@ -1,20 +1,21 @@
 <script setup lang="ts">
-import { inject, Ref } from "vue";
+import { inject } from "vue";
 
 import { IBreadcrumbItem, Separator } from "./../utils/breradcrumb";
+
+import { IConfig } from "./../types/config";
 
 // REF: [Props | Vue.js](https://cn.vuejs.org/guide/components/props.html)
 const props = defineProps<{
     routes: IBreadcrumbItem[];
 }>();
 
+const config = inject("config") as IConfig; // 用户配置
+
 /* 将路由转换为超链接 href */
 function paths2href(paths: string | string[]): string {
     return `siyuan://blocks/${typeof paths === "string" ? paths : paths.pop()}`;
 }
-
-const wrap_breadcrumb = inject("wrap_breadcrumb") as Ref<boolean>; // 面包屑换行
-const wrap_breadcrumb_item = inject("wrap_breadcrumb_item") as Ref<boolean>; // 面包屑项换行
 </script>
 
 <template>
@@ -22,7 +23,7 @@ const wrap_breadcrumb_item = inject("wrap_breadcrumb_item") as Ref<boolean>; // 
     <a-breadcrumb
         class="breadcrumb"
         :style="{
-            flexWrap: wrap_breadcrumb ? 'wrap' : 'nowrap',
+            flexWrap: config.render.breadcrumb.wrap ? 'wrap' : 'nowrap',
         }"
     >
         <a-breadcrumb-item
@@ -34,7 +35,7 @@ const wrap_breadcrumb_item = inject("wrap_breadcrumb_item") as Ref<boolean>; // 
             <a-link
                 class="link"
                 :style="{
-                    whiteSpace: wrap_breadcrumb_item ? 'normal' : 'nowrap',
+                    whiteSpace: config.render.breadcrumb.item.wrap ? 'normal' : 'nowrap',
                 }"
                 :href="paths2href(route.path)"
                 :disabled="route.separator === Separator.notebook"
