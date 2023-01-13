@@ -45,25 +45,41 @@ export enum Container {
 
 /* 块级节点类型 */
 export enum BlockType {
-    NodeDocument = "NodeDocument",
+    NodeNotebook = "NodeNotebook", // <icon-book />
+
+    NodeDocument = "NodeDocument", // 🍞 <icon-file />
     NodeSuperBlock = "NodeSuperBlock",
-    NodeBlockquote = "NodeBlockquote",
-    NodeList = "NodeList",
-    NodeListItem = "NodeListItem",
+    NodeBlockquote = "NodeBlockquote", // <icon-quote />
+    NodeList = "NodeList", // <icon-list />
+    NodeListItem = "NodeListItem", // 🍞 <icon-mind-mapping />
 
-    NodeHeading = "NodeHeading",
-    NodeParagraph = "NodeParagraph",
-    NodeMathBlock = "NodeMathBlock",
-    NodeTable = "NodeTable",
-    NodeCodeBlock = "NodeCodeBlock",
-    NodeHTMLBlock = "NodeHTMLBlock",
+    NodeHeading = "NodeHeading", // 🍞
+    NodeParagraph = "NodeParagraph", // 🍞 <icon-language />
+    NodeMathBlock = "NodeMathBlock",  // 🍞 <icon-formula />
+    NodeTable = "NodeTable", // 🍞 <icon-nav />
+    NodeCodeBlock = "NodeCodeBlock", // 🍞 <icon-code-block />
+    NodeHTMLBlock = "NodeHTMLBlock", // 🍞 <icon-code />
 
-    NodeThematicBreak = "NodeThematicBreak",
-    NodeAudio = "NodeAudio",
-    NodeVideo = "NodeVideo",
-    NodeIFrame = "NodeIFrame",
-    NodeWidget = "NodeWidget",
-    NodeBlockQueryEmbed = "NodeBlockQueryEmbed",
+    NodeThematicBreak = "NodeThematicBreak", // 🍞 <icon-minus />
+    NodeAudio = "NodeAudio", // 🍞 <icon-file-audio />
+    NodeVideo = "NodeVideo", // 🍞 <icon-file-video />
+    NodeIFrame = "NodeIFrame", // 🍞 <icon-cloud />
+    NodeWidget = "NodeWidget", // 🍞 <icon-apps />
+    NodeBlockQueryEmbed = "NodeBlockQueryEmbed", // 🍞 <icon-find-replace />
+}
+
+/* 块级节点子类型 */
+export enum BlockSubType {
+    h1 = "h1", // <icon-h1 />
+    h2 = "h2", // <icon-h2 />
+    h3 = "h3", // <icon-h3 />
+    h4 = "h4", // <icon-h4 />
+    h5 = "h5", // <icon-h5 />
+    h6 = "h6", // <icon-h6 />
+    u = "u", // <icon-unordered-list />
+    o = "o", // <icon-ordered-list />
+    t = "t", // <icon-select-all />
+    none = "",
 }
 
 /**

@@ -2,19 +2,22 @@
 <script setup lang="ts">
 import BreadcrumbPopover from "./BreadcrumbPopover.vue";
 
-import { computed, inject, ShallowReactive } from "vue";
+import { computed, inject, reactive, shallowReactive, watch, ShallowReactive } from "vue";
+import { VueI18nTranslation } from "vue-i18n";
+import { Notification } from "@arco-design/web-vue";
 
 import { INotebooks, Block_fullTextSearchBlock, Data_fullTextSearchBlock } from "./../types/siyuan";
+
+import { SiyuanClient, BlockType, BlockSubType } from "./../utils/siyuan";
 import { IBreadcrumbItem, Separator } from "./../utils/breradcrumb";
 
 /* 查询结果 */
 const results = inject("results") as ShallowReactive<Data_fullTextSearchBlock>; // 查询结果
 
 /* 是否分组 */
-const grouped = computed(() => {
-    return results.blocks?.[0].children?.length > 0 ?? false;
-});
+const grouped = computed(() => results.blocks?.[0].children?.length > 0 ?? false);
 
+/* 👇 分组 👇 */
 /* 文档 */
 const notebooks = inject("notebooks") as ShallowReactive<INotebooks>; // 笔记本列表
 
@@ -30,6 +33,9 @@ function doc2routes(doc: Block_fullTextSearchBlock): IBreadcrumbItem[] {
             path,
             label: hPath[index],
             separator: Separator.document,
+            icon: false,
+            type: BlockType.NodeNotebook,
+            subType: BlockSubType.none,
         };
     });
 
@@ -54,6 +60,109 @@ function isHit(block: Block_fullTextSearchBlock): boolean {
         -4
     );
 }
+
+/* 块 */
+const client = inject("client") as InstanceType<typeof SiyuanClient>; // 思源客户端
+
+/* 渲染块面包屑 */
+const rendered = reactive<boolean[]>([]); // 是否已渲染
+const routes = shallowReactive<IBreadcrumbItem[][][]>([]); // 面包屑
+watch(
+    () => results.blocks,
+    blocks => {
+        for (let i = 0; i < blocks.length; ++i) {
+            const doc = blocks[i];
+            rendered[i] = false;
+            routes[i] = [];
+
+            for (let j = 0; j < doc.children?.length; ++j) {
+                routes[i][j] = [];
+            }
+        }
+    },
+);
+
+/* 渲染指定的列表 */
+function change(index: number, $t: VueI18nTranslation): void {
+    /* 已渲染 */
+    if (rendered[index]) return;
+
+    /* 没有块 */
+    const blocks = results.blocks[index].children;
+    if (blocks?.length === 0) return;
+
+    // REF [Promise.all() - JavaScript | MDN](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Promise/all)
+    Promise.all(
+        blocks.map(
+            block =>
+                new Promise((resolve, reject) => {
+                    client
+                        .getBlockBreadcrumb({
+                            id: block.id,
+                            excludeTypes: [],
+                        })
+                        .then(response => {
+                            const routes: IBreadcrumbItem[] = [];
+                            if (response.data.length === 1 && response.data[0].type === BlockType.NodeDocument) {
+                                const breadcrumb_item = response.data[0];
+                                routes.push({
+                                    path: breadcrumb_item.id,
+                                    separator: Separator.block,
+                                    icon: true,
+                                    type: breadcrumb_item.type,
+                                    subType: breadcrumb_item.subType,
+                                    label: block.content,
+                                });
+                            } else {
+                                for (let j = 1; j < response.data.length; ++j) {
+                                    const breadcrumb_item = response.data[j];
+                                    routes.push({
+                                        path: breadcrumb_item.id,
+                                        separator: Separator.block,
+                                        icon: true,
+                                        type: breadcrumb_item.type,
+                                        subType: breadcrumb_item.subType,
+                                        label: (() => {
+                                            switch (breadcrumb_item.type) {
+                                                case BlockType.NodeMathBlock:
+                                                case BlockType.NodeTable:
+                                                case BlockType.NodeCodeBlock:
+                                                case BlockType.NodeHTMLBlock:
+                                                case BlockType.NodeThematicBreak:
+                                                case BlockType.NodeAudio:
+                                                case BlockType.NodeVideo:
+                                                case BlockType.NodeIFrame:
+                                                case BlockType.NodeWidget:
+                                                case BlockType.NodeBlockQueryEmbed:
+                                                    return "";
+                                                default:
+                                                    return breadcrumb_item.name;
+                                            }
+                                        })(),
+                                    });
+                                }
+                            }
+
+                            resolve(routes);
+                        })
+                        .catch(reject);
+                }),
+        ),
+    )
+        .then(values => {
+            routes[index] = values as IBreadcrumbItem[][];
+            rendered[index] = true;
+        })
+        .catch(reason => {
+            console.warn(reason);
+            Notification.error({
+                title: $t("search"),
+                content: String(reason),
+                closable: true,
+                duration: 3000,
+            });
+        });
+}
 </script>
 
 <template>
@@ -76,14 +185,16 @@ function isHit(block: Block_fullTextSearchBlock): boolean {
                     v-if="grouped"
                     class="content"
                     :bordered="false"
+                    @change="change(index, $t)"
                 >
                     <a-collapse-item
                         class="collapse-item"
-                        key="1"
+                        :key="1"
                     >
                         <!-- 文档 -->
                         <template #header>
                             <breadcrumb-popover
+                                class="doc"
                                 :block="item"
                                 :routes="doc2routes(item)"
                             />
@@ -107,17 +218,32 @@ function isHit(block: Block_fullTextSearchBlock): boolean {
                         </template>
 
                         <!-- 块 -->
-                        <a-list size="small">
+                        <a-list
+                            v-if="rendered[index]"
+                            class="blocks"
+                            size="small"
+                        >
                             <a-list-item
+                                class="block"
                                 v-for="(block, i) in item.children"
                                 :key="i"
                             >
-                                <div
-                                    class="content"
-                                    v-html="block.content"
-                                ></div>
+                                <breadcrumb-popover
+                                    class="doc"
+                                    :block="item"
+                                    :routes="routes[index][i]"
+                                />
                             </a-list-item>
                         </a-list>
+
+                        <!-- REF [Arco Design Vue](https://arco.design/vue/component/skeleton) -->
+                        <!-- 加载中的骨架屏 -->
+                        <a-skeleton
+                            v-else
+                            :animation="true"
+                        >
+                            <a-skeleton-line :rows="1" />
+                        </a-skeleton>
                     </a-collapse-item>
                 </a-collapse>
 
@@ -158,6 +284,14 @@ function isHit(block: Block_fullTextSearchBlock): boolean {
             > :last-child {
                 background-color: transparent;
                 padding: 0 0.5em;
+            }
+
+            // 块
+            .blocks {
+                padding: 0;
+                .block {
+                    padding: 0.25em 0.5em;
+                }
             }
         }
 

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import BlockIcon from "./BlockIcon.vue";
+
 import { inject } from "vue";
 
 import { IBreadcrumbItem, Separator } from "./../utils/breradcrumb";
@@ -39,8 +41,19 @@ function paths2href(paths: string | string[]): string {
                 }"
                 :href="paths2href(route.path)"
                 :disabled="route.separator === Separator.notebook"
-                v-html="route.label"
-            ></a-link>
+            >
+                <block-icon
+                    style="margin-right: 0.25em"
+                    v-show="route.icon"
+                    :type="route.type"
+                    :subtype="route.subType"
+                />
+
+                <span
+                    :on-show="route.label.length > 0"
+                    v-html="route.label"
+                ></span>
+            </a-link>
         </a-breadcrumb-item>
     </a-breadcrumb>
 </template>

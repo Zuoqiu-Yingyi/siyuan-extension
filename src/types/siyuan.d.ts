@@ -3,6 +3,7 @@ import {
     GroupBy,
     OrderBy,
     BlockType,
+    BlockSubType,
 } from "../utils/siyuan";
 
 /* 响应体 */
@@ -128,8 +129,8 @@ export interface IPayload_getBlockBreadcrumb {
 export interface Data_getBlockBreadcrumb {
 	id: string;
 	name: string;
-	type: string;
-	subType: string;
+	type: BlockType;
+    subType: BlockSubType;
     children?: Data_getBlockBreadcrumb[];
 }
 

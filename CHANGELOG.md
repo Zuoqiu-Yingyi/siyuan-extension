@@ -20,3 +20,4 @@
 - 搜索结果样式开关绑定至 `config` | Search result style switch bound to `config`.
 - 新增 API `/api/block/getBlockBreadcrumb` | Add API `/api/block/getBlockBreadcrumb`.
 - 完善 API 测试用例 | Improve API test cases.
+- 按文档分组的搜索结果添加块级面包屑 | Add block-level breadcrumbs to search results grouped by document.
