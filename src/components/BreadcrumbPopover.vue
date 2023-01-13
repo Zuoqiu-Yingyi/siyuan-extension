@@ -2,14 +2,15 @@
 import BreadcrumbA from "./BreadcrumbA.vue";
 
 import { computed } from "vue";
-import { BreadcrumbRoute } from "@arco-design/web-vue";
+
+import { IBreadcrumbItem } from "./../utils/breradcrumb";
 
 import { Block_fullTextSearchBlock } from "../types/siyuan";
 
 // REF: [Props | Vue.js](https://cn.vuejs.org/guide/components/props.html)
 const props = defineProps<{
     block: Block_fullTextSearchBlock;
-    routes: BreadcrumbRoute[];
+    routes: IBreadcrumbItem[];
 }>();
 
 /* 是否渲染块命名/别名/备注 (若非空) */

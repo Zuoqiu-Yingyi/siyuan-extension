@@ -3,9 +3,9 @@
 import BreadcrumbPopover from "./BreadcrumbPopover.vue";
 
 import { computed, inject, ShallowReactive } from "vue";
-import { BreadcrumbRoute } from "@arco-design/web-vue";
 
-import { INotebooks, Block_fullTextSearchBlock, Data_fullTextSearchBlock } from "../types/siyuan";
+import { INotebooks, Block_fullTextSearchBlock, Data_fullTextSearchBlock } from "./../types/siyuan";
+import { IBreadcrumbItem, Separator } from "./../utils/breradcrumb";
 
 /* 查询结果 */
 const results = inject("results") as ShallowReactive<Data_fullTextSearchBlock>; // 查询结果
@@ -18,19 +18,23 @@ const grouped = computed(() => {
 /* 文档 */
 const notebooks = inject("notebooks") as ShallowReactive<INotebooks>; // 笔记本列表
 
-function doc2routes(doc: Block_fullTextSearchBlock): BreadcrumbRoute[] {
+function doc2routes(doc: Block_fullTextSearchBlock): IBreadcrumbItem[] {
     const paths = doc.path.substring(0, doc.path.lastIndexOf(".")).split("/"); // 文档 ID 路径
     const hPath = doc.hPath.split("/"); // 可读路径
     hPath[0] = notebooks.map.get(doc.box)?.name as string; // 笔记名
     hPath[hPath.length - 1] = doc.content.toString(); // 当前文档名
 
     /* 路由 */
-    const routes: BreadcrumbRoute[] = paths.map((path, index) => {
+    const routes: IBreadcrumbItem[] = paths.map((path, index) => {
         return {
             path,
             label: hPath[index],
+            separator: Separator.document,
         };
     });
+
+    routes[0].label = `${notebooks.map.get(doc.box)?.icon ?? "📔"}${routes[0].label}`;
+    routes[0].separator = Separator.notebook;
 
     return routes;
 }

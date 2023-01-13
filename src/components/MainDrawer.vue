@@ -206,7 +206,6 @@ provide("results", results);
         .title-icon {
             width: 1em;
             height: 1em;
-            line-height: inherit;
             flex: none;
         }
 

@@ -1,15 +1,16 @@
 <script setup lang="ts">
 import { inject, Ref } from "vue";
-import { BreadcrumbRoute } from "@arco-design/web-vue";
+
+import { IBreadcrumbItem, Separator } from "./../utils/breradcrumb";
 
 // REF: [Props | Vue.js](https://cn.vuejs.org/guide/components/props.html)
 const props = defineProps<{
-    routes: BreadcrumbRoute[];
+    routes: IBreadcrumbItem[];
 }>();
 
 /* 将路由转换为超链接 href */
-function paths2href(paths: string[]): string {
-    return `siyuan://blocks/${paths.pop()}`;
+function paths2href(paths: string | string[]): string {
+    return `siyuan://blocks/${typeof paths === "string" ? paths : paths.pop()}`;
 }
 
 const wrap_breadcrumb = inject("wrap_breadcrumb") as Ref<boolean>; // 面包屑换行
@@ -23,19 +24,23 @@ const wrap_breadcrumb_item = inject("wrap_breadcrumb_item") as Ref<boolean>; // 
         :style="{
             flexWrap: wrap_breadcrumb ? 'wrap' : 'nowrap',
         }"
-        :routes="props.routes"
     >
-        <!-- 使用插槽可以为最后一个面包屑项设置超链接 -->
-        <template #item-render="{ route, paths }">
+        <a-breadcrumb-item
+            v-for="(route, index) in props.routes"
+            :key="index"
+            :separator="route.separator"
+        >
             <!-- eslint-disable vue/no-v-text-v-html-on-component -->
             <a-link
+                class="link"
                 :style="{
                     whiteSpace: wrap_breadcrumb_item ? 'normal' : 'nowrap',
                 }"
-                :href="paths2href(paths)"
+                :href="paths2href(route.path)"
+                :disabled="route.separator === Separator.notebook"
                 v-html="route.label"
             ></a-link>
-        </template>
+        </a-breadcrumb-item>
     </a-breadcrumb>
 </template>
 
@@ -48,7 +53,6 @@ const wrap_breadcrumb_item = inject("wrap_breadcrumb_item") as Ref<boolean>; // 
 
     > .arco-breadcrumb-item {
         display: flex;
-        padding: 0;
 
         &:last-child {
             a:not(:hover) {
@@ -56,9 +60,26 @@ const wrap_breadcrumb_item = inject("wrap_breadcrumb_item") as Ref<boolean>; // 
             }
         }
 
-        a {
+        .link {
             padding: 0;
             font-size: 12px;
+
+            &.arco-link-disabled {
+                color: var(--color-text-2);
+                cursor: pointer;
+            }
+
+            .icon {
+                display: inline-block;
+                width: 1em;
+                height: 1em;
+                margin-right: 0.5em;
+
+                &:is(img) {
+                    // REF: [vertical-align - CSS（层叠样式表） | MDN](https://developer.mozilla.org/zh-CN/docs/Web/CSS/vertical-align)
+                    vertical-align: middle;
+                }
+            }
         }
     }
 }

@@ -16,3 +16,4 @@
 - 按文档分组的搜索结果添加面包屑 | Add breadcrumbs to search results grouped by document.
 - 鼠标悬浮显示块属性 | Mouse hover to display block attributes.
 - 为搜索结果添加开关以控制面包屑换行 | Add a switch for the search results to control the line break of the breadcrumbs.
+- 重构面包屑渲染实现 | Refactor breadcrumb rendering implementation.
