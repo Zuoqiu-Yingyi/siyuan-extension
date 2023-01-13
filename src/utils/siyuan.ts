@@ -11,7 +11,9 @@ import {
     IResponse_lsNotebooks,
     IPayload_fullTextSearchBlock,
     IResponse_fullTextSearchBlock,
-} from "../types/siyuan";
+    IPayload_getBlockBreadcrumb,
+    IResponse_getBlockBreadcrumb,
+} from "./../types/siyuan";
 
 /* 叶子块 */
 export enum Leaf {
@@ -39,6 +41,29 @@ export enum Container {
     b, // 引述块
     l, // 列表块
     i, // 列表项
+}
+
+/* 块级节点类型 */
+export enum BlockType {
+    NodeDocument = "NodeDocument",
+    NodeSuperBlock = "NodeSuperBlock",
+    NodeBlockquote = "NodeBlockquote",
+    NodeList = "NodeList",
+    NodeListItem = "NodeListItem",
+
+    NodeHeading = "NodeHeading",
+    NodeParagraph = "NodeParagraph",
+    NodeMathBlock = "NodeMathBlock",
+    NodeTable = "NodeTable",
+    NodeCodeBlock = "NodeCodeBlock",
+    NodeHTMLBlock = "NodeHTMLBlock",
+
+    NodeThematicBreak = "NodeThematicBreak",
+    NodeAudio = "NodeAudio",
+    NodeVideo = "NodeVideo",
+    NodeIFrame = "NodeIFrame",
+    NodeWidget = "NodeWidget",
+    NodeBlockQueryEmbed = "NodeBlockQueryEmbed",
 }
 
 /**
@@ -175,10 +200,16 @@ class SiyuanClient {
         const response = await this._request("/api/notebook/lsNotebooks") as IResponse_lsNotebooks;
         return response;
     }
-    
+
     /* 全局搜索 */
     public async fullTextSearchBlock(payload: IPayload_fullTextSearchBlock): Promise<IResponse_fullTextSearchBlock> {
-        const response = await this._request("/api/search/fullTextSearchBlock", payload) as IResponse_fullTextSearchBlock; 
+        const response = await this._request("/api/search/fullTextSearchBlock", payload) as IResponse_fullTextSearchBlock;
+        return response;
+    }
+
+    /* 获得指定块的面包屑 */
+    public async getBlockBreadcrumb(payload: IPayload_getBlockBreadcrumb): Promise<IResponse_getBlockBreadcrumb> {
+        const response = await this._request("/api/block/getBlockBreadcrumb", payload) as IResponse_getBlockBreadcrumb;
         return response;
     }
 

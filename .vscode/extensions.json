@@ -1,6 +1,11 @@
 {
   "recommendations": [
-    "Vue.volar",
-    "Vue.vscode-typescript-vue-plugin"
-  ]
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "gregorbiswanger.json2ts",
+    "richie5um2.vscode-sort-json",
+    "vue.volar",
+    "vue.vscode-typescript-vue-plugin",
+    "zixuanchen.vitest-explorer",
+  ],
 }

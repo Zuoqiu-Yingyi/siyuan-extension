@@ -71,6 +71,7 @@ function isHit(block: Block_fullTextSearchBlock): boolean {
                 :key="index"
                 size="mini"
             >
+                <!-- 按文档分组 -->
                 <a-collapse
                     v-if="grouped"
                     class="content"
@@ -119,6 +120,8 @@ function isHit(block: Block_fullTextSearchBlock): boolean {
                         </a-list>
                     </a-collapse-item>
                 </a-collapse>
+
+                <!-- 未分组 -->
                 <div
                     v-else
                     class="content"

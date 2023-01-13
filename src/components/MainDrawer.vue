@@ -73,8 +73,8 @@ async function search($t: VueI18nTranslation, keyword: boolean) {
         const response = await client.fullTextSearchBlock(payload);
 
         results.blocks = response.data.blocks;
-        results.matchedBlockCount = response.data.matchedRootCount;
-        results.matchedRootCount = response.data.matchedBlockCount;
+        results.matchedRootCount = response.data.matchedRootCount;
+        results.matchedBlockCount = response.data.matchedBlockCount;
     } catch (error) {
         console.warn(error);
         Notification.error({

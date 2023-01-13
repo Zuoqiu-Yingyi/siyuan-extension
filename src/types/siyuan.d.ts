@@ -2,6 +2,7 @@ import {
     Method,
     GroupBy,
     OrderBy,
+    BlockType,
 } from "../utils/siyuan";
 
 /* 响应体 */
@@ -90,10 +91,10 @@ export interface Block_fullTextSearchBlock {
     fcontent: string;
     markdown: string;
     folded: boolean;
-    type: string;
+    type: BlockType;
     subType: string;
     refText: string;
-    refs?: any;
+    refs?: Block_fullTextSearchBlock[];
     defID: string;
     defPath: string;
     ial: Ial;
@@ -115,4 +116,25 @@ export interface IResponse_fullTextSearchBlock {
     code: number;
     msg: string;
     data: Data_fullTextSearchBlock;
+}
+
+// /api/block/getBlockBreadcrumb
+
+export interface IPayload_getBlockBreadcrumb {
+    id: string;
+    excludeTypes: BlockType[];
+}
+
+export interface Data_getBlockBreadcrumb {
+	id: string;
+	name: string;
+	type: string;
+	subType: string;
+    children?: Data_getBlockBreadcrumb[];
+}
+
+export interface IResponse_getBlockBreadcrumb {
+	code: number;
+	msg: string;
+    data: Data_getBlockBreadcrumb[];
 }
