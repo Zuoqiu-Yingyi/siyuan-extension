@@ -15,3 +15,4 @@
 - 搜索结果支持显示笔记本图标 | Search results support displaying notebook icon.
 - 按文档分组的搜索结果添加面包屑 | Add breadcrumbs to search results grouped by document.
 - 鼠标悬浮显示块属性 | Mouse hover to display block attributes.
+- 为搜索结果添加开关以控制面包屑换行 | Add a switch for the search results to control the line break of the breadcrumbs.

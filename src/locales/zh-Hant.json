@@ -7,11 +7,16 @@
     "content": "内容",
     "help": {
         "block_attrs_exist": "存在塊屬性",
+        "search_empty": "暫無搜索結果",
         "search_march": "匹配的搜索結果",
         "server": "@:siyuan_server URL 源",
         "token": "可在 @:path.token 中獲取"
     },
     "hostname": "IP 地址 {'|'} 域名 {'|'} 主機名",
+    "label": {
+        "wrap_breadcrumb": "麵包屑換行",
+        "wrap_breadcrumb_item": "麵包屑項換行"
+    },
     "language": "語言",
     "memo": "備註",
     "name": "命名",

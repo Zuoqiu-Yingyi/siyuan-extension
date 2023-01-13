@@ -2,12 +2,17 @@
 <script setup lang="ts">
 import SearchResults from "./SearchResults.vue";
 
-import { inject, ShallowReactive } from "vue";
+import { inject, provide, ref, ShallowReactive } from "vue";
 
 import { Data_fullTextSearchBlock } from "./../types/siyuan";
 
 /* 查询结果 */
 const results = inject("results") as ShallowReactive<Data_fullTextSearchBlock>; // 查询结果
+
+const wrap_breadcrumb = ref(true); // 面包屑是否换行
+const wrap_breadcrumb_item = ref(true); // 面包屑项是否换行
+provide("wrap_breadcrumb", wrap_breadcrumb);
+provide("wrap_breadcrumb_item", wrap_breadcrumb_item);
 </script>
 
 <template>
@@ -37,6 +42,39 @@ const results = inject("results") as ShallowReactive<Data_fullTextSearchBlock>; 
                             {{ results.matchedBlockCount }}
                         </a-descriptions-item>
                     </a-descriptions>
+
+                    <!-- REF [Arco Design Vue](https://arco.design/vue/component/divider) -->
+                    <!-- 分割线 -->
+                    <a-divider margin="0.5em" />
+
+                    <!-- REF [Arco Design Vue](https://arco.design/vue/component/switch) -->
+                    <a-space>
+                        <!-- 面包屑换行 -->
+                        <a-tag bordered>
+                            <!-- 标签图标 -->
+                            <template #icon><icon-align-left /></template>
+
+                            {{ $t("label.wrap_breadcrumb") }}
+                            <a-switch
+                                style="margin-left: 0.5em"
+                                v-model="wrap_breadcrumb"
+                                size="small"
+                            />
+                        </a-tag>
+
+                        <!-- 面包屑项换行 -->
+                        <a-tag bordered>
+                            <!-- 标签图标 -->
+                            <template #icon><icon-align-left /></template>
+
+                            {{ $t("label.wrap_breadcrumb_item") }}
+                            <a-switch
+                                style="margin-left: 0.5em"
+                                v-model="wrap_breadcrumb_item"
+                                size="small"
+                            />
+                        </a-tag>
+                    </a-space>
                 </template>
             </a-popover>
         </template>

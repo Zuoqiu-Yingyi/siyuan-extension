@@ -7,11 +7,16 @@
     "content": "Content",
     "help": {
         "block_attrs_exist": "Exise Block Attributes",
+        "search_empty": "No Search Results",
         "search_march": "Matching Search Result",
         "server": "@:siyuan_server URL Origin",
         "token": "Available in @:path.token"
     },
     "hostname": "IP Address {'|'} Domain Name {'|'} Host Name",
+    "label": {
+        "wrap_breadcrumb": "Breadcrumbs Wrap",
+        "wrap_breadcrumb_item": "Breadcrumb Items Wrap"
+    },
     "language": "Language",
     "memo": "Memo",
     "name": "Name",

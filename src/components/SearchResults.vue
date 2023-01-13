@@ -58,6 +58,9 @@ function isHit(block: Block_fullTextSearchBlock): boolean {
         size="small"
         :data="results.blocks"
     >
+        <template #empty>
+            <a-empty :description="$t('help.search_empty')" />
+        </template>
         <template #item="{ item, index }">
             <a-list-item
                 class="list-item"
@@ -126,7 +129,12 @@ function isHit(block: Block_fullTextSearchBlock): boolean {
 .list {
     .list-item {
         padding: 0 !important;
+        width: 100%;
         overflow-x: auto;
+        scrollbar-width: none;
+        &::-webkit-scrollbar {
+            display: none;
+        }
 
         .collapse-item {
             // 折叠面板标题
