@@ -3,28 +3,32 @@ import HelloWorld from "./components/HelloWorld.vue";
 import DragBall from "./components/DragBall.vue";
 import MainDrawer from "./components/MainDrawer.vue";
 
-import { ref, provide, reactive, inject, watch } from "vue";
+import { ref, provide, reactive, inject, watch, shallowReactive } from "vue";
 import { I18n } from "vue-i18n";
 
 import { IConfig } from "./types/config";
-import { INotebooks } from "./types/siyuan";
+import { Data_fullTextSearchBlock, INotebooks } from "./types/siyuan";
 
 import { GroupBy, Method, OrderBy, SiyuanClient } from "./utils/siyuan";
 import { Status } from "./utils/status";
 import { mapLabel } from "./utils/language";
 import { Theme } from "./utils/theme";
 import { Icon } from "./utils/icon";
+import { Tree } from "./utils/tree";
 
 const i18n = inject("i18n") as I18n; // 国际化引擎
 
 /* 笔记本列表 */
-const notebooks = reactive<INotebooks>({
+const notebooks = shallowReactive<INotebooks>({
     list: [],
     map: new Map(),
 });
+
+/* 监听 list 更改时更新 map */
 watch(
     () => notebooks.list,
     list => {
+        /* 重建映射 */
         notebooks.map.clear();
         list.forEach(notebook => {
             notebook.icon = Icon.icon2emojis(notebook.icon, client.url);
@@ -69,6 +73,9 @@ const config: IConfig = reactive({
             item: {
                 wrap: true,
             },
+        },
+        tree: {
+            fold: false,
         },
     },
     other: {
@@ -153,6 +160,19 @@ const visible = ref(false); // 抽屉是否可见
 const size = ref(0.5); // 抽屉宽度占比
 provide("visible", visible);
 /* 👆 抽屉状态 👆 */
+
+/* 👇 查询结果 👇 */
+const results = shallowReactive<Data_fullTextSearchBlock>({
+    blocks: [],
+    matchedBlockCount: 0,
+    matchedRootCount: 0,
+}); // 查询结果
+
+const tree = new Tree(results, notebooks); // 节点树
+
+provide("results", results);
+provide("tree", tree);
+/* 👆 查询结果 👆 */
 </script>
 
 <template>

@@ -4,8 +4,8 @@ import SearchResults from "./SearchResults.vue";
 
 import { inject, ShallowReactive } from "vue";
 
-import { IConfig } from "./../types/config";
-import { Data_fullTextSearchBlock } from "./../types/siyuan";
+import { IConfig } from "../types/config";
+import { Data_fullTextSearchBlock } from "../types/siyuan";
 
 /* 查询结果 */
 const config = inject("config") as IConfig; // 用户配置
@@ -15,12 +15,13 @@ const results = inject("results") as ShallowReactive<Data_fullTextSearchBlock>; 
 <template>
     <a-tab-pane
         class="panel"
-        key="1"
+        :key="1"
     >
         <!-- 标签页标题 -->
         <template #title>
             <a-popover position="bl">
-                <icon-search /> {{ $t("search_result") }}
+                <icon-unordered-list />
+                {{ $t("label.search_results_list") }}
 
                 <template #content>
                     <!-- REF [Arco Design Vue](https://arco.design/vue/component/descriptions) -->
@@ -45,7 +46,8 @@ const results = inject("results") as ShallowReactive<Data_fullTextSearchBlock>; 
                     <a-divider margin="0.5em" />
 
                     <!-- REF [Arco Design Vue](https://arco.design/vue/component/switch) -->
-                    <a-space>
+                    <!-- 搜索结果渲染样式控件 -->
+                    <a-space class="tools">
                         <!-- 面包屑换行 -->
                         <a-tag bordered>
                             <!-- 标签图标 -->
@@ -53,7 +55,7 @@ const results = inject("results") as ShallowReactive<Data_fullTextSearchBlock>; 
 
                             {{ $t("label.wrap_breadcrumb") }}
                             <a-switch
-                                style="margin-left: 0.5em"
+                                class="switch"
                                 v-model="config.render.breadcrumb.wrap"
                                 size="small"
                             />
@@ -66,7 +68,7 @@ const results = inject("results") as ShallowReactive<Data_fullTextSearchBlock>; 
 
                             {{ $t("label.wrap_breadcrumb_item") }}
                             <a-switch
-                                style="margin-left: 0.5em"
+                                class="switch"
                                 v-model="config.render.breadcrumb.item.wrap"
                                 size="small"
                             />
@@ -93,6 +95,13 @@ const results = inject("results") as ShallowReactive<Data_fullTextSearchBlock>; 
     .scrollbar {
         height: 100%;
         overflow: auto;
+    }
+}
+
+.tools {
+    flex-wrap: wrap;
+    .switch {
+        margin-left: 0.5em;
     }
 }
 </style>

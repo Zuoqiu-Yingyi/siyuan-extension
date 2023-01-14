@@ -1,4 +1,6 @@
 import { IPayload_fullTextSearchBlock } from "./siyuan"
+import { MODE } from "./../utils/render";
+
 export interface IConfig {
     server: {
         protocol: string,
@@ -14,6 +16,9 @@ export interface IConfig {
             item: {
                 wrap: boolean,
             },
+        },
+        tree: {
+            fold: boolean,
         },
     },
     other: {

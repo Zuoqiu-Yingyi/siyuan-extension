@@ -6,6 +6,8 @@ import {
     BlockSubType,
 } from "../utils/siyuan";
 
+export type ID = string; // ID 类型
+
 /* 响应体 */
 export interface IResponse {
     code: number;
@@ -16,7 +18,7 @@ export interface IResponse {
 // /api/notebook/lsNotebooks
 
 export interface Notebook {
-    id: string;
+    id: ID;
     name: string;
     icon: string;
     sort: number;
@@ -68,7 +70,7 @@ export interface IPayload_fullTextSearchBlock {
     groupBy: GroupBy; // 搜索结果分组方案
     method: Method; // 搜索方案
     orderBy: OrderBy; // 搜索结果排序方案
-    paths: string[]; // 指定搜索路径(以 *.sy 结尾不包含子文档)
+    paths: ID[]; // 指定搜索路径(以 *.sy 结尾不包含子文档)
     query: string; // 查询语句
     types: BlockTypes; // 搜索块类型
 }
@@ -81,9 +83,9 @@ export interface Block_fullTextSearchBlock {
     box: string;
     path: string;
     hPath: string;
-    id: string;
-    rootID: string;
-    parentID: string;
+    id: ID;
+    rootID: ID;
+    parentID: ID;
     name: string;
     alias: string;
     memo: string;
@@ -93,10 +95,10 @@ export interface Block_fullTextSearchBlock {
     markdown: string;
     folded: boolean;
     type: BlockType;
-    subType: string;
+    subType: BlockSubType;
     refText: string;
     refs?: Block_fullTextSearchBlock[];
-    defID: string;
+    defID: ID;
     defPath: string;
     ial: Ial;
     children: Block_fullTextSearchBlock[];
@@ -122,12 +124,12 @@ export interface IResponse_fullTextSearchBlock {
 // /api/block/getBlockBreadcrumb
 
 export interface IPayload_getBlockBreadcrumb {
-    id: string;
+    id: ID;
     excludeTypes: BlockType[];
 }
 
 export interface Data_getBlockBreadcrumb {
-	id: string;
+    id: ID;
 	name: string;
 	type: BlockType;
     subType: BlockSubType;

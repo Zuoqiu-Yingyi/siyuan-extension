@@ -21,3 +21,4 @@
 - 新增 API `/api/block/getBlockBreadcrumb` | Add API `/api/block/getBlockBreadcrumb`.
 - 完善 API 测试用例 | Improve API test cases.
 - 按文档分组的搜索结果添加块级面包屑 | Add block-level breadcrumbs to search results grouped by document.
+- 添加 `搜索结果树` 标签页 | Add `Search Results Tree` tab.

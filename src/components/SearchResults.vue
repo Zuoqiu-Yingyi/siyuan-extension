@@ -9,7 +9,8 @@ import { Notification } from "@arco-design/web-vue";
 import { INotebooks, Block_fullTextSearchBlock, Data_fullTextSearchBlock } from "./../types/siyuan";
 
 import { SiyuanClient, BlockType, BlockSubType } from "./../utils/siyuan";
-import { IBreadcrumbItem, Separator } from "./../utils/breradcrumb";
+import { IBreadcrumbItem, Separator } from "../utils/breadcrumb";
+import { Icon } from "../utils/icon";
 
 /* 查询结果 */
 const results = inject("results") as ShallowReactive<Data_fullTextSearchBlock>; // 查询结果
@@ -23,23 +24,24 @@ const notebooks = inject("notebooks") as ShallowReactive<INotebooks>; // 笔记�
 
 function doc2routes(doc: Block_fullTextSearchBlock): IBreadcrumbItem[] {
     const paths = doc.path.substring(0, doc.path.lastIndexOf(".")).split("/"); // 文档 ID 路径
-    const hPath = doc.hPath.split("/"); // 可读路径
-    hPath[0] = notebooks.map.get(doc.box)?.name as string; // 笔记名
-    hPath[hPath.length - 1] = doc.content.toString(); // 当前文档名
+    const hPaths = doc.hPath.split("/"); // 可读路径
+    hPaths[0] = notebooks.map.get(doc.box)?.name as string; // 笔记名
+    hPaths[hPaths.length - 1] = doc.content.toString(); // 当前文档名
 
     /* 路由 */
-    const routes: IBreadcrumbItem[] = paths.map((path, index) => {
-        return {
-            path,
-            label: hPath[index],
+    const routes: IBreadcrumbItem[] = [];
+    for (let i = 0, len = paths.length; i < len; ++i) {
+        routes.push({
+            path: paths[i],
+            label: hPaths[i],
             separator: Separator.document,
             icon: false,
             type: BlockType.NodeNotebook,
             subType: BlockSubType.none,
-        };
-    });
+        });
+    }
 
-    routes[0].label = `${notebooks.map.get(doc.box)?.icon ?? "📔"}${routes[0].label}`;
+    routes[0].label = `${notebooks.map.get(doc.box)?.icon ?? Icon.default.notebook.wrap}<span>${routes[0].label}</span>`;
     routes[0].separator = Separator.notebook;
 
     return routes;
@@ -53,11 +55,10 @@ function hasAttrs(block: Block_fullTextSearchBlock): boolean {
 /* 关键词是否命中块命名/别名/备注 */
 function isHit(block: Block_fullTextSearchBlock): boolean {
     return (
-        block.content.search("<mark>") + // 命中文档标题
-            block.name.search("<mark>") + // 命中命名
-            block.alias.search("<mark>") + // 命中别名
-            block.memo.search("<mark>") > // 命中备注
-        -4
+        block.content.search("<mark>") >= 0 || // 命中文档标题
+        block.name.search("<mark>") >= 0 || // 命中命名
+        block.alias.search("<mark>") >= 0 || // 命中别名
+        block.memo.search("<mark>") >= 0 // 命中备注
     );
 }
 
@@ -291,6 +292,7 @@ function change(index: number, $t: VueI18nTranslation): void {
                 padding: 0;
                 .block {
                     padding: 0.25em 0.5em;
+                    border: 1px solid var(--color-border-3);
                 }
             }
         }

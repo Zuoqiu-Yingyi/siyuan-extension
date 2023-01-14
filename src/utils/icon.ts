@@ -32,4 +32,10 @@ class Icon {
         return /^[0-9a-f]+$/.test(icon) ? Icon.utf32Decode(icon, true) : Icon.icon2img(icon, url);
     }
 
+    public static default = {
+        notebook: {
+            text: "📔",
+            wrap: `<span class="icon">📔</span>`,
+        },
+    };
 }

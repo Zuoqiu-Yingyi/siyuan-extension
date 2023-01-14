@@ -3,7 +3,7 @@ import BreadcrumbA from "./BreadcrumbA.vue";
 
 import { computed } from "vue";
 
-import { IBreadcrumbItem } from "./../utils/breradcrumb";
+import { IBreadcrumbItem } from "../utils/breadcrumb";
 
 import { Block_fullTextSearchBlock } from "../types/siyuan";
 

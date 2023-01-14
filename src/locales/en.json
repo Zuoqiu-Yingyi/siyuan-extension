@@ -14,10 +14,15 @@
     },
     "hostname": "IP Address {'|'} Domain Name {'|'} Host Name",
     "label": {
+        "fold": "Fold",
+        "search_results_list": "@:search_result @:list",
+        "search_results_tree": "@:search_result @:tree",
+        "unfold": "Unfold",
         "wrap_breadcrumb": "Breadcrumbs Wrap",
         "wrap_breadcrumb_item": "Breadcrumb Items Wrap"
     },
     "language": "Language",
+    "list": "List",
     "memo": "Memo",
     "name": "Name",
     "notebook": "Notebook",
@@ -97,6 +102,7 @@
     },
     "time": "Time",
     "token": "API Token",
+    "tree": "Tree",
     "user": "User",
     "user_settings": "@:user @:settings"
 }

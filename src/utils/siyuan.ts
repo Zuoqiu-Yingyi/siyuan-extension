@@ -1,11 +1,22 @@
 export {
-    SiyuanClient,
     MODE,
+    Leaf,
+    Container,
+    BlockType,
+    BlockSubType,
+    Method,
+    GroupBy,
+    OrderBy,
+
+    washNotebooks,
+
+    SiyuanClient,
 };
 
 import { Ref } from "vue";
 import { Status } from "./status";
 import {
+    Notebook,
     IResponse,
     IResponse_version,
     IResponse_lsNotebooks,
@@ -16,7 +27,7 @@ import {
 } from "./../types/siyuan";
 
 /* 叶子块 */
-export enum Leaf {
+enum Leaf {
     /* 可搜索时过滤 */
     h, // 标题块
     p, // 段落块
@@ -35,7 +46,7 @@ export enum Leaf {
 }
 
 /* 容器块 */
-export enum Container {
+enum Container {
     d, // 文档块
     s, // 超级块
     b, // 引述块
@@ -44,7 +55,7 @@ export enum Container {
 }
 
 /* 块级节点类型 */
-export enum BlockType {
+enum BlockType {
     NodeNotebook = "NodeNotebook", // <icon-book />
 
     NodeDocument = "NodeDocument", // 🍞 <icon-file />
@@ -69,7 +80,7 @@ export enum BlockType {
 }
 
 /* 块级节点子类型 */
-export enum BlockSubType {
+enum BlockSubType {
     h1 = "h1", // <icon-h1 />
     h2 = "h2", // <icon-h2 />
     h3 = "h3", // <icon-h3 />
@@ -86,7 +97,7 @@ export enum BlockSubType {
  * 搜索方案
  * REF: https://github.com/siyuan-note/siyuan/blob/145243e0583b7259fed143833a648e61f8863528/kernel/api/search.go#L221
  */
-export enum Method {
+enum Method {
     keyword, // 关键字
     querySyntax, // 查询语法
     sql, // SQL
@@ -97,7 +108,7 @@ export enum Method {
  * 搜索结果分组方案
  * REF: https://github.com/siyuan-note/siyuan/blob/145243e0583b7259fed143833a648e61f8863528/kernel/api/search.go#L231
  */
-export enum GroupBy {
+enum GroupBy {
     noGroupBy, // 不分组
     group, // 按文档分组
 }
@@ -106,7 +117,7 @@ export enum GroupBy {
  * 搜索结果排序方案
  * REF: https://github.com/siyuan-note/siyuan/blob/145243e0583b7259fed143833a648e61f8863528/kernel/api/search.go#L226
  */
-export enum OrderBy {
+enum OrderBy {
     type, // 按块类型（默认）
     createdASC, // 创建时间升序
     createdDESC, // 创建时间降序
@@ -122,6 +133,15 @@ enum MODE {
     desktop = "desktop",
     export = "export",
     mobile = "mobile",
+}
+
+/**
+ * 清洗笔记本列表
+ * - 过滤未打开的笔记本
+ * - 笔记本排序
+ */
+function washNotebooks(notebooks: Notebook[]): Notebook[] {
+    return notebooks.filter(notebook => !notebook.closed).sort((a, b) => a.sort - b.sort);
 }
 
 class SiyuanClient {

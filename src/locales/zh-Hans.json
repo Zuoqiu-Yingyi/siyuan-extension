@@ -14,10 +14,15 @@
     },
     "hostname": "IP 地址 {'|'} 域名 {'|'} 主机名",
     "label": {
+        "fold": "折叠",
+        "search_results_list": "@:search_result@:list",
+        "search_results_tree": "@:search_result@:tree",
+        "unfold": "展开",
         "wrap_breadcrumb": "面包屑换行",
         "wrap_breadcrumb_item": "面包屑项换行"
     },
     "language": "语言",
+    "list": "列表",
     "memo": "备注",
     "name": "命名",
     "notebook": "笔记本",
@@ -97,6 +102,7 @@
     },
     "time": "时间",
     "token": "API Token",
+    "tree": "树",
     "user": "用户",
     "user_settings": "@:user@:settings"
 }

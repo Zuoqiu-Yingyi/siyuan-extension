@@ -8,7 +8,7 @@ import { Notification } from "@arco-design/web-vue";
 import { IConfig } from "./../types/config";
 import { INotebooks } from "./../types/siyuan";
 
-import { Method, GroupBy, OrderBy, Leaf, Container, SiyuanClient } from "../utils/siyuan";
+import { Method, GroupBy, OrderBy, Leaf, Container, washNotebooks, SiyuanClient } from "../utils/siyuan";
 import { Theme, THEME_MOD } from "../utils/theme";
 
 const config = inject("config") as IConfig; // 用户配置
@@ -19,9 +19,8 @@ const client = inject("client") as InstanceType<typeof SiyuanClient>; // 思源�
 async function testSiyuanServer($t: VueI18nTranslation): Promise<void> {
     // console.log(config.server.url);
     try {
-        const r = await client.lsNotebooks();
-
-        notebooks.list = r.data.notebooks;
+        const response = await client.lsNotebooks();
+        notebooks.list = washNotebooks(response.data.notebooks);
 
         Notification.success({
             title: $t("conect_siyuan_client"),
@@ -155,7 +154,7 @@ const theme = inject("theme") as InstanceType<typeof Theme>; // 用户配置
 <template>
     <a-tab-pane
         class="panel"
-        key="2"
+        :key="3"
     >
         <template #title>
             <icon-settings />

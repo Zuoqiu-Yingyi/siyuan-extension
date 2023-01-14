@@ -1,15 +1,16 @@
 <script setup lang="ts">
-import TabSearch from "./TabSearch.vue";
+import TabSearchList from "./TabSearchList.vue";
+import TabSearchTree from "./TabSearchTree.vue";
 import TabSettings from "./TabSettings.vue";
 
-import { ref, shallowReactive, toRaw, inject, provide, watch, Ref, ShallowReactive } from "vue";
+import { ref, toRaw, inject, watch, Ref, ShallowReactive } from "vue";
 import { VueI18nTranslation } from "vue-i18n";
 import { Notification } from "@arco-design/web-vue";
 
 import { IConfig } from "./../types/config";
 import { INotebooks, Data_fullTextSearchBlock } from "./../types/siyuan";
 import { Status, map } from "./../utils/status";
-import { Method, SiyuanClient } from "./../utils/siyuan";
+import { Method, washNotebooks, SiyuanClient } from "./../utils/siyuan";
 
 const status = inject("status") as Ref<Status>; // 连接状态
 const message = inject("message") as Ref<string>; // 连接状态消息
@@ -29,11 +30,7 @@ function handleCancel() {
 /* 👇 查询内容 👇 */
 const query = ref(""); // 查询语句
 const keywords = ref<string[]>([]); // 查询关键词
-const results = shallowReactive<Data_fullTextSearchBlock>({
-    blocks: [],
-    matchedBlockCount: 0,
-    matchedRootCount: 0,
-}); // 查询结果
+const results = inject("results") as Data_fullTextSearchBlock; // 查询结果
 
 /* 将关键字列表转换为查询语句 */
 function keywords2query(value: string[]): string {
@@ -61,7 +58,7 @@ async function search($t: VueI18nTranslation, keyword: boolean) {
 
         if (notebooks.list.length === 0) {
             const response = await client.lsNotebooks();
-            notebooks.list = response.data.notebooks;
+            notebooks.list = washNotebooks(response.data.notebooks);
         }
 
         // REF [响应式 API：进阶 toRay() | Vue.js](https://cn.vuejs.org/api/reactivity-advanced.html#toraw)
@@ -85,8 +82,6 @@ async function search($t: VueI18nTranslation, keyword: boolean) {
         });
     }
 }
-
-provide("results", results);
 /* 👆 查询内容 👆 */
 </script>
 
@@ -186,7 +181,8 @@ provide("results", results);
             :size="'mini'"
             :justify="true"
         >
-            <tab-search />
+            <tab-search-list />
+            <tab-search-tree />
             <tab-settings />
         </a-tabs>
     </a-drawer>
@@ -218,6 +214,21 @@ provide("results", results);
         .title-input,
         .title-input-tag {
             flex: auto;
+        }
+    }
+
+    .icon {
+        display: inline-block;
+        width: 1em;
+        height: 1em;
+
+        &:not(:last-child) {
+            margin-right: 0.5em;
+        }
+
+        &:is(img) {
+            // REF: [vertical-align - CSS（层叠样式表） | MDN](https://developer.mozilla.org/zh-CN/docs/Web/CSS/vertical-align)
+            vertical-align: middle;
         }
     }
 

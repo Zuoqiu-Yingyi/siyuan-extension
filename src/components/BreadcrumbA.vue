@@ -3,7 +3,7 @@ import BlockIcon from "./BlockIcon.vue";
 
 import { inject } from "vue";
 
-import { IBreadcrumbItem, Separator } from "./../utils/breradcrumb";
+import { IBreadcrumbItem, Separator } from "../utils/breadcrumb";
 
 import { IConfig } from "./../types/config";
 
@@ -43,14 +43,14 @@ function paths2href(paths: string | string[]): string {
                 :disabled="route.separator === Separator.notebook"
             >
                 <block-icon
-                    style="margin-right: 0.25em"
-                    v-show="route.icon"
+                    v-if="route.icon"
                     :type="route.type"
                     :subtype="route.subType"
                 />
 
                 <span
-                    :on-show="route.label.length > 0"
+                    class="text"
+                    v-if="route.label.length > 0"
                     v-html="route.label"
                 ></span>
             </a-link>
@@ -75,23 +75,21 @@ function paths2href(paths: string | string[]): string {
         }
 
         .link {
-            padding: 0;
+            display: inline-flex;
+            padding: 0 0.25em;
             font-size: 12px;
+
+            outline: 1px solid var(--color-border-4);
+            border-radius: 2px;
 
             &.arco-link-disabled {
                 color: var(--color-text-2);
                 cursor: pointer;
             }
 
-            .icon {
-                display: inline-block;
-                width: 1em;
-                height: 1em;
-                margin-right: 0.5em;
-
-                &:is(img) {
-                    // REF: [vertical-align - CSS（层叠样式表） | MDN](https://developer.mozilla.org/zh-CN/docs/Web/CSS/vertical-align)
-                    vertical-align: middle;
+            .text {
+                &:not(:empty):not(:first-child) {
+                    margin-left: 0.25em;
                 }
             }
         }
