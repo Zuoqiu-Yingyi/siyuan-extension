@@ -9,8 +9,20 @@ const props = defineProps<{
 
 <template>
     <span>
+        <!-- 笔记本 -->
+        <icon-book v-if="props.type === BlockType.NodeNotebook" />
+
+        <!-- 文件夹(作为路径的文档) -->
+        <icon-folder v-else-if="props.type === BlockType.NodeFolder" />
+
         <!-- 文档 -->
-        <icon-file v-if="props.type === BlockType.NodeDocument" />
+        <icon-file v-else-if="props.type === BlockType.NodeDocument" />
+
+        <!-- 超级 -->
+        <icon-interaction v-else-if="props.type === BlockType.NodeSuperBlock" />
+
+        <!-- 引述 -->
+        <icon-quote v-else-if="props.type === BlockType.NodeBlockquote" />
 
         <!-- 列表项 -->
         <icon-unordered-list v-else-if="props.type === BlockType.NodeListItem && props.subtype === BlockSubType.u" />

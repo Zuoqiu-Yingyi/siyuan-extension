@@ -57,9 +57,10 @@ enum Container {
 /* 块级节点类型 */
 enum BlockType {
     NodeNotebook = "NodeNotebook", // <icon-book />
+    NodeFolder = "NodeFolder", // <icon-book />
 
     NodeDocument = "NodeDocument", // 🍞 <icon-file />
-    NodeSuperBlock = "NodeSuperBlock",
+    NodeSuperBlock = "NodeSuperBlock", // <icon-interaction />
     NodeBlockquote = "NodeBlockquote", // <icon-quote />
     NodeList = "NodeList", // <icon-list />
     NodeListItem = "NodeListItem", // 🍞 <icon-mind-mapping />

@@ -1,5 +1,6 @@
 {
     "alias": "别名",
+    "block": "块",
     "check_all": "全选",
     "client": "客户端",
     "conect_siyuan_client": "连接@:siyuan@:client",
@@ -38,21 +39,21 @@
     "search": "搜索",
     "search_config": {
         "block_types": {
-            "blockquote": "引述块",
-            "codeBlock": "代码块",
+            "blockquote": "@:types.NodeBlockquote@:block",
+            "codeBlock": "@:types.NodeCodeBlock@:block",
             "container": "容器块",
             "details": "根据 @:search_config.block_types.label 筛选@:search_result",
-            "document": "文档块",
-            "heading": "标题块",
-            "htmlBlock": "HTML块",
+            "document": "@:types.NodeDocument@:block",
+            "heading": "@:types.NodeHeading@:block",
+            "htmlBlock": "@:types.NodeHTMLBlock@:block",
             "label": "块类型",
             "leaf": "叶子块",
-            "list": "列表块",
-            "listItem": "列表项",
-            "mathBlock": "公式块",
-            "paragraph": "段落块",
-            "superBlock": "超级块",
-            "table": "表格块"
+            "list": "@:types.NodeList@:block",
+            "listItem": "@:types.NodeListItem",
+            "mathBlock": "@:types.NodeMathBlock@:block",
+            "paragraph": "@:types.NodeParagraph@:block",
+            "superBlock": "@:types.NodeSuperBlock@:block",
+            "table": "@:types.NodeTable@:block"
         },
         "groupBy": {
             "details": "@:search_result@:search_config.groupBy.label",
@@ -103,6 +104,25 @@
     "time": "时间",
     "token": "API Token",
     "tree": "树",
+    "types": {
+        "NodeAudio": "音频",
+        "NodeBlockQueryEmbed": "嵌入",
+        "NodeBlockquote": "引述",
+        "NodeCodeBlock": "代码",
+        "NodeDocument": "文档",
+        "NodeHTMLBlock": "HTML",
+        "NodeHeading": "标题",
+        "NodeIFrame": "IFrame",
+        "NodeList": "列表",
+        "NodeListItem": "列表项",
+        "NodeMathBlock": "公式",
+        "NodeParagraph": "段落",
+        "NodeSuperBlock": "超级",
+        "NodeTable": "表格",
+        "NodeThematicBreak": "分割线",
+        "NodeVideo": "视频",
+        "NodeWidget": "挂件"
+    },
     "user": "用户",
     "user_settings": "@:user@:settings"
 }

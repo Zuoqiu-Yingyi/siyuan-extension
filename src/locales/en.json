@@ -1,5 +1,6 @@
 {
     "alias": "Alias",
+    "block": "Block",
     "check_all": "Check All",
     "client": "Client",
     "conect_siyuan_client": "Connect @:siyuan @:client",
@@ -38,21 +39,21 @@
     "search": "Search",
     "search_config": {
         "block_types": {
-            "blockquote": "Quote Block",
-            "codeBlock": "Code Block",
+            "blockquote": "@:types.NodeBlockquote @:block",
+            "codeBlock": "@:types.NodeCodeBlock @:block",
             "container": "Container Block",
             "details": "Filter @:search_result Based on @:search_config.block_types.label",
-            "document": "Document Block",
-            "heading": "Heading Block",
-            "htmlBlock": "HTML Block",
+            "document": "@:types.NodeDocument @:block",
+            "heading": "@:types.NodeHeading @:block",
+            "htmlBlock": "@:types.NodeHTMLBlock @:block",
             "label": "Block Type",
             "leaf": "Leaf Block",
-            "list": "List Block",
-            "listItem": "List Item",
-            "mathBlock": "Formula Block",
-            "paragraph": "Paragraph Block",
-            "superBlock": "Super Block",
-            "table": "Table Block"
+            "list": "@:types.NodeList @:block",
+            "listItem": "@:types.NodeListItem",
+            "mathBlock": "@:types.NodeMathBlock @:block",
+            "paragraph": "@:types.NodeParagraph @:block",
+            "superBlock": "@:types.NodeSuperBlock @:block",
+            "table": "@:types.NodeTable @:block"
         },
         "groupBy": {
             "details": "@:search_result @:search_config.groupBy.label",
@@ -103,6 +104,25 @@
     "time": "Time",
     "token": "API Token",
     "tree": "Tree",
+    "types": {
+        "NodeAudio": "Audio",
+        "NodeBlockQueryEmbed": "Embed",
+        "NodeBlockquote": "Quote",
+        "NodeCodeBlock": "Code",
+        "NodeDocument": "Document",
+        "NodeHTMLBlock": "HTML",
+        "NodeHeading": "Heading",
+        "NodeIFrame": "IFrame",
+        "NodeList": "List",
+        "NodeListItem": "List Item",
+        "NodeMathBlock": "Formula",
+        "NodeParagraph": "Paragraph",
+        "NodeSuperBlock": "Super",
+        "NodeTable": "Table",
+        "NodeThematicBreak": "Horizontal Rule",
+        "NodeVideo": "Video",
+        "NodeWidget": "Widget"
+    },
     "user": "User",
     "user_settings": "@:user @:settings"
 }

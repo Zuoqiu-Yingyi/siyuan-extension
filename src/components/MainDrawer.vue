@@ -11,6 +11,7 @@ import { IConfig } from "./../types/config";
 import { INotebooks, Data_fullTextSearchBlock } from "./../types/siyuan";
 import { Status, map } from "./../utils/status";
 import { Method, washNotebooks, SiyuanClient } from "./../utils/siyuan";
+import { Tree } from "./../utils/tree";
 
 const status = inject("status") as Ref<Status>; // 连接状态
 const message = inject("message") as Ref<string>; // 连接状态消息
@@ -19,6 +20,7 @@ const version = inject("version") as Ref<string>; // 内核版本
 const visible = inject("visible") as Ref<boolean>; // 是否显示
 
 const config = inject("config") as IConfig; // 用户配置
+const tree = inject("tree") as InstanceType<typeof Tree>; // 树状搜索结果
 
 function handleOk() {
     visible.value = false;
@@ -97,10 +99,93 @@ async function search($t: VueI18nTranslation, keyword: boolean) {
     >
         <template #title>
             <div class="title">
-                <img
-                    class="title-icon"
-                    src="./../assets/siyuan-32.png"
-                />
+                <a-popover position="bl">
+                    <img
+                        class="title-icon"
+                        src="./../assets/siyuan-32.png"
+                    />
+
+                    <template #content>
+                        <!-- REF [Arco Design Vue](https://arco.design/vue/component/descriptions) -->
+                        <!-- 搜索结果信息 -->
+                        <a-descriptions
+                            size="mini"
+                            bordered
+                        >
+                            <!-- 搜索结果文档数 -->
+                            <a-descriptions-item :label="$t('search_description.doc_count')">
+                                {{ results.matchedRootCount }}
+                            </a-descriptions-item>
+
+                            <!-- 搜索结果块数 -->
+                            <a-descriptions-item :label="$t('search_description.block_count')">
+                                {{ results.matchedBlockCount }}
+                            </a-descriptions-item>
+                        </a-descriptions>
+
+                        <!-- REF [Arco Design Vue](https://arco.design/vue/component/divider) -->
+                        <!-- 分割线 -->
+                        <a-divider margin="0.5em" />
+
+                        <!-- REF [Arco Design Vue](https://arco.design/vue/component/switch) -->
+                        <!-- 搜索结果渲染样式控件 -->
+                        <a-space class="tools">
+                            <!-- 面包屑换行 -->
+                            <a-tag bordered>
+                                <!-- 标签图标 -->
+                                <template #icon><icon-align-left /></template>
+
+                                {{ $t("label.wrap_breadcrumb") }}
+                                <a-switch
+                                    class="switch"
+                                    v-model:model-value="config.render.breadcrumb.wrap"
+                                    size="small"
+                                />
+                            </a-tag>
+
+                            <!-- 面包屑项换行 -->
+                            <a-tag bordered>
+                                <!-- 标签图标 -->
+                                <template #icon><icon-align-left /></template>
+
+                                {{ $t("label.wrap_breadcrumb_item") }}
+                                <a-switch
+                                    class="switch"
+                                    v-model:model-value="config.render.breadcrumb.item.wrap"
+                                    size="small"
+                                />
+                            </a-tag>
+
+                            <!-- 展开 -->
+                            <a-button
+                                class="button"
+                                type="secondary"
+                                size="mini"
+                                @click="config.render.tree.fold === false ? tree.broadcast() : (config.render.tree.fold = false)"
+                            >
+                                <template #icon>
+                                    <icon-expand />
+                                </template>
+
+                                {{ $t("label.unfold") }}
+                            </a-button>
+
+                            <!-- 折叠 -->
+                            <a-button
+                                class="button"
+                                type="secondary"
+                                size="mini"
+                                @click="config.render.tree.fold === true ? tree.broadcast() : (config.render.tree.fold = true)"
+                            >
+                                <template #icon>
+                                    <icon-shrink />
+                                </template>
+
+                                {{ $t("label.fold") }}
+                            </a-button>
+                        </a-space>
+                    </template>
+                </a-popover>
 
                 <!-- REF [Arco Design Vue](https://arco.design/vue/component/popover) -->
                 <!-- 鼠标悬浮气泡卡片 -->
@@ -166,7 +251,7 @@ async function search($t: VueI18nTranslation, keyword: boolean) {
                     v-else
                     class="title-input"
                     size="mini"
-                    v-model="query"
+                    v-model:model-value="query"
                     :placeholder="$t('search')"
                     @change="search($t, false)"
                     allow-clear
@@ -189,6 +274,25 @@ async function search($t: VueI18nTranslation, keyword: boolean) {
 </template>
 
 <style lang="less">
+.tools {
+    flex-wrap: wrap;
+
+    .switch {
+        margin-left: 0.5em;
+    }
+
+    .button {
+    }
+}
+// 树节点文本
+.arco-tree-node-title-text {
+    [custom-wrap="true"] & {
+        white-space: normal;
+    }
+    [custom-wrap="false"] & {
+        white-space: nowrap;
+    }
+}
 // 支持 .arco-* 选择器需要移除 scoped 标签
 #siyuan-drawer {
     .arco-drawer-title {

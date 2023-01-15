@@ -1,16 +1,82 @@
 <script setup lang="ts">
-import { inject, computed, ShallowReactive } from "vue";
+import { shallowRef, inject, watch, ShallowReactive } from "vue";
+import { VueI18nTranslation } from "vue-i18n";
+import { Notification, TreeNodeData } from "@arco-design/web-vue";
 
-import { IConfig } from "../types/config";
-import { Data_fullTextSearchBlock } from "../types/siyuan";
+import { IConfig } from "./../types/config";
+import { Data_fullTextSearchBlock, Data_getBlockBreadcrumb, ID } from "./../types/siyuan";
 
-import { Tree } from "./../utils/tree";
+import { Tree, TreeNode } from "./../utils/tree";
+import { SiyuanClient } from "./../utils/siyuan";
 
 /* 查询结果 */
 const config = inject("config") as IConfig; // 用户配置
+const client = inject("client") as InstanceType<typeof SiyuanClient>; // 思源客户端
 const results = inject("results") as ShallowReactive<Data_fullTextSearchBlock>; // 查询结果
 const tree = inject("tree") as InstanceType<typeof Tree>; // 树状搜索结果
-const expanded_keys = computed(() => config.render.tree.fold ? [] : [...tree.map.keys()]); // 展开的节点
+const expanded_keys = shallowRef<string[]>([]); // 展开的节点
+
+/* 监听展开/折叠按钮 */
+watch(
+    [() => config.render.tree.fold, tree.signal],
+    ([fold]) => {
+        expanded_keys.value = fold ? [] : [...tree.map.keys()];
+    },
+    { immediate: true },
+);
+
+/* 加载块级节点 */
+function load(node: TreeNodeData, $t: VueI18nTranslation): Promise<void> {
+    return new Promise(resolve => {
+        let blocks = results.blocks.filter(block => block.path.endsWith(node.key as string));
+        if (blocks.length === 1 && blocks[0].children?.length > 0) blocks = blocks[0].children; // 若查询结果按文档分组, 则展开该文档的子节点
+        Promise.all(
+            blocks.map(
+                block =>
+                    new Promise((resolve, reject) => {
+                        client
+                            .getBlockBreadcrumb({
+                                id: block.id,
+                                excludeTypes: [],
+                            })
+                            .then(response => {
+                                resolve(response.data);
+                            })
+                            .catch(reject);
+                    }),
+            ),
+        )
+            .then(breadcrumbs => {
+                const keys = tree.updateBlocks(
+                    node as TreeNode, // 文档节点
+                    breadcrumbs as Data_getBlockBreadcrumb[][], // 每个块的面包屑
+                    $t, // i10n 方法
+                );
+                expanded_keys.value.push(...keys);
+                resolve();
+            })
+            .catch(reason => {
+                console.warn(reason);
+                Notification.error({
+                    title: $t("search"),
+                    content: String(reason),
+                    closable: true,
+                    duration: 3000,
+                });
+            });
+        resolve();
+    });
+}
+
+/* 选择节点 */
+function select(selectedKeys: Array<string | number>, data: { selected?: boolean; selectedNodes: TreeNodeData[]; node?: TreeNodeData; e?: Event }): void {
+    if (data.selected && selectedKeys.length === 1) {
+        const id = /^(?<id>\d{14}-[0-9a-z]{7})/.exec(selectedKeys[0] as string)?.groups?.id;
+        if (id) {
+            window.open(`siyuan://blocks/${id}`, "_blank");
+        }
+    }
+}
 </script>
 
 <template>
@@ -20,76 +86,30 @@ const expanded_keys = computed(() => config.render.tree.fold ? [] : [...tree.map
     >
         <!-- 标签页标题 -->
         <template #title>
-            <a-popover position="bl">
-                <icon-mind-mapping />
-                {{ $t("label.search_results_tree") }}
-
-                <template #content>
-                    <!-- 搜索结果信息 -->
-                    <a-descriptions
-                        size="mini"
-                        bordered
-                    >
-                        <!-- 搜索结果文档数 -->
-                        <a-descriptions-item :label="$t('search_description.doc_count')">
-                            {{ results.matchedRootCount }}
-                        </a-descriptions-item>
-
-                        <!-- 搜索结果块数 -->
-                        <a-descriptions-item :label="$t('search_description.block_count')">
-                            {{ results.matchedBlockCount }}
-                        </a-descriptions-item>
-                    </a-descriptions>
-
-                    <!-- 分割线 -->
-                    <a-divider margin="0.5em" />
-
-                    <!-- 搜索结果渲染样式控件 -->
-                    <a-space class="tools">
-                        <!-- 展开 -->
-                        <a-button
-                            type="outline"
-                            size="mini"
-                            @click="config.render.tree.fold = false"
-                        >
-                            <template #icon>
-                                <icon-expand />
-                            </template>
-
-                            {{ $t("label.unfold") }}
-                        </a-button>
-
-                        <!-- 折叠 -->
-                        <a-button
-                            type="outline"
-                            size="mini"
-                            @click="config.render.tree.fold = true"
-                        >
-                            <template #icon>
-                                <icon-shrink />
-                            </template>
-
-                            {{ $t("label.fold") }}
-                        </a-button>
-                    </a-space>
-                </template>
-            </a-popover>
+            <icon-mind-mapping />
+            {{ $t("label.search_results_tree") }}
         </template>
 
         <!-- 标签页内容 -->
         <!-- 滚动条 -->
         <a-scrollbar
-            outer-class="scrollbar"
+            style="height: 100%; overflow: auto"
+            outer-class="scrollbar-outer"
             type="track"
         >
             <!-- REF [Arco Design Vue](https://arco.design/vue/component/tree) -->
             <!-- 树 -->
             <a-tree
                 v-if="tree.data.length > 0"
+                size="mini"
+                class="tree"
+                :custom-wrap="config.render.breadcrumb.item.wrap"
                 :data="tree.data"
                 :show-line="true"
+                :load-more="(node: TreeNodeData) => load(node, $t)"
                 v-model:expanded-keys="expanded_keys"
-                blockNode
+                @select="select"
+                block-node
             />
 
             <a-empty
@@ -102,10 +122,12 @@ const expanded_keys = computed(() => config.render.tree.fold ? [] : [...tree.map
 
 <style scoped lang="less">
 .panel {
-    .scrollbar {
+    .scrollbar-outer {
         height: 100%;
-        overflow: auto;
-        padding: 0 0.5em;
+        padding: 0 0.25em;
+
+        .tree {
+        }
     }
 }
 </style>

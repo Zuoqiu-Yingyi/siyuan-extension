@@ -135,7 +135,7 @@ function change(index: number, $t: VueI18nTranslation): void {
                                                 case BlockType.NodeIFrame:
                                                 case BlockType.NodeWidget:
                                                 case BlockType.NodeBlockQueryEmbed:
-                                                    return "";
+                                                    return $t(`types.${breadcrumb_item.type}`);
                                                 default:
                                                     return breadcrumb_item.name;
                                             }
@@ -175,6 +175,7 @@ function change(index: number, $t: VueI18nTranslation): void {
         <template #empty>
             <a-empty :description="$t('help.search_empty')" />
         </template>
+
         <template #item="{ item, index }">
             <a-list-item
                 class="list-item"

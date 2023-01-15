@@ -5,15 +5,22 @@ export {
     Tree,
 };
 
+import { VueI18nTranslation } from "vue-i18n";
 import {
     h,
+    ref,
     reactive,
     watch,
-    VNode,
     ShallowReactive,
     UnwrapNestedRefs,
 } from "vue";
 import { TreeNodeData } from "@arco-design/web-vue";
+import {
+    IconCaretDown,
+    IconCaretRight,
+    IconLoading,
+    IconToRight,
+} from "@arco-design/web-vue/es/icon";
 
 import BlockIcon from "./../components/BlockIcon.vue";
 
@@ -21,6 +28,7 @@ import {
     INotebooks,
     Block_fullTextSearchBlock,
     Data_fullTextSearchBlock,
+    Data_getBlockBreadcrumb,
 } from "./../types/siyuan";
 
 import {
@@ -36,8 +44,6 @@ interface TreeNode extends TreeNodeData {
     key: string | number;
     title: string;
     isLeaf: boolean;
-    icon: () => VNode[];
-    children: TreeNode[];
 }
 
 class Tree {
@@ -45,7 +51,8 @@ class Tree {
         results: ShallowReactive<Data_fullTextSearchBlock>,
         protected _notebooks: ShallowReactive<INotebooks>, // 笔记本
         public data: UnwrapNestedRefs<TreeNode[]> = reactive([]), // 树形数据
-        public map: Map<string, TreeNode> = new Map, // ID => 树节点
+        public map: Map<string, TreeNode> = new Map(), // ID => 树节点]
+        public signal = ref(0), // 更新信号, 每次更新时取反, 用于触发组件更新
     ) {
         watch(
             () => results.blocks,
@@ -54,7 +61,12 @@ class Tree {
         );
     }
 
-    /* 跟踪查询结果构造树 */
+    /* 广播更新信号 */
+    public broadcast(): void {
+        this.signal.value++;
+    }
+
+    /* 根据查询结果构造文档树 */
     protected _updateDoc(blocks: Block_fullTextSearchBlock[]) {
         /* 删除原树 */
         this.data.length = 0;
@@ -102,15 +114,90 @@ class Tree {
                         key: child.path,
                         title: child.label,
                         isLeaf: false,
-                        icon: () => [h(BlockIcon, { type: child.type, subtype: child.subType })],
-                        children: [],
+                        icon: child.icon
+                            ? () => [h(BlockIcon, { type: child.type, subtype: child.subType })]
+                            : undefined, // 表示无图标
+                        children: undefined // 可激活动态加载
                     };
+                    if (child.path.endsWith(".sy")) { // 文档节点
+                        // node.switcherIcon = () => [h(IconRightCircle)]; // 展开图标
+                        node.switcherIcon = () => [h(IconCaretRight)]; // 展开图标
+                        node.loadingIcon = () => [h(IconLoading)]; // 动态加载图标
+                    }
                     this.map.set(child.path, node);
-                    parent.children.push(node);
+                    parent.children?.push(node) ?? (parent.children = [node]);
                     return node;
                 }
             }, root as unknown as TreeNode);
         });
+        this.broadcast();
+    }
+
+    /**
+     * 更新块级树
+     * @params node: 文档节点
+     * @params breadcrumbs: 文档内各块的面包屑
+     * @params $t: 本地化函数
+     * @return : 更新的节点 key 列表
+     */
+    public updateBlocks(
+        node: TreeNode,
+        breadcrumbs: Data_getBlockBreadcrumb[][],
+        $t: VueI18nTranslation,
+    ): string[] {
+        const keys: string[] = []; // 更新的节点 key 列表
+        breadcrumbs.forEach(breadcrumb => {
+            breadcrumb.shift(); // 移除文档路径
+            if (breadcrumb.length === 0) { // 文档节点
+                node.icon = () => [h(BlockIcon, { type: BlockType.NodeDocument, subtype: BlockSubType.none })];
+                return; // 无需更新
+            }
+            const leaf = breadcrumb.reduce((parent: TreeNode, child: Data_getBlockBreadcrumb) => {
+                const current_node = this.map.get(child.id); // 当前节点是否已经添加到树中
+                if (current_node) {
+                    return current_node;
+                }
+                else {
+                    const node: TreeNode = {
+                        key: child.id,
+                        title: (() => {
+                            switch (child.type) {
+                                case BlockType.NodeMathBlock:
+                                case BlockType.NodeTable:
+                                case BlockType.NodeCodeBlock:
+                                case BlockType.NodeHTMLBlock:
+                                case BlockType.NodeThematicBreak:
+                                case BlockType.NodeAudio:
+                                case BlockType.NodeVideo:
+                                case BlockType.NodeIFrame:
+                                case BlockType.NodeWidget:
+                                case BlockType.NodeBlockQueryEmbed:
+                                    return $t(`types.${child.type}`);
+                                default:
+                                    return child.name;
+                            }
+                        })(),
+                        isLeaf: false,
+                        icon: () => [h(BlockIcon, { type: child.type, subtype: child.subType })],
+                        children: [],
+                    };
+                    keys.push(child.id);
+                    this.map.set(child.id, node);
+                    parent.children?.push(node) ?? (parent.children = [node]);
+                    return node;
+                }
+            }, node);
+
+            leaf.isLeaf = true;
+            leaf.switcherIcon = () => [h(IconToRight)];
+        });
+        if (node.children?.length) { // 文档下级存在子节点(存在非文档节点)
+            node.switcherIcon = () => [h(IconCaretDown)];
+        }
+        else { // 文档下级无子节点(仅匹配到了文档)
+            node.switcherIcon = () => [h(IconToRight)];
+        }
+        return keys;
     }
 
     /* 解析文档节点路径 */
@@ -131,21 +218,33 @@ class Tree {
         });
 
         /* 添加文档 */
-        const paths = block.path.substring(0, block.path.lastIndexOf(".")).split("/"); // 文档 ID 路径
+        // const paths = block.path.substring(0, block.path.lastIndexOf(".")).split("/"); // 文档 ID 路径
+        const paths = block.path.split("/"); // "ID" 为文件夹(存在子文档), "ID.sy" 为文档(存在子块)
         const hPaths = block.hPath.split("/"); // 可读路径
 
         if (paths.length !== hPaths.length) throw new Error(`Path length mismatch: path="${block.path}", hPath="${hPaths}"`);
 
-        for (let i = 1; i < paths.length; ++i) {
+        /* 作为文件夹(存在子文档) */
+        for (let i = 1, len = paths.length - 1; i < len; ++i) {
             breadcrumb.push({
                 path: paths[i],
                 label: hPaths[i],
                 separator: Separator.document,
-                icon: true,
-                type: BlockType.NodeDocument,
+                icon: false,
+                type: BlockType.NodeFolder,
                 subType: BlockSubType.none,
             });
         }
+
+        /* 作为文档块(存在子块) */
+        breadcrumb.push({
+            path: paths.at(-1) as string,
+            label: hPaths.at(-1) as string,
+            separator: Separator.document,
+            icon: false,
+            type: BlockType.NodeDocument,
+            subType: BlockSubType.none,
+        });
 
         return breadcrumb;
     }

@@ -1,5 +1,6 @@
 {
     "alias": "別名",
+    "block": "塊",
     "check_all": "全選",
     "client": "客戶端",
     "conect_siyuan_client": "連接@:siyuan@:client",
@@ -38,21 +39,21 @@
     "search": "搜索",
     "search_config": {
         "block_types": {
-            "blockquote": "引述塊",
-            "codeBlock": "代碼塊",
+            "blockquote": "@:types.NodeBlockquote@:block",
+            "codeBlock": "@:types.NodeCodeBlock@:block",
             "container": "容器塊",
             "details": "根據 @:search_config.block_types.label 篩選@:search_result",
-            "document": "文檔塊",
-            "heading": "標題塊",
-            "htmlBlock": "HTML塊",
+            "document": "@:types.NodeDocument@:block",
+            "heading": "@:types.NodeHeading@:block",
+            "htmlBlock": "@:types.NodeHTMLBlock@:block",
             "label": "塊類型",
             "leaf": "葉子塊",
-            "list": "列表塊",
-            "listItem": "列表項",
-            "mathBlock": "公式塊",
-            "paragraph": "段落塊",
-            "superBlock": "超級塊",
-            "table": "表格塊"
+            "list": "@:types.NodeList@:block",
+            "listItem": "@:types.NodeListItem",
+            "mathBlock": "@:types.NodeMathBlock@:block",
+            "paragraph": "@:types.NodeParagraph@:block",
+            "superBlock": "@:types.NodeSuperBlock@:block",
+            "table": "@:types.NodeTable@:block"
         },
         "groupBy": {
             "details": "@:search_result@:search_config.groupBy.label",
@@ -103,6 +104,25 @@
     "time": "時間",
     "token": "API Token",
     "tree": "樹",
+    "types": {
+        "NodeAudio": "音頻塊",
+        "NodeBlockQueryEmbed": "嵌入塊",
+        "NodeBlockquote": "引述塊",
+        "NodeCodeBlock": "代碼塊",
+        "NodeDocument": "文檔塊",
+        "NodeHTMLBlock": "HTML塊",
+        "NodeHeading": "標題塊",
+        "NodeIFrame": "IFrame塊",
+        "NodeList": "列表塊",
+        "NodeListItem": "列表項",
+        "NodeMathBlock": "公式塊",
+        "NodeParagraph": "段落塊",
+        "NodeSuperBlock": "超級塊",
+        "NodeTable": "表格塊",
+        "NodeThematicBreak": "分割線",
+        "NodeVideo": "視頻塊",
+        "NodeWidget": "掛件塊"
+    },
     "user": "用戶",
     "user_settings": "@:user@:settings"
 }

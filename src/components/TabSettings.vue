@@ -184,7 +184,7 @@ const theme = inject("theme") as InstanceType<typeof Theme>; // 用户配置
                         <!-- 协议名 -->
                         <a-select
                             style="min-width: 6em; max-width: 6em"
-                            v-model="config.server.protocol"
+                            v-model:model-value="config.server.protocol"
                         >
                             <a-option>http</a-option>
                             <a-option>https</a-option>
@@ -195,7 +195,7 @@ const theme = inject("theme") as InstanceType<typeof Theme>; // 用户配置
                         <!-- 主机名 -->
                         <a-input
                             style="flex: auto"
-                            v-model="config.server.hostname"
+                            v-model:model-value="config.server.hostname"
                             :placeholder="$t('hostname')"
                         >
                             <!-- <template #prefix>://</template> -->
@@ -206,7 +206,7 @@ const theme = inject("theme") as InstanceType<typeof Theme>; // 用户配置
                         <!-- 端口号 -->
                         <a-input-number
                             style="min-width: 6em; max-width: 6em"
-                            v-model="config.server.port"
+                            v-model:model-value="config.server.port"
                             :min="1"
                             :max="65535"
                         >
@@ -222,7 +222,7 @@ const theme = inject("theme") as InstanceType<typeof Theme>; // 用户配置
                         <a-input-search
                             search-button
                             @search="(_value: string, _e: MouseEvent) => testSiyuanServer($t)"
-                            v-model="config.server.token"
+                            v-model:model-value="config.server.token"
                             placeholder="0123456789abcdef"
                         >
                             <!-- 按钮图标 -->
@@ -243,7 +243,7 @@ const theme = inject("theme") as InstanceType<typeof Theme>; // 用户配置
 
                     <!-- 搜索方案 -->
                     <a-form-item :label="$t('search_config.method.label')">
-                        <a-select v-model="config.search.method">
+                        <a-select v-model:model-value="config.search.method">
                             <a-option :value="Method.keyword">{{ $t("search_config.method.keyword") }}</a-option>
                             <a-option :value="Method.querySyntax">{{ $t("search_config.method.querySyntax") }}</a-option>
                             <a-option :value="Method.regex">{{ $t("search_config.method.regex") }}</a-option>
@@ -255,7 +255,7 @@ const theme = inject("theme") as InstanceType<typeof Theme>; // 用户配置
                     <a-form-item :label="$t('search_config.groupBy.label')">
                         <template #help>{{ $t("search_config.groupBy.details") }}</template>
 
-                        <a-select v-model="config.search.groupBy">
+                        <a-select v-model:model-value="config.search.groupBy">
                             <a-option :value="GroupBy.noGroupBy">{{ $t("search_config.groupBy.noGroupBy") }}</a-option>
                             <a-option :value="GroupBy.group">{{ $t("search_config.groupBy.group") }}</a-option>
                         </a-select>
@@ -265,7 +265,7 @@ const theme = inject("theme") as InstanceType<typeof Theme>; // 用户配置
                     <a-form-item :label="$t('search_config.orderBy.label')">
                         <template #help>{{ $t("search_config.orderBy.details") }}</template>
 
-                        <a-select v-model="config.search.orderBy">
+                        <a-select v-model:model-value="config.search.orderBy">
                             <a-optgroup :label="$t('content')">
                                 <a-option :value="OrderBy.type">{{ $t("search_config.orderBy.type") }}</a-option>
                                 <a-option :value="OrderBy.sortByContent">{{ $t("search_config.orderBy.sortByContent") }}</a-option>
@@ -292,7 +292,7 @@ const theme = inject("theme") as InstanceType<typeof Theme>; // 用户配置
                             <fieldset>
                                 <legend>
                                     <a-checkbox
-                                        :model-value="leaf"
+                                        v-model:model-value="leaf"
                                         :indeterminate="leaf_indeterminate"
                                         @change="handleLeaf"
                                     >
@@ -301,7 +301,7 @@ const theme = inject("theme") as InstanceType<typeof Theme>; // 用户配置
                                 </legend>
 
                                 <a-checkbox-group
-                                    v-model="leafs"
+                                    v-model:model-value="leafs"
                                     @change="handleLeafs"
                                 >
                                     <a-checkbox :value="Leaf.h">{{ $t("search_config.block_types.heading") }}</a-checkbox>
@@ -317,7 +317,7 @@ const theme = inject("theme") as InstanceType<typeof Theme>; // 用户配置
                             <fieldset>
                                 <legend>
                                     <a-checkbox
-                                        :model-value="container"
+                                        v-model:model-value="container"
                                         :indeterminate="container_indeterminate"
                                         @change="handleContainer"
                                     >
@@ -326,7 +326,7 @@ const theme = inject("theme") as InstanceType<typeof Theme>; // 用户配置
                                 </legend>
 
                                 <a-checkbox-group
-                                    v-model="containers"
+                                    v-model:model-value="containers"
                                     @change="handleContainers"
                                 >
                                     <a-checkbox :value="Container.d">{{ $t("search_config.block_types.document") }}</a-checkbox>
@@ -350,7 +350,7 @@ const theme = inject("theme") as InstanceType<typeof Theme>; // 用户配置
                     <!-- 界面语言 -->
                     <a-form-item :label="$t('language')">
                         <!-- 语言选择 -->
-                        <a-select v-model="config.other.language.tag">
+                        <a-select v-model:model-value="config.other.language.tag">
                             <a-option
                                 v-for="item in config.other.languages"
                                 :value="item.tag"
@@ -367,7 +367,7 @@ const theme = inject("theme") as InstanceType<typeof Theme>; // 用户配置
                         :label="$t('theme.label')"
                     >
                         <!-- 主题模式选择 -->
-                        <a-select v-model="theme.mode">
+                        <a-select v-model:model-value="theme.mode">
                             <a-option :value="THEME_MOD.dark">
                                 {{ $t("theme.dark") }}
                             </a-option>

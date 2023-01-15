@@ -19,70 +19,16 @@ const results = inject("results") as ShallowReactive<Data_fullTextSearchBlock>; 
     >
         <!-- 标签页标题 -->
         <template #title>
-            <a-popover position="bl">
-                <icon-unordered-list />
-                {{ $t("label.search_results_list") }}
-
-                <template #content>
-                    <!-- REF [Arco Design Vue](https://arco.design/vue/component/descriptions) -->
-                    <!-- 搜索结果信息 -->
-                    <a-descriptions
-                        size="mini"
-                        bordered
-                    >
-                        <!-- 搜索结果文档数 -->
-                        <a-descriptions-item :label="$t('search_description.doc_count')">
-                            {{ results.matchedRootCount }}
-                        </a-descriptions-item>
-
-                        <!-- 搜索结果块数 -->
-                        <a-descriptions-item :label="$t('search_description.block_count')">
-                            {{ results.matchedBlockCount }}
-                        </a-descriptions-item>
-                    </a-descriptions>
-
-                    <!-- REF [Arco Design Vue](https://arco.design/vue/component/divider) -->
-                    <!-- 分割线 -->
-                    <a-divider margin="0.5em" />
-
-                    <!-- REF [Arco Design Vue](https://arco.design/vue/component/switch) -->
-                    <!-- 搜索结果渲染样式控件 -->
-                    <a-space class="tools">
-                        <!-- 面包屑换行 -->
-                        <a-tag bordered>
-                            <!-- 标签图标 -->
-                            <template #icon><icon-align-left /></template>
-
-                            {{ $t("label.wrap_breadcrumb") }}
-                            <a-switch
-                                class="switch"
-                                v-model="config.render.breadcrumb.wrap"
-                                size="small"
-                            />
-                        </a-tag>
-
-                        <!-- 面包屑项换行 -->
-                        <a-tag bordered>
-                            <!-- 标签图标 -->
-                            <template #icon><icon-align-left /></template>
-
-                            {{ $t("label.wrap_breadcrumb_item") }}
-                            <a-switch
-                                class="switch"
-                                v-model="config.render.breadcrumb.item.wrap"
-                                size="small"
-                            />
-                        </a-tag>
-                    </a-space>
-                </template>
-            </a-popover>
+            <icon-unordered-list />
+            {{ $t("label.search_results_list") }}
         </template>
 
         <!-- 标签页内容 -->
         <!-- REF [Arco Design Vue](https://arco.design/vue/component/scrollbar) -->
         <!-- 滚动条 -->
         <a-scrollbar
-            outer-class="scrollbar"
+            style="height: 100%; overflow: auto"
+            outer-class="scrollbar-outer"
             type="track"
         >
             <search-results />
@@ -92,16 +38,8 @@ const results = inject("results") as ShallowReactive<Data_fullTextSearchBlock>; 
 
 <style scoped lang="less">
 .panel {
-    .scrollbar {
+    .scrollbar-outer {
         height: 100%;
-        overflow: auto;
-    }
-}
-
-.tools {
-    flex-wrap: wrap;
-    .switch {
-        margin-left: 0.5em;
     }
 }
 </style>
