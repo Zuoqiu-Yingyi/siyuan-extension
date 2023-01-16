@@ -1,15 +1,6 @@
 <!-- REF [Arco Design Vue](https://arco.design/vue/component/tabs) -->
 <script setup lang="ts">
 import SearchResults from "./SearchResults.vue";
-
-import { inject, ShallowReactive } from "vue";
-
-import { IConfig } from "../types/config";
-import { Data_fullTextSearchBlock } from "../types/siyuan";
-
-/* 查询结果 */
-const config = inject("config") as IConfig; // 用户配置
-const results = inject("results") as ShallowReactive<Data_fullTextSearchBlock>; // 查询结果
 </script>
 
 <template>

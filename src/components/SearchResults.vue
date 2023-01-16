@@ -2,7 +2,7 @@
 <script setup lang="ts">
 import BreadcrumbPopover from "./BreadcrumbPopover.vue";
 
-import { computed, inject, reactive, shallowReactive, watch, ShallowReactive } from "vue";
+import { inject, reactive, shallowReactive, watch, ShallowReactive, ComputedRef } from "vue";
 import { VueI18nTranslation } from "vue-i18n";
 import { Notification } from "@arco-design/web-vue";
 
@@ -16,7 +16,7 @@ import { Icon } from "../utils/icon";
 const results = inject("results") as ShallowReactive<Data_fullTextSearchBlock>; // 查询结果
 
 /* 是否分组 */
-const grouped = computed(() => results.blocks?.[0].children?.length > 0 ?? false);
+const grouped = inject("grouped") as ComputedRef<boolean>;
 
 /* 👇 分组 👇 */
 /* 文档 */
@@ -260,7 +260,7 @@ function change(index: number, $t: VueI18nTranslation): void {
     </a-list>
 </template>
 
-<style lang="less">
+<style scoped lang="less">
 .list {
     .list-item {
         padding: 0 !important;
@@ -294,6 +294,9 @@ function change(index: number, $t: VueI18nTranslation): void {
                 .block {
                     padding: 0.25em 0.5em;
                     border: 1px solid var(--color-border-3);
+                    &:hover {
+                        border-color: var(--color-border-4);
+                    }
                 }
             }
         }
@@ -306,17 +309,6 @@ function change(index: number, $t: VueI18nTranslation): void {
                 vertical-align: text-bottom;
             }
         }
-    }
-}
-
-.content,
-.descriptions {
-    mark {
-        background-color: transparent;
-        color: inherit;
-        margin: 0 0.25em;
-        padding: 0 0.25em;
-        outline: 1px solid;
     }
 }
 </style>

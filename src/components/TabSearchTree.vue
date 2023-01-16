@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { shallowRef, inject, watch, ShallowReactive } from "vue";
+import { shallowRef, inject, watch, ShallowReactive, ComputedRef, Ref, computed } from "vue";
 import { VueI18nTranslation } from "vue-i18n";
 import { Notification, TreeNodeData } from "@arco-design/web-vue";
 
@@ -12,7 +12,9 @@ import { SiyuanClient } from "./../utils/siyuan";
 /* 查询结果 */
 const config = inject("config") as IConfig; // 用户配置
 const client = inject("client") as InstanceType<typeof SiyuanClient>; // 思源客户端
+const keywords = inject("keywords") as Ref<string[]>; // 搜索关键字
 const results = inject("results") as ShallowReactive<Data_fullTextSearchBlock>; // 查询结果
+const grouped = inject("grouped") as ComputedRef<boolean>; // 是否按文档分组
 const tree = inject("tree") as InstanceType<typeof Tree>; // 树状搜索结果
 const expanded_keys = shallowRef<string[]>([]); // 展开的节点
 
@@ -28,6 +30,10 @@ watch(
 /* 加载块级节点 */
 function load(node: TreeNodeData, $t: VueI18nTranslation): Promise<void> {
     return new Promise(resolve => {
+        if (!(node.key as string).endsWith(".sy")) {
+            resolve();
+            return;
+        }
         let blocks = results.blocks.filter(block => block.path.endsWith(node.key as string));
         if (blocks.length === 1 && blocks[0].children?.length > 0) blocks = blocks[0].children; // 若查询结果按文档分组, 则展开该文档的子节点
         Promise.all(
@@ -77,6 +83,19 @@ function select(selectedKeys: Array<string | number>, data: { selected?: boolean
         }
     }
 }
+
+const keys = computed(() => Array.from(new Set(keywords.value)).sort((a, b) => b.length - a.length)); // 关键字列表(按长度降序, 去重)
+
+/* 为搜索结果添加标志 */
+function mark(html: string): string {
+    if (grouped.value && keys.value.length > 0) {
+        return keys.value.reduce((html: string, keyword: string) => {
+            return html.replaceAll(keyword, "<mark>$&</mark>");
+        }, html);
+    } else {
+        return html;
+    }
+}
 </script>
 
 <template>
@@ -110,7 +129,14 @@ function select(selectedKeys: Array<string | number>, data: { selected?: boolean
                 v-model:expanded-keys="expanded_keys"
                 @select="select"
                 block-node
-            />
+            >
+                <template #title="node">
+                    <span
+                        class="title"
+                        v-html="mark(node.title)"
+                    ></span>
+                </template>
+            </a-tree>
 
             <a-empty
                 v-else
@@ -127,6 +153,13 @@ function select(selectedKeys: Array<string | number>, data: { selected?: boolean
         padding: 0 0.25em;
 
         .tree {
+            &[custom-wrap="true"] .title {
+                white-space: normal;
+            }
+
+            &[custom-wrap="false"] .title {
+                white-space: nowrap;
+            }
         }
     }
 }

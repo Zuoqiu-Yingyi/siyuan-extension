@@ -3,7 +3,7 @@ import TabSearchList from "./TabSearchList.vue";
 import TabSearchTree from "./TabSearchTree.vue";
 import TabSettings from "./TabSettings.vue";
 
-import { ref, toRaw, inject, watch, Ref, ShallowReactive } from "vue";
+import { ref, toRaw, inject, watch, Ref, ShallowReactive, provide } from "vue";
 import { VueI18nTranslation } from "vue-i18n";
 import { Notification } from "@arco-design/web-vue";
 
@@ -84,6 +84,8 @@ async function search($t: VueI18nTranslation, keyword: boolean) {
         });
     }
 }
+
+provide("keywords", keywords);
 /* 👆 查询内容 👆 */
 </script>
 
@@ -274,6 +276,16 @@ async function search($t: VueI18nTranslation, keyword: boolean) {
 </template>
 
 <style lang="less">
+.mark() {
+    mark {
+        background-color: transparent;
+        color: inherit;
+        margin: 0 0.25em;
+        padding: 0 0.25em;
+        outline: 1px solid;
+    }
+}
+
 .tools {
     flex-wrap: wrap;
 
@@ -284,15 +296,7 @@ async function search($t: VueI18nTranslation, keyword: boolean) {
     .button {
     }
 }
-// 树节点文本
-.arco-tree-node-title-text {
-    [custom-wrap="true"] & {
-        white-space: normal;
-    }
-    [custom-wrap="false"] & {
-        white-space: nowrap;
-    }
-}
+
 // 支持 .arco-* 选择器需要移除 scoped 标签
 #siyuan-drawer {
     .arco-drawer-title {
@@ -348,8 +352,14 @@ async function search($t: VueI18nTranslation, keyword: boolean) {
                 > .arco-tabs-content {
                     padding: 0;
                 }
+
+                .mark();
             }
         }
     }
+}
+
+.descriptions {
+    .mark();
 }
 </style>

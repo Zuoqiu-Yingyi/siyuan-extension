@@ -3,7 +3,7 @@ import HelloWorld from "./components/HelloWorld.vue";
 import DragBall from "./components/DragBall.vue";
 import MainDrawer from "./components/MainDrawer.vue";
 
-import { ref, provide, reactive, inject, watch, shallowReactive } from "vue";
+import { ref, provide, reactive, inject, watch, shallowReactive, computed } from "vue";
 import { I18n } from "vue-i18n";
 
 import { IConfig } from "./types/config";
@@ -167,10 +167,11 @@ const results = shallowReactive<Data_fullTextSearchBlock>({
     matchedBlockCount: 0,
     matchedRootCount: 0,
 }); // 查询结果
-
+const grouped = computed(() => results.blocks?.[0].children?.length > 0 ?? false); // 是否分组
 const tree = new Tree(results, notebooks); // 节点树
 
 provide("results", results);
+provide("grouped", grouped);
 provide("tree", tree);
 /* 👆 查询结果 👆 */
 </script>

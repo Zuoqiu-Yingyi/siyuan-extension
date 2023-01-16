@@ -149,7 +149,7 @@ class Tree {
         breadcrumbs.forEach(breadcrumb => {
             breadcrumb.shift(); // 移除文档路径
             if (breadcrumb.length === 0) { // 文档节点
-                node.icon = () => [h(BlockIcon, { type: BlockType.NodeDocument, subtype: BlockSubType.none })];
+                // node.icon = () => [h(BlockIcon, { type: BlockType.NodeDocument, subtype: BlockSubType.none })];
                 return; // 无需更新
             }
             const leaf = breadcrumb.reduce((parent: TreeNode, child: Data_getBlockBreadcrumb) => {
@@ -230,7 +230,7 @@ class Tree {
                 path: paths[i],
                 label: hPaths[i],
                 separator: Separator.document,
-                icon: false,
+                icon: true,
                 type: BlockType.NodeFolder,
                 subType: BlockSubType.none,
             });
@@ -241,7 +241,7 @@ class Tree {
             path: paths.at(-1) as string,
             label: hPaths.at(-1) as string,
             separator: Separator.document,
-            icon: false,
+            icon: true,
             type: BlockType.NodeDocument,
             subType: BlockSubType.none,
         });

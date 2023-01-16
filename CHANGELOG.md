@@ -23,3 +23,4 @@
 - 按文档分组的搜索结果添加块级面包屑 | Add block-level breadcrumbs to search results grouped by document.
 - 添加 `搜索结果树` 标签页 | Add `Search Results Tree` tab.
 - 搜索结果树支持块级层级 | Search results tree supports block-level hierarchy.
+- 搜索结果树支持高亮匹配的关键字 | Search results tree supports highlighting matching keywords.
