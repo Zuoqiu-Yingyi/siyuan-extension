@@ -4,6 +4,7 @@ import { VueI18nTranslation } from "vue-i18n";
 import { Notification, TreeNodeData } from "@arco-design/web-vue";
 
 import { IConfig } from "./../types/config";
+import { IPreview } from "./../types/preview";
 import { Data_fullTextSearchBlock, Data_getBlockBreadcrumb, ID } from "./../types/siyuan";
 
 import { Tree, TreeNode } from "./../utils/tree";
@@ -14,6 +15,7 @@ const config = inject("config") as IConfig; // 用户配置
 const client = inject("client") as InstanceType<typeof SiyuanClient>; // 思源客户端
 const keywords = inject("keywords") as Ref<string[]>; // 搜索关键字
 const results = inject("results") as ShallowReactive<Data_fullTextSearchBlock>; // 查询结果
+const preview = inject("preview") as ShallowReactive<IPreview>; // 预览
 const grouped = inject("grouped") as ComputedRef<boolean>; // 是否按文档分组
 const tree = inject("tree") as InstanceType<typeof Tree>; // 树状搜索结果
 const expanded_keys = shallowRef<string[]>([]); // 展开的节点
@@ -74,14 +76,20 @@ function load(node: TreeNodeData, $t: VueI18nTranslation): Promise<void> {
     });
 }
 
-/* 选择节点 */
-function select(selectedKeys: Array<string | number>, data: { selected?: boolean; selectedNodes: TreeNodeData[]; node?: TreeNodeData; e?: Event }): void {
+/* 选择节点-在左侧预览 */
+function onselect(selectedKeys: Array<string | number>, data: { selected?: boolean; selectedNodes: TreeNodeData[]; node?: TreeNodeData; e?: Event }): void {
     if (data.selected && selectedKeys.length === 1) {
         const id = /^(?<id>\d{14}-[0-9a-z]{7})/.exec(selectedKeys[0] as string)?.groups?.id;
         if (id) {
-            window.open(`siyuan://blocks/${id}`, "_blank");
+            preview.id = id;
+            preview.display = true;
         }
     }
+}
+
+/* 双击节点-在思源中打开 */
+function ondblclick(id: ID): void {
+    window.open(`siyuan://blocks/${id}`, "_blank");
 }
 
 const keys = computed(() => Array.from(new Set(keywords.value)).sort((a, b) => b.length - a.length)); // 关键字列表(按长度降序, 去重)
@@ -127,13 +135,14 @@ function mark(html: string): string {
                 :show-line="true"
                 :load-more="(node: TreeNodeData) => load(node, $t)"
                 v-model:expanded-keys="expanded_keys"
-                @select="select"
+                @select="onselect"
                 block-node
             >
                 <template #title="node">
                     <span
                         class="title"
                         v-html="mark(node.title)"
+                        @dblclick="ondblclick(node.key)"
                     ></span>
                 </template>
             </a-tree>

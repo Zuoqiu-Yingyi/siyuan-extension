@@ -6,6 +6,7 @@ import { inject, reactive, shallowReactive, watch, ShallowReactive, ComputedRef 
 import { VueI18nTranslation } from "vue-i18n";
 import { Notification } from "@arco-design/web-vue";
 
+import { IPreview } from "./../types/preview";
 import { INotebooks, Block_fullTextSearchBlock, Data_fullTextSearchBlock } from "./../types/siyuan";
 
 import { SiyuanClient, BlockType, BlockSubType } from "./../utils/siyuan";
@@ -14,6 +15,7 @@ import { Icon } from "../utils/icon";
 
 /* 查询结果 */
 const results = inject("results") as ShallowReactive<Data_fullTextSearchBlock>; // 查询结果
+const preview = inject("preview") as ShallowReactive<IPreview>; // 预览
 
 /* 是否分组 */
 const grouped = inject("grouped") as ComputedRef<boolean>;
@@ -84,7 +86,7 @@ watch(
 );
 
 /* 渲染指定的列表 */
-function change(index: number, $t: VueI18nTranslation): void {
+function onchange(index: number, $t: VueI18nTranslation): void {
     /* 已渲染 */
     if (rendered[index]) return;
 
@@ -164,6 +166,11 @@ function change(index: number, $t: VueI18nTranslation): void {
             });
         });
 }
+
+/* 点击打开预览 */
+function onclick(block: Block_fullTextSearchBlock): void {
+    preview.id = block.id;
+}
 </script>
 
 <template>
@@ -187,7 +194,7 @@ function change(index: number, $t: VueI18nTranslation): void {
                     v-if="grouped"
                     class="content"
                     :bordered="false"
-                    @change="change(index, $t)"
+                    @change="onchange(index, $t)"
                 >
                     <a-collapse-item
                         class="collapse-item"
@@ -226,8 +233,9 @@ function change(index: number, $t: VueI18nTranslation): void {
                             size="small"
                         >
                             <a-list-item
-                                class="block"
                                 v-for="(block, i) in item.children"
+                                class="block"
+                                @click="onclick(block)"
                                 :key="i"
                             >
                                 <breadcrumb-popover

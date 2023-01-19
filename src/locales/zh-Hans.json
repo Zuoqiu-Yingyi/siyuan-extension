@@ -20,7 +20,8 @@
         "search_results_tree": "@:search_result@:tree",
         "unfold": "展开",
         "wrap_breadcrumb": "面包屑换行",
-        "wrap_breadcrumb_item": "面包屑项换行"
+        "wrap_breadcrumb_item": "面包屑项换行",
+        "preview_focus": "预览聚焦"
     },
     "language": "语言",
     "list": "列表",

@@ -7,6 +7,7 @@ import { ref, provide, reactive, inject, watch, shallowReactive, computed } from
 import { I18n } from "vue-i18n";
 
 import { IConfig } from "./types/config";
+import { IPreview } from "./types/preview";
 import { Data_fullTextSearchBlock, INotebooks } from "./types/siyuan";
 
 import { GroupBy, Method, OrderBy, SiyuanClient } from "./utils/siyuan";
@@ -107,11 +108,11 @@ const version = ref(""); // 内核版本
 const client = new SiyuanClient(config.server.url, config.server.token, status, message);
 
 watch(
-    () => config.server,
-    newVal => {
-        config.server.url.protocol = newVal.protocol;
-        config.server.url.hostname = newVal.hostname;
-        config.server.url.port = String(newVal.port);
+    [() => config.server.protocol, () => config.server.hostname, () => config.server.port],
+    ([protocol, hostname, port]) => {
+        config.server.url.protocol = protocol;
+        config.server.url.hostname = hostname;
+        config.server.url.port = String(port);
 
         client.update(config.server.url, config.server.token);
         setTimeout(async () => {
@@ -127,7 +128,6 @@ watch(
     },
     {
         immediate: true, // 立即执行一次
-        deep: true, // 深层跟踪
     },
 );
 
@@ -174,6 +174,58 @@ provide("results", results);
 provide("grouped", grouped);
 provide("tree", tree);
 /* 👆 查询结果 👆 */
+
+/* 👇 预览 👇 */
+const preview = shallowReactive<IPreview>({
+    display: false,
+    id: "",
+    focus: true,
+}); // 是否开启预览
+
+const preview_url = new URL(config.server.url);
+preview_url.pathname = "/stage/build/mobile/";
+
+/* 跟踪思源服务源设置 */
+watch(
+    [() => config.server.protocol, () => config.server.hostname, () => config.server.port],
+    ([protocol, hostname, port]) => {
+        preview_url.protocol = protocol;
+        preview_url.hostname = hostname;
+        preview_url.port = String(port);
+    },
+    { immediate: true },
+);
+
+/* 搜索结果更改时隐藏预览界面 */
+watch(
+    () => results.blocks,
+    () => {
+        preview.display = false;
+    },
+);
+
+const preview_src = computed(() => {
+    preview_url.searchParams.set("r", Date.now().toString());
+    preview_url.searchParams.set("id", preview.id);
+    if (preview.focus) {
+        preview_url.searchParams.set("focus", "1");
+    } else {
+        preview_url.searchParams.delete("focus");
+    }
+    return preview_url.href;
+});
+provide("preview", preview);
+/* 👆 预览 👆 */
+
+/* 👇 伸缩面板 👇 */
+function onmoveStart() {
+    Array.prototype.forEach.call(document.getElementsByTagName("iframe"), iframe => (iframe.style.pointerEvents = "none"));
+}
+
+function onmoveEnd() {
+    Array.prototype.forEach.call(document.getElementsByTagName("iframe"), iframe => (iframe.style.pointerEvents = "unset"));
+}
+/* 👆 伸缩面板 👆 */
 </script>
 
 <template>
@@ -206,14 +258,23 @@ provide("tree", tree);
             class="split-container"
             v-model:size="size"
             v-show="visible"
+            @moveStart="onmoveStart"
+            @moveEnd="onmoveEnd"
         >
             <template #first>
                 <!-- 模仿抽屉的遮罩 -->
                 <a-layout
                     class="split-panel"
                     style="background-color: var(--color-mask-bg)"
-                    @click="visible = !visible"
+                    @click.self="visible = !visible"
                 >
+                    <a-layout-content v-if="preview.display">
+                        <iframe
+                            id="preview"
+                            :src="preview_src"
+                            frameborder="0"
+                        ></iframe>
+                    </a-layout-content>
                 </a-layout>
             </template>
 
@@ -251,6 +312,12 @@ provide("tree", tree);
         width: 100%;
         height: 100%;
         overflow: hidden;
+
+        #preview {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
     }
 }
 

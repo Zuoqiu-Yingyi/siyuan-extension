@@ -8,7 +8,9 @@ import { VueI18nTranslation } from "vue-i18n";
 import { Notification } from "@arco-design/web-vue";
 
 import { IConfig } from "./../types/config";
+import { IPreview } from "./../types/preview";
 import { INotebooks, Data_fullTextSearchBlock } from "./../types/siyuan";
+
 import { Status, map } from "./../utils/status";
 import { Method, washNotebooks, SiyuanClient } from "./../utils/siyuan";
 import { Tree } from "./../utils/tree";
@@ -16,10 +18,9 @@ import { Tree } from "./../utils/tree";
 const status = inject("status") as Ref<Status>; // 连接状态
 const message = inject("message") as Ref<string>; // 连接状态消息
 const version = inject("version") as Ref<string>; // 内核版本
-
 const visible = inject("visible") as Ref<boolean>; // 是否显示
-
 const config = inject("config") as IConfig; // 用户配置
+const preview = inject("preview") as ShallowReactive<IPreview>; // 预览
 const tree = inject("tree") as InstanceType<typeof Tree>; // 树状搜索结果
 
 function handleOk() {
@@ -132,6 +133,19 @@ provide("keywords", keywords);
                         <!-- REF [Arco Design Vue](https://arco.design/vue/component/switch) -->
                         <!-- 搜索结果渲染样式控件 -->
                         <a-space class="tools">
+                            <!-- 预览聚焦 -->
+                            <a-tag bordered>
+                                <!-- 标签图标 -->
+                                <template #icon><icon-eye /></template>
+
+                                {{ $t("label.preview_focus") }}
+                                <a-switch
+                                    class="switch"
+                                    v-model:model-value="preview.focus"
+                                    size="small"
+                                />
+                            </a-tag>
+
                             <!-- 面包屑换行 -->
                             <a-tag bordered>
                                 <!-- 标签图标 -->
@@ -291,9 +305,6 @@ provide("keywords", keywords);
 
     .switch {
         margin-left: 0.5em;
-    }
-
-    .button {
     }
 }
 

@@ -24,3 +24,4 @@
 - 添加 `搜索结果树` 标签页 | Add `Search Results Tree` tab.
 - 搜索结果树支持块级层级 | Search results tree supports block-level hierarchy.
 - 搜索结果树支持高亮匹配的关键字 | Search results tree supports highlighting matching keywords.
+- 单击搜索结果在页面左侧预览块 | Click the search result to preview the block on the left side of the page.

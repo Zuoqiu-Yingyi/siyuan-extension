@@ -20,7 +20,8 @@
         "search_results_tree": "@:search_result@:tree",
         "unfold": "展開",
         "wrap_breadcrumb": "麵包屑換行",
-        "wrap_breadcrumb_item": "麵包屑項換行"
+        "wrap_breadcrumb_item": "麵包屑項換行",
+        "preview_focus": "預覽聚焦"
     },
     "language": "語言",
     "list": "列表",

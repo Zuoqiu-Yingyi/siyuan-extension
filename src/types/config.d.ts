@@ -1,5 +1,4 @@
 import { IPayload_fullTextSearchBlock } from "./siyuan"
-import { MODE } from "./../utils/render";
 
 export interface IConfig {
     server: {
