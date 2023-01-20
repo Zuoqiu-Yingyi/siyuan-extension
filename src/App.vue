@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import HelloWorld from "./components/HelloWorld.vue";
 import DragBall from "./components/DragBall.vue";
 import MainDrawer from "./components/MainDrawer.vue";
 
@@ -229,7 +228,7 @@ function onmoveEnd() {
 </script>
 
 <template>
-    <hello-world msg="Vite + Vue" />
+    <!-- <hello-world msg="Vite + Vue" /> -->
     <Teleport to="body">
         <!-- 打开抽屉的悬浮球 -->
         <drag-ball

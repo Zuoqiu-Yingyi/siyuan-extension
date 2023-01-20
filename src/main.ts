@@ -40,4 +40,8 @@ app.config.performance = true; // 启用开发模式的性能分析
 app.use(i18n); // 国际化
 app.use(ArcoVue); // Arco 组件库
 app.use(ArcoVueIcon); // Arco 组件库图标
-app.mount("#app");
+
+/* 添加 #app 元素 */
+const id = "app";
+globalThis.document.body.insertAdjacentHTML("beforeend", `<div id="${id}"></div>`);
+app.mount(`#${id}`);

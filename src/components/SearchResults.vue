@@ -170,6 +170,7 @@ function onchange(index: number, $t: VueI18nTranslation): void {
 /* 点击打开预览 */
 function onclick(block: Block_fullTextSearchBlock): void {
     preview.id = block.id;
+    preview.display = true;
 }
 </script>
 

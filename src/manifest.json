@@ -1,0 +1,7 @@
+{
+    "name": "__MSG_app_name__", // 扩展名称
+    "description": "__MSG_app_description__", // 扩展描述
+    "version": "0.1.0", // 附加组件的版本
+    "manifest_version": 2, // 指定扩展使用的 manifest.json 的版本
+    "default_locale": "en" // 标识 _locales 的一个子目录，该子目录将用于查找扩展名的默认字符串
+}
