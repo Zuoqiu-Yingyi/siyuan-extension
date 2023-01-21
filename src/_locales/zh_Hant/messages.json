@@ -1,8 +1,8 @@
 {
-    "app_name": {
-        "message": "思源筆記擴展"
-    },
     "app_description": {
         "message": "思源筆記瀏覽器擴展"
+    },
+    "app_name": {
+        "message": "思源筆記擴展"
     }
 }
