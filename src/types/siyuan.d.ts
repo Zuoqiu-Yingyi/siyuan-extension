@@ -58,6 +58,7 @@ export interface BlockTypes {
     table: boolean; // 表格块
     codeBlock: boolean; // 代码块
     htmlBlock: boolean; // HTML 块
+    embedBlock: boolean; // 嵌入块
 
     document: boolean; // 文档块
     superBlock: boolean; // 超级块

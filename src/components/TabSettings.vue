@@ -55,8 +55,9 @@ config.search.types.mathBlock && leafs_init.push(Leaf.m);
 config.search.types.table && leafs_init.push(Leaf.t);
 config.search.types.codeBlock && leafs_init.push(Leaf.c);
 config.search.types.htmlBlock && leafs_init.push(Leaf.html);
+config.search.types.embedBlock && leafs_init.push(Leaf.query_embed);
 
-const leaf = ref(leafs_init.length === 6); // 叶子块全选框状态
+const leaf = ref(leafs_init.length === 7); // 叶子块全选框状态
 const leaf_indeterminate = ref(leafs_init.length > 0 && leafs_init.length < 6); // 叶子块全选框状态是否未知
 const leafs = ref(leafs_init); // 叶子块复选框组状态列表
 
@@ -76,7 +77,7 @@ function handleLeaf(value: boolean | (string | number | boolean)[]): void {
     leaf_indeterminate.value = false;
     if (value) {
         leaf.value = true;
-        leafs.value = [Leaf.h, Leaf.p, Leaf.m, Leaf.t, Leaf.c, Leaf.html];
+        leafs.value = [Leaf.h, Leaf.p, Leaf.m, Leaf.t, Leaf.c, Leaf.html, Leaf.query_embed];
     } else {
         leaf.value = false;
         leafs.value = [];
@@ -90,7 +91,7 @@ function handleLeafs(values: (string | number | boolean)[]): void {
             leaf.value = false;
             leaf_indeterminate.value = false;
             break;
-        case 6:
+        case 7:
             leaf.value = true;
             leaf_indeterminate.value = false;
             break;
@@ -106,6 +107,7 @@ function handleLeafs(values: (string | number | boolean)[]): void {
     config.search.types.table = Leaf.t in values;
     config.search.types.codeBlock = Leaf.c in values;
     config.search.types.htmlBlock = Leaf.html in values;
+    config.search.types.embedBlock = Leaf.query_embed in values;
 }
 
 /* 处理容器块全选 */
@@ -310,6 +312,7 @@ const theme = inject("theme") as InstanceType<typeof Theme>; // 用户配置
                                     <a-checkbox :value="Leaf.t">{{ $t("search_config.block_types.table") }}</a-checkbox>
                                     <a-checkbox :value="Leaf.c">{{ $t("search_config.block_types.codeBlock") }}</a-checkbox>
                                     <a-checkbox :value="Leaf.html">{{ $t("search_config.block_types.htmlBlock") }}</a-checkbox>
+                                    <a-checkbox :value="Leaf.query_embed">{{ $t("search_config.block_types.embedBlock") }}</a-checkbox>
                                 </a-checkbox-group>
                             </fieldset>
 

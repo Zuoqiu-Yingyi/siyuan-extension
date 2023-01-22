@@ -59,6 +59,7 @@ const config: IConfig = reactive({
             table: true,
             codeBlock: true,
             htmlBlock: true,
+            embedBlock: true,
 
             document: true,
             superBlock: false,

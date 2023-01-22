@@ -16,12 +16,12 @@
     "hostname": "IP Address {'|'} Domain Name {'|'} Host Name",
     "label": {
         "fold": "Fold",
+        "preview_focus": "Preview Focus",
         "search_results_list": "@:search_result @:list",
         "search_results_tree": "@:search_result @:tree",
         "unfold": "Unfold",
         "wrap_breadcrumb": "Breadcrumbs Wrap",
-        "wrap_breadcrumb_item": "Breadcrumb Items Wrap",
-        "preview_focus": "Preview Focus"
+        "wrap_breadcrumb_item": "Breadcrumb Items Wrap"
     },
     "language": "Language",
     "list": "List",
@@ -45,6 +45,7 @@
             "container": "Container Block",
             "details": "Filter @:search_result Based on @:search_config.block_types.label",
             "document": "@:types.NodeDocument @:block",
+            "embedBlock": "@:types.NodeBlockQueryEmbed @:block",
             "heading": "@:types.NodeHeading @:block",
             "htmlBlock": "@:types.NodeHTMLBlock @:block",
             "label": "Block Type",

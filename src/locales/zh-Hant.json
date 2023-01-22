@@ -16,12 +16,12 @@
     "hostname": "IP 地址 {'|'} 域名 {'|'} 主機名",
     "label": {
         "fold": "折疊",
+        "preview_focus": "預覽聚焦",
         "search_results_list": "@:search_result@:list",
         "search_results_tree": "@:search_result@:tree",
         "unfold": "展開",
         "wrap_breadcrumb": "麵包屑換行",
-        "wrap_breadcrumb_item": "麵包屑項換行",
-        "preview_focus": "預覽聚焦"
+        "wrap_breadcrumb_item": "麵包屑項換行"
     },
     "language": "語言",
     "list": "列表",
@@ -45,6 +45,7 @@
             "container": "容器塊",
             "details": "根據 @:search_config.block_types.label 篩選@:search_result",
             "document": "@:types.NodeDocument@:block",
+            "embedBlock": "@:types.NodeBlockQueryEmbed@:block",
             "heading": "@:types.NodeHeading@:block",
             "htmlBlock": "@:types.NodeHTMLBlock@:block",
             "label": "塊類型",
