@@ -9,13 +9,13 @@ import ArcoVue from "@arco-design/web-vue";
 import ArcoVueIcon from "@arco-design/web-vue/es/icon";
 import "@arco-design/web-vue/dist/arco.css";
 
-import en from "./locales/en.json";
-import zh_Hans from "./locales/zh-Hans.json";
-import zh_Hant from "./locales/zh-Hant.json";
 
 import { mapLocal } from "./utils/language";
 
 /* 语言包 */
+import en from "./locales/en.json";
+import zh_Hans from "./locales/zh-Hans.json";
+import zh_Hant from "./locales/zh-Hant.json";
 const messages = {
     "en": en,
     "zh-Hans": zh_Hans,
@@ -43,5 +43,5 @@ app.use(ArcoVueIcon); // Arco 组件库图标
 
 /* 添加 #app 元素 */
 const id = "app";
-globalThis.document.body.insertAdjacentHTML("beforeend", `<div id="${id}"></div>`);
+globalThis.document.body.insertAdjacentHTML("beforeend", `<div id="${id}" style="display: none;"></div>`);
 app.mount(`#${id}`);

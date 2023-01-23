@@ -192,7 +192,7 @@ const theme = inject("theme") as InstanceType<typeof Theme>; // 用户配置
                             <a-option>https</a-option>
                         </a-select>
 
-                        &thinsp;://&thinsp;
+                        <!-- &thinsp;://&thinsp; -->
 
                         <!-- 主机名 -->
                         <a-input
@@ -200,10 +200,11 @@ const theme = inject("theme") as InstanceType<typeof Theme>; // 用户配置
                             v-model:model-value="config.server.hostname"
                             :placeholder="$t('hostname')"
                         >
-                            <!-- <template #prefix>://</template> -->
+                            <template #prepend>://</template>
+                            <template #append>:</template>
                         </a-input>
 
-                        &thinsp;:&thinsp;
+                        <!-- &thinsp;:&thinsp; -->
 
                         <!-- 端口号 -->
                         <a-input-number
@@ -212,7 +213,6 @@ const theme = inject("theme") as InstanceType<typeof Theme>; // 用户配置
                             :min="1"
                             :max="65535"
                         >
-                            <!-- <template #prefix>:</template> -->
                         </a-input-number>
                     </a-form-item>
 

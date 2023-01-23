@@ -108,7 +108,7 @@ const version = ref(""); // 内核版本
 const client = new SiyuanClient(config.server.url, config.server.token, status, message);
 
 watch(
-    [() => config.server.protocol, () => config.server.hostname, () => config.server.port],
+    [() => config.server.protocol, () => config.server.hostname, () => config.server.port, () => config.server.token],
     ([protocol, hostname, port]) => {
         config.server.url.protocol = protocol;
         config.server.url.hostname = hostname;
@@ -233,7 +233,7 @@ function onmoveEnd() {
     <Teleport to="body">
         <!-- 打开抽屉的悬浮球 -->
         <drag-ball
-            style="z-index: 1"
+            style="z-index: 1000"
             :top="'2em'"
             :right="'2em'"
         >

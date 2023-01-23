@@ -78,7 +78,7 @@ async function search($t: VueI18nTranslation, keyword: boolean) {
     } catch (error) {
         console.warn(error);
         Notification.error({
-            title: $t("search"),
+            // title: $t("search"),
             content: String(error),
             closable: true,
             duration: 3000,
