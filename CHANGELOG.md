@@ -27,3 +27,4 @@
 - 单击搜索结果在页面左侧预览块 | Click the search result to preview the block on the left side of the page.
 - 配置浏览器扩展开发环境 | Configure browser extension development environment.
 - 搜索块类型支持 `嵌入块` | Search block type supports `Embed Block`.
+- 更新配置文件 | Update configuration file.

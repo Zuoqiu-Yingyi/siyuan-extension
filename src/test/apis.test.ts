@@ -82,6 +82,7 @@ describe("APIs Test", async () => {
                             table: true,
                             codeBlock: true,
                             htmlBlock: true,
+                            embedBlock: true,
 
                             document: true,
                             superBlock: false,
