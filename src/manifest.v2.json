@@ -9,6 +9,7 @@
         "128": "assets/siyuan-128.png",
         "512": "assets/siyuan-512.png"
     },
+    "permissions": ["storage", "*://*/*"],
     "content_scripts": [
         {
             "matches": [
@@ -219,8 +220,8 @@
                 "https://*.yandex.by/search*",
                 "https://searx.be/search*"
             ],
-            "js": ["content-script.js"],
-            "css": ["content-script.css"]
+            "js": ["content-script/index.js"],
+            "css": ["content-script/index.css"]
         }
     ]
 }
