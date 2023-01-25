@@ -2,8 +2,9 @@
 import DragBall from "./components/DragBall.vue";
 import MainDrawer from "./components/MainDrawer.vue";
 
-import { ref, provide, reactive, unref, inject, watch, shallowReactive, computed, toRaw, WritableComputedRef } from "vue";
+import { ref, provide, reactive, unref, inject, watch, shallowReactive, computed, watchEffect, onMounted } from "vue";
 import { I18n } from "vue-i18n";
+import { Storage } from "webextension-polyfill";
 
 import { IConfig } from "./types/config";
 import { IPreview } from "./types/preview";
@@ -113,7 +114,7 @@ const configs_entries = computed(() => Array.from(configs.entries()));
 
 /* 浏览器扩展环境 */
 if (import.meta.env.PROD) {
-    let loaded = false; // 持久化的数据是否已经加载完成
+    let loaded = ref(false); // 持久化的数据是否已经加载完成
 
     /* 从储存中读取用户配置列表 */
     browser.storage.local
@@ -131,18 +132,20 @@ if (import.meta.env.PROD) {
                 configs.set(key, value);
             });
 
-            loaded = true;
+            loaded.value = true;
         });
 
     /* 保存用户配置列表 */
     watch(configs_entries, entries => {
-        if (loaded) {
+        if (loaded.value) {
             browser.storage.local.set({
                 config: copy(config),
                 configs: copy(entries),
             });
         }
     });
+
+    provide("loaded", loaded);
 }
 
 const status = ref(Status.normal); // 连接状态
@@ -204,6 +207,25 @@ provide("theme", theme);
 const visible = ref(false); // 抽屉是否可见
 const size = ref(0.5); // 抽屉宽度占比
 provide("visible", visible);
+
+/* 浏览器扩展环境 */
+if (import.meta.env.PROD) {
+    /* 从储存中读取抽屉宽度比例 */
+    browser.storage.local
+        .get({
+            size: unref(size),
+        })
+        .then(items => {
+            if (size.value !== items.size) size.value = items.size;
+        });
+
+    /* 监听抽屉宽度更改 */
+    browser.storage.local.onChanged.addListener((changes: Storage.StorageAreaOnChangedChangesType) => {
+        if (changes.size) {
+            if (size.value !== changes.size.newValue) size.value = changes.size.newValue;
+        }
+    });
+}
 /* 👆 抽屉状态 👆 */
 
 /* 👇 查询结果 👇 */
@@ -269,6 +291,14 @@ function onmoveStart() {
 
 function onmoveEnd() {
     Array.prototype.forEach.call(document.getElementsByTagName("iframe"), iframe => (iframe.style.pointerEvents = "unset"));
+
+    /* 浏览器扩展环境 */
+    if (import.meta.env.PROD) {
+        /* 保存抽屉尺寸 */
+        browser.storage.local.set({
+            size: unref(size),
+        });
+    }
 }
 /* 👆 伸缩面板 👆 */
 </script>

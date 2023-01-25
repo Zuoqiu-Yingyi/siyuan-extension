@@ -43,5 +43,5 @@ app.use(ArcoVueIcon); // Arco 组件库图标
 
 /* 添加 #app 元素 */
 const id = "siyuan-extension-app";
-globalThis.document.body.insertAdjacentHTML("beforeend", `<div id="${id}" style="display: none;"></div>`);
+globalThis.document.documentElement.insertAdjacentHTML("beforeend", `<div id="${id}" style="display: none;"></div>`);
 app.mount(`#${id}`);

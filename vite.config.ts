@@ -29,12 +29,12 @@ export default defineConfig({
                 {
                     assetFileNames: "firefox/content-script/index[extname]",
                     entryFileNames: "firefox/content-script/index.js",
-                    format: 'iife',
+                    // format: 'iife',
                 },
                 {
                     assetFileNames: "chromium/content-script/index[extname]",
                     entryFileNames: "chromium/content-script/index.js",
-                    format: 'iife',
+                    // format: 'iife',
                 },
                 {
                     assetFileNames: "assets/[name]-[hash][extname]",

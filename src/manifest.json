@@ -223,7 +223,7 @@
                 "https://*.yandex.by/search*",
                 "https://searx.be/search*"
             ],
-            "js": ["webextension-polyfill", "content-script/index.js"],
+            "js": ["webextension-polyfill.js", "content-script/index.js"],
             "css": ["content-script/index.css"]
         }
     ]

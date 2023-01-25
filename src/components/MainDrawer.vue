@@ -3,8 +3,8 @@ import TabSearchList from "./TabSearchList.vue";
 import TabSearchTree from "./TabSearchTree.vue";
 import TabSettings from "./TabSettings.vue";
 
-import { ref, toRaw, inject, watch, Ref, ShallowReactive, provide } from "vue";
-import { VueI18nTranslation } from "vue-i18n";
+import { ref, toRaw, inject, watch, provide, Ref, ShallowReactive, onBeforeMount } from "vue";
+import { I18n, VueI18nTranslation } from "vue-i18n";
 import { Notification } from "@arco-design/web-vue";
 
 import { IConfig } from "./../types/config";
@@ -14,6 +14,8 @@ import { INotebooks, Data_fullTextSearchBlock } from "./../types/siyuan";
 import { Status, map } from "./../utils/status";
 import { Method, washNotebooks, SiyuanClient } from "./../utils/siyuan";
 import { Tree } from "./../utils/tree";
+
+import { Engine } from "../engine/Engine";
 
 const status = inject("status") as Ref<Status>; // 连接状态
 const message = inject("message") as Ref<string>; // 连接状态消息
@@ -78,7 +80,7 @@ async function search($t: VueI18nTranslation, keyword: boolean) {
     } catch (error) {
         console.warn(error);
         Notification.error({
-            // title: $t("search"),
+            title: $t("search"),
             content: String(error),
             closable: true,
             duration: 3000,
@@ -87,6 +89,30 @@ async function search($t: VueI18nTranslation, keyword: boolean) {
 }
 
 provide("keywords", keywords);
+
+// 初始化后再执行
+onBeforeMount(() => {
+    /* 浏览器扩展环境 */
+    if (import.meta.env.PROD) {
+        const loaded = inject("loaded") as Ref<boolean>; // 是否加载完成
+        const i18n = inject("i18n") as I18n; // 国际化引擎
+
+        const stop = watch(loaded, loaded => {
+            if (loaded) {
+                /* 关联搜索引擎 */
+                const engine = new Engine(q => {
+                    query.value = q;
+                    keywords.value = q.trim().split(/\s+/);
+
+                    search(i18n.global.t, config.search.method === Method.keyword);
+                });
+
+                provide("engine", engine);
+                stop(); // 停止监听
+            }
+        });
+    }
+});
 /* 👆 查询内容 👆 */
 </script>
 
