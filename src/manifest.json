@@ -212,7 +212,9 @@
                 "https://search.naver.com/search*",
                 "https://search.brave.com/search*",
                 "https://duckduckgo.com/*",
-                "https://www.baidu.com/*",
+                "https://www.startpage.com/do/search*",
+                "https://www.baidu.com/s*",
+                "https://yandex.com/search*",
                 "https://*.yandex.com/search*",
                 "https://*.yandex.ru/search*",
                 "https://*.yandex.com.tr/search*",
@@ -221,7 +223,7 @@
                 "https://*.yandex.by/search*",
                 "https://searx.be/search*"
             ],
-            "js": ["content-script/index.js"],
+            "js": ["webextension-polyfill", "content-script/index.js"],
             "css": ["content-script/index.css"]
         }
     ]

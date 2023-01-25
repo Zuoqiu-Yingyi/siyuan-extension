@@ -220,7 +220,7 @@ provide("keywords", keywords);
                         <!-- REF [Arco Design Vue](https://arco.design/vue/component/tooltip) -->
                         <!-- 显示思源服务源的文字气泡 -->
                         <a-tooltip
-                            :content="config.server.url.origin"
+                            :content="config.server.url"
                             position="bottom"
                             mini
                         >

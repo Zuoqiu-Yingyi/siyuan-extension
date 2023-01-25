@@ -1,4 +1,5 @@
 /src/test/custom.ts
+.env.development
 
 # Logs
 logs

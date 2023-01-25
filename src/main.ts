@@ -1,14 +1,13 @@
-import { createApp } from "vue";
-
-import App from "./App.vue";
-import "./style.css";
-
-import { createI18n } from "vue-i18n";
-
-import ArcoVue from "@arco-design/web-vue";
-import ArcoVueIcon from "@arco-design/web-vue/es/icon";
 import "@arco-design/web-vue/dist/arco.css";
 
+import "./style.css";
+
+import { createApp } from "vue";
+import { createI18n } from "vue-i18n";
+import ArcoVue from "@arco-design/web-vue";
+import ArcoVueIcon from "@arco-design/web-vue/es/icon";
+
+import App from "./App.vue";
 
 import { mapLocal } from "./utils/language";
 
@@ -16,6 +15,7 @@ import { mapLocal } from "./utils/language";
 import en from "./locales/en.json";
 import zh_Hans from "./locales/zh-Hans.json";
 import zh_Hant from "./locales/zh-Hant.json";
+
 const messages = {
     "en": en,
     "zh-Hans": zh_Hans,
@@ -42,6 +42,6 @@ app.use(ArcoVue); // Arco 组件库
 app.use(ArcoVueIcon); // Arco 组件库图标
 
 /* 添加 #app 元素 */
-const id = "app";
+const id = "siyuan-extension-app";
 globalThis.document.body.insertAdjacentHTML("beforeend", `<div id="${id}" style="display: none;"></div>`);
 app.mount(`#${id}`);

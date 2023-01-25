@@ -30,3 +30,4 @@
 - 更新配置文件 | Update configuration file.
 - vue-i18n 打包时仅打包运行时模块 | vue-i18n bundle the runtime only module.
 - 调整界面样式 | Adjust interface style.
+- 用户配置数据持久化 | User configuration data persistence.

@@ -2,7 +2,7 @@
 import DragBall from "./components/DragBall.vue";
 import MainDrawer from "./components/MainDrawer.vue";
 
-import { ref, provide, reactive, inject, watch, shallowReactive, computed } from "vue";
+import { ref, provide, reactive, unref, inject, watch, shallowReactive, computed, toRaw, WritableComputedRef } from "vue";
 import { I18n } from "vue-i18n";
 
 import { IConfig } from "./types/config";
@@ -10,11 +10,13 @@ import { IPreview } from "./types/preview";
 import { Data_fullTextSearchBlock, INotebooks } from "./types/siyuan";
 
 import { GroupBy, Method, OrderBy, SiyuanClient } from "./utils/siyuan";
+import { browser } from "./utils/browser";
 import { Status } from "./utils/status";
 import { mapLabel } from "./utils/language";
 import { Theme } from "./utils/theme";
 import { Icon } from "./utils/icon";
 import { Tree } from "./utils/tree";
+import { copy, merge } from "./utils/object";
 
 const i18n = inject("i18n") as I18n; // 国际化引擎
 
@@ -38,14 +40,14 @@ watch(
 );
 provide("notebooks", notebooks);
 
-/* 用户配置 */
-const config: IConfig = reactive({
+/* 用户默认配置 */
+const config_default: IConfig = {
     server: {
         protocol: "http",
         hostname: "localhost",
         port: 6806,
-        token: "",
-        url: new URL("http://localhost:6806"),
+        token: import.meta.env.VITE_TEST_TOKEN ?? "",
+        url: "http://localhost:6806",
     },
     search: {
         groupBy: GroupBy.group,
@@ -81,7 +83,7 @@ const config: IConfig = reactive({
     },
     other: {
         language: {
-            tag: i18n.global.locale,
+            tag: unref(i18n.global.locale),
             label: "",
         },
         languages: [
@@ -99,22 +101,65 @@ const config: IConfig = reactive({
             },
         ],
     },
-});
+};
+
+/* 用户配置 */
+const config: IConfig = reactive(copy(config_default));
+config.other.language.tag = i18n.global.locale;
+
+/* 用户配置列表 */
+const configs = reactive<Map<string, IConfig>>(new Map());
+const configs_entries = computed(() => Array.from(configs.entries()));
+
+/* 浏览器扩展环境 */
+if (import.meta.env.PROD) {
+    let loaded = false; // 持久化的数据是否已经加载完成
+
+    /* 从储存中读取用户配置列表 */
+    browser.storage.local
+        .get({
+            config: config_default,
+            configs: unref(configs_entries),
+        })
+        .then(items => {
+            /* 加载当前配置 */
+            merge(config, items.config ?? {});
+
+            /* 加载配置列表 */
+            configs.clear();
+            Object.values(items.configs as Record<number, [string, IConfig]>).forEach(([key, value]) => {
+                configs.set(key, value);
+            });
+
+            loaded = true;
+        });
+
+    /* 保存用户配置列表 */
+    watch(configs_entries, entries => {
+        if (loaded) {
+            browser.storage.local.set({
+                config: copy(config),
+                configs: copy(entries),
+            });
+        }
+    });
+}
 
 const status = ref(Status.normal); // 连接状态
 const message = ref(""); // 连接状态消息
 const version = ref(""); // 内核版本
 
-const client = new SiyuanClient(config.server.url, config.server.token, status, message);
+const client = new SiyuanClient(new URL(config.server.url), config.server.token, status, message);
 
 watch(
     [() => config.server.protocol, () => config.server.hostname, () => config.server.port, () => config.server.token],
     ([protocol, hostname, port]) => {
-        config.server.url.protocol = protocol;
-        config.server.url.hostname = hostname;
-        config.server.url.port = String(port);
+        notebooks.list.length = 0;
 
-        client.update(config.server.url, config.server.token);
+        const url = new URL(`${protocol}://${hostname}:${port}`);
+        config.server.url = url.origin;
+
+        client.update(url, config.server.token);
         setTimeout(async () => {
             try {
                 const r = await client.version();
@@ -135,8 +180,6 @@ watch(
     () => config.other.language.tag,
     tag => {
         config.other.language.label = mapLabel(tag);
-        // @ts-ignore
-        i18n.global.locale = tag in i18n.global.messages ? tag : i18n.global.fallbackLocale;
     },
     {
         immediate: true, // 立即执行一次
@@ -145,6 +188,8 @@ watch(
 
 // REF: [依赖注入 | Vue.js](https://cn.vuejs.org/guide/components/provide-inject.html#provide)
 provide("config", config);
+provide("configs", configs);
+provide("config_default", config_default);
 provide("client", client);
 provide("status", status);
 provide("message", message);
@@ -234,7 +279,7 @@ function onmoveEnd() {
         <!-- 打开抽屉的悬浮球 -->
         <drag-ball
             style="z-index: 1000"
-            :top="'2em'"
+            :top="'4em'"
             :right="'2em'"
         >
             <a-button
@@ -319,19 +364,5 @@ function onmoveEnd() {
             height: 100%;
         }
     }
-}
-
-.logo {
-    height: 6em;
-    padding: 1.5em;
-    will-change: filter;
-}
-
-.logo:hover {
-    filter: drop-shadow(0 0 2em #646cffaa);
-}
-
-.logo.vue:hover {
-    filter: drop-shadow(0 0 2em #42b883aa);
 }
 </style>

@@ -1,6 +1,6 @@
 <!-- REF [Arco Design Vue](https://arco.design/vue/component/tabs) -->
 <script setup lang="ts">
-import { inject, watch, ref, ShallowReactive } from "vue";
+import { inject, watch, ref, ShallowReactive, UnwrapNestedRefs, computed } from "vue";
 import { VueI18nTranslation } from "vue-i18n";
 
 import { Notification } from "@arco-design/web-vue";
@@ -8,8 +8,9 @@ import { Notification } from "@arco-design/web-vue";
 import { IConfig } from "./../types/config";
 import { INotebooks } from "./../types/siyuan";
 
-import { Method, GroupBy, OrderBy, Leaf, Container, washNotebooks, SiyuanClient } from "../utils/siyuan";
-import { Theme, THEME_MOD } from "../utils/theme";
+import { Method, GroupBy, OrderBy, Leaf, Container, washNotebooks, SiyuanClient } from "./../utils/siyuan";
+import { Theme, THEME_MOD } from "./../utils/theme";
+import { copy, merge } from "./../utils/object";
 
 const config = inject("config") as IConfig; // 用户配置
 const notebooks = inject("notebooks") as ShallowReactive<INotebooks>; // 笔记本列表
@@ -57,9 +58,9 @@ config.search.types.codeBlock && leafs_init.push(Leaf.c);
 config.search.types.htmlBlock && leafs_init.push(Leaf.html);
 config.search.types.embedBlock && leafs_init.push(Leaf.query_embed);
 
-const leaf = ref(leafs_init.length === 7); // 叶子块全选框状态
-const leaf_indeterminate = ref(leafs_init.length > 0 && leafs_init.length < 6); // 叶子块全选框状态是否未知
 const leafs = ref(leafs_init); // 叶子块复选框组状态列表
+const leaf = computed(() => leafs.value.length === 7); // 叶子块全选框状态
+const leaf_indeterminate = computed(() => leafs.value.length > 0 && leafs.value.length < 7); // 叶子块全选框状态是否未知
 
 const containers_init: Container[] = []; // 容器块初值
 config.search.types.document && containers_init.push(Container.d);
@@ -68,39 +69,21 @@ config.search.types.blockquote && containers_init.push(Container.b);
 config.search.types.list && containers_init.push(Container.l);
 config.search.types.listItem && containers_init.push(Container.i);
 
-const container = ref(containers_init.length === 5); // 容器块全选框状态
-const container_indeterminate = ref(containers_init.length > 0 && containers_init.length < 5); // 容器块全选框状态是否未知
 const containers = ref(containers_init); // 容器块复选框组状态列表
+const container = computed(() => containers.value.length === 5); // 容器块全选框状态
+const container_indeterminate = computed(() => containers.value.length > 0 && containers.value.length < 5); // 容器块全选框状态是否未知
 
 /* 处理叶子块全选 */
 function handleLeaf(value: boolean | (string | number | boolean)[]): void {
-    leaf_indeterminate.value = false;
     if (value) {
-        leaf.value = true;
         leafs.value = [Leaf.h, Leaf.p, Leaf.m, Leaf.t, Leaf.c, Leaf.html, Leaf.query_embed];
     } else {
-        leaf.value = false;
         leafs.value = [];
     }
 }
 
 /* 处理叶子块选择 */
 function handleLeafs(values: (string | number | boolean)[]): void {
-    switch (values.length) {
-        case 0:
-            leaf.value = false;
-            leaf_indeterminate.value = false;
-            break;
-        case 7:
-            leaf.value = true;
-            leaf_indeterminate.value = false;
-            break;
-        default:
-            leaf.value = false;
-            leaf_indeterminate.value = true;
-            break;
-    }
-
     config.search.types.heading = Leaf.h in values;
     config.search.types.paragraph = Leaf.p in values;
     config.search.types.mathBlock = Leaf.m in values;
@@ -112,34 +95,15 @@ function handleLeafs(values: (string | number | boolean)[]): void {
 
 /* 处理容器块全选 */
 function handleContainer(value: boolean | (string | number | boolean)[]): void {
-    container_indeterminate.value = false;
     if (value) {
-        container.value = true;
         containers.value = [Container.d, Container.s, Container.b, Container.l, Container.i];
     } else {
-        container.value = false;
         containers.value = [];
     }
 }
 
 /* 处理容器块选择 */
 function handleContainers(values: (string | number | boolean)[]): void {
-    switch (values.length) {
-        case 0:
-            container.value = false;
-            container_indeterminate.value = false;
-            break;
-        case 5:
-            container.value = true;
-            container_indeterminate.value = false;
-            break;
-
-        default:
-            container.value = false;
-            container_indeterminate.value = true;
-            break;
-    }
-
     config.search.types.document = Container.d in values;
     config.search.types.superBlock = Container.s in values;
     config.search.types.blockquote = Container.b in values;
@@ -151,6 +115,32 @@ function handleContainers(values: (string | number | boolean)[]): void {
 /* 👇 主题 👇 */
 const theme = inject("theme") as InstanceType<typeof Theme>; // 用户配置
 /* 👆 主题 👆 */
+
+/* 👇 配置列表 👇 */
+const configs = inject("configs") as UnwrapNestedRefs<Map<string, IConfig>>; // 用户配置列表
+const config_default = inject("config_default") as IConfig; // 用户默认配置
+const options = computed(() => [...configs.keys()]);
+const model_value = ref(""); // 选择框值
+
+function saveOnClick(): void {
+    configs.set(config.server.url, copy(config));
+    model_value.value = config.server.url;
+}
+
+function deleteOnClick(): void {
+    configs.delete(model_value.value);
+    model_value.value = "";
+}
+
+function resetOnClick(): void {
+    merge(config, config_default);
+    model_value.value = "";
+}
+
+function onChange(key: string | number | Record<string, any> | (string | number | Record<string, any>)[]): void {
+    merge(config, configs.get(key as string) as IConfig);
+}
+/* 👆 配置列表 👆 */
 </script>
 
 <template>
@@ -163,12 +153,65 @@ const theme = inject("theme") as InstanceType<typeof Theme>; // 用户配置
             {{ $t("user_settings") }}
         </template>
 
+        <a-space wrap>
+            <a-select
+                size="small"
+                :options="options"
+                v-model:model-value="model_value"
+                @change="onChange"
+            >
+            </a-select>
+
+            <!-- 保存 -->
+            <a-tooltip
+                size="small"
+                :content="$t('label.save')"
+            >
+                <a-button
+                    type="secondary"
+                    status="success"
+                    @click="saveOnClick"
+                >
+                    <icon-save />
+                </a-button>
+            </a-tooltip>
+
+            <!-- 删除 -->
+            <a-tooltip
+                size="small"
+                :content="$t('label.delete')"
+            >
+                <a-button
+                    type="secondary"
+                    status="warning"
+                    @click="deleteOnClick"
+                >
+                    <icon-delete />
+                </a-button>
+            </a-tooltip>
+
+            <!-- 重置 -->
+            <a-tooltip
+                size="small"
+                :content="$t('label.reset')"
+            >
+                <a-button
+                    type="secondary"
+                    status="normal"
+                    @click="resetOnClick"
+                    ><icon-reply
+                /></a-button>
+            </a-tooltip>
+        </a-space>
+
         <a-form
             class="form"
             size="mini"
             :model="{}"
             auto-label-width
         >
+            <!-- 保存的用户配置 -->
+
             <!-- REF [Arco Design Vue](https://arco.design/vue/component/collapse) -->
             <a-collapse>
                 <!-- 思源服务设置 -->
@@ -209,7 +252,7 @@ const theme = inject("theme") as InstanceType<typeof Theme>; // 用户配置
                         <!-- 端口号 -->
                         <a-input-number
                             style="min-width: 6em; max-width: 6em"
-                            v-model:model-value="config.server.port"
+                            v-model="config.server.port"
                             :min="1"
                             :max="65535"
                         >

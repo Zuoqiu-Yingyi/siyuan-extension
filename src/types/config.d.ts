@@ -1,13 +1,15 @@
 import { IPayload_fullTextSearchBlock } from "./siyuan"
 
+export interface IServer {
+    protocol: string,
+    hostname: string,
+    port: number,
+    token: string,
+    url: string,
+}
+
 export interface IConfig {
-    server: {
-        protocol: string,
-        hostname: string,
-        port: number,
-        token: string,
-        url: URL,
-    },
+    server: IServer,
     search: Omit<IPayload_fullTextSearchBlock, 'query'>, // 省略 query 属性
     render: {
         breadcrumb: {
@@ -27,6 +29,6 @@ export interface IConfig {
 }
 
 interface ILanguage {
-    tag: string, // 语言标识
+    tag: string | WritableComputedRef<string>, // 语言标识
     label: string, // 语言名称
 }

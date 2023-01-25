@@ -29,10 +29,12 @@ export default defineConfig({
                 {
                     assetFileNames: "firefox/content-script/index[extname]",
                     entryFileNames: "firefox/content-script/index.js",
+                    format: 'iife',
                 },
                 {
                     assetFileNames: "chromium/content-script/index[extname]",
                     entryFileNames: "chromium/content-script/index.js",
+                    format: 'iife',
                 },
                 {
                     assetFileNames: "assets/[name]-[hash][extname]",
@@ -44,19 +46,25 @@ export default defineConfig({
                     targets: [
                         {
                             src: "src/_locales/*",
-                            dest: "dist/firefox/_locales",
-                        },
-                        {
-                            src: "src/_locales/*",
-                            dest: "dist/chromium/_locales",
-                        },
-                        {
-                            src: "src/assets/*",
-                            dest: "dist/firefox/assets",
+                            dest: [
+                                "dist/firefox/_locales",
+                                "dist/chromium/_locales",
+                            ],
                         },
                         {
                             src: "src/assets/*",
-                            dest: "dist/chromium/assets",
+                            dest: [
+                                "dist/firefox/assets",
+                                "dist/chromium/assets",
+                            ],
+                        },
+                        {
+                            src: "node_modules/webextension-polyfill/dist/browser-polyfill.min.js",
+                            dest: [
+                                "dist/firefox",
+                                "dist/chromium",
+                            ],
+                            rename: "webextension-polyfill.js",
                         },
                         {
                             src: "src/manifest.v2.json",

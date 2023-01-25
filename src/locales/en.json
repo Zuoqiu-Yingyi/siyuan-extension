@@ -21,7 +21,10 @@
         "search_results_tree": "@:search_result @:tree",
         "unfold": "Unfold",
         "wrap_breadcrumb": "Breadcrumbs Wrap",
-        "wrap_breadcrumb_item": "Breadcrumb Items Wrap"
+        "wrap_breadcrumb_item": "Breadcrumb Items Wrap",
+        "save": "Save",
+        "reset": "Reset",
+        "delete": "Delete"
     },
     "language": "Language",
     "list": "List",

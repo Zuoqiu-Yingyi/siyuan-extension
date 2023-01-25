@@ -4,6 +4,7 @@ specifiers:
   '@arco-design/web-vue': ^2.41.1
   '@eslint/create-config': ^0.4.2
   '@intlify/unplugin-vue-i18n': ^0.8.1
+  '@types/webextension-polyfill': ^0.10.0
   '@typescript-eslint/eslint-plugin': ^5.48.0
   '@typescript-eslint/parser': ^5.48.0
   '@vitejs/plugin-vue': ^4.0.0
@@ -31,6 +32,7 @@ devDependencies:
   '@arco-design/web-vue': 2.41.1_vue@3.2.45
   '@eslint/create-config': 0.4.2
   '@intlify/unplugin-vue-i18n': 0.8.1_vue-i18n@9.2.2
+  '@types/webextension-polyfill': 0.10.0
   '@typescript-eslint/eslint-plugin': 5.48.0_k73wpmdolxikpyqun3p36akaaq
   '@typescript-eslint/parser': 5.48.0_iukboom6ndih5an6iafl45j2fe
   '@vitejs/plugin-vue': 4.0.0_vite@4.0.4+vue@3.2.45
@@ -511,6 +513,10 @@ packages:
 
   /@types/semver/7.3.13:
     resolution: {integrity: sha512-21cFJr9z3g5dW8B0CVI9g2O9beqaThGQ6ZFBqHfwhzLDKUxaqTIy3vnfah/UPkfOiF2pLq+tGz+W8RyCskuslw==}
+    dev: true
+
+  /@types/webextension-polyfill/0.10.0:
+    resolution: {integrity: sha512-If4EcaHzYTqcbNMp/FdReVdRmLL/Te42ivnJII551bYjhX19bWem5m14FERCqdJA732OloGuxCRvLBvcMGsn4A==}
     dev: true
 
   /@typescript-eslint/eslint-plugin/5.48.0_k73wpmdolxikpyqun3p36akaaq:
