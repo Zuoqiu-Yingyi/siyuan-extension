@@ -7,6 +7,7 @@
     "conect_success": "连接@:success",
     "content": "内容",
     "help": {
+        "auto_open": "页面加载后自动打开抽屉",
         "block_attrs_exist": "存在块属性",
         "search_empty": "暂无搜索结果",
         "search_march": "匹配的搜索结果",
@@ -15,16 +16,17 @@
     },
     "hostname": "IP 地址 {'|'} 域名 {'|'} 主机名",
     "label": {
+        "auto_open": "自动打开",
+        "delete": "删除",
         "fold": "折叠",
         "preview_focus": "预览聚焦",
+        "reset": "重置",
+        "save": "保存",
         "search_results_list": "@:search_result@:list",
         "search_results_tree": "@:search_result@:tree",
         "unfold": "展开",
         "wrap_breadcrumb": "面包屑换行",
-        "wrap_breadcrumb_item": "面包屑项换行",
-        "save": "保存",
-        "reset": "重置",
-        "delete": "删除"
+        "wrap_breadcrumb_item": "面包屑项换行"
     },
     "language": "语言",
     "list": "列表",

@@ -23,6 +23,7 @@ export interface IConfig {
         },
     },
     other: {
+        open: boolean, // 是否自动打开抽屉
         language: ILanguage,
         languages: ILanguage[],
     },

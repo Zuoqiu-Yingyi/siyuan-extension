@@ -137,7 +137,7 @@ function resetOnClick(): void {
     model_value.value = "";
 }
 
-function onChange(key: string | number | Record<string, any> | (string | number | Record<string, any>)[]): void {
+function onChange(key: string | number | Record<string, unknown> | (string | number | Record<string, unknown>)[]): void {
     merge(config, configs.get(key as string) as IConfig);
 }
 /* 👆 配置列表 👆 */
@@ -153,7 +153,7 @@ function onChange(key: string | number | Record<string, any> | (string | number 
             {{ $t("user_settings") }}
         </template>
 
-        <a-space wrap>
+        <a-space>
             <a-select
                 size="small"
                 :options="options"
@@ -168,6 +168,7 @@ function onChange(key: string | number | Record<string, any> | (string | number 
                 :content="$t('label.save')"
             >
                 <a-button
+                    size="mini"
                     type="secondary"
                     status="success"
                     @click="saveOnClick"
@@ -182,6 +183,7 @@ function onChange(key: string | number | Record<string, any> | (string | number 
                 :content="$t('label.delete')"
             >
                 <a-button
+                    size="mini"
                     type="secondary"
                     status="warning"
                     @click="deleteOnClick"
@@ -196,6 +198,7 @@ function onChange(key: string | number | Record<string, any> | (string | number 
                 :content="$t('label.reset')"
             >
                 <a-button
+                    size="mini"
                     type="secondary"
                     status="normal"
                     @click="resetOnClick"
@@ -392,6 +395,17 @@ function onChange(key: string | number | Record<string, any> | (string | number 
                     key="other"
                 >
                     <template #header>{{ $t("other_settings") }}</template>
+
+                    <!-- 自动展开抽屉 -->
+                    <a-form-item :label="$t('label.auto_open')">
+                        <template #help>{{ $t("help.auto_open") }}</template>
+
+                        <a-switch
+                            size="small"
+                            type="round"
+                            v-model:model-value="config.other.open"
+                        />
+                    </a-form-item>
 
                     <!-- 界面语言 -->
                     <a-form-item :label="$t('language')">

@@ -2,7 +2,7 @@
 import DragBall from "./components/DragBall.vue";
 import MainDrawer from "./components/MainDrawer.vue";
 
-import { ref, provide, reactive, unref, inject, watch, shallowReactive, computed, watchEffect, onMounted } from "vue";
+import { ref, provide, reactive, unref, inject, watch, shallowReactive, computed } from "vue";
 import { I18n } from "vue-i18n";
 import { Storage } from "webextension-polyfill";
 
@@ -83,6 +83,7 @@ const config_default: IConfig = {
         },
     },
     other: {
+        open: false,
         language: {
             tag: unref(i18n.global.locale),
             label: "",
@@ -125,6 +126,9 @@ if (import.meta.env.PROD) {
         .then(items => {
             /* 加载当前配置 */
             merge(config, items.config ?? {});
+
+            /* 是否自动展开抽屉 */
+            visible.value = config.other.open;
 
             /* 加载配置列表 */
             configs.clear();

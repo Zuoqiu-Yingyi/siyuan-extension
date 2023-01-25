@@ -7,6 +7,7 @@
     "conect_success": "Connect @:success",
     "content": "Content",
     "help": {
+        "auto_open": "Open the Drawer Automatically after the Page Loads",
         "block_attrs_exist": "Exise Block Attributes",
         "search_empty": "No Search Results",
         "search_march": "Matching Search Result",
@@ -15,16 +16,18 @@
     },
     "hostname": "IP Address {'|'} Domain Name {'|'} Host Name",
     "label": {
+        "auto_open": "Auto Open",
+        "default_tab": "Default Tab",
+        "delete": "Delete",
         "fold": "Fold",
         "preview_focus": "Preview Focus",
+        "reset": "Reset",
+        "save": "Save",
         "search_results_list": "@:search_result @:list",
         "search_results_tree": "@:search_result @:tree",
         "unfold": "Unfold",
         "wrap_breadcrumb": "Breadcrumbs Wrap",
-        "wrap_breadcrumb_item": "Breadcrumb Items Wrap",
-        "save": "Save",
-        "reset": "Reset",
-        "delete": "Delete"
+        "wrap_breadcrumb_item": "Breadcrumb Items Wrap"
     },
     "language": "Language",
     "list": "List",

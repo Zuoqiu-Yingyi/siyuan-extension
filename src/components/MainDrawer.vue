@@ -3,11 +3,13 @@ import TabSearchList from "./TabSearchList.vue";
 import TabSearchTree from "./TabSearchTree.vue";
 import TabSettings from "./TabSettings.vue";
 
-import { ref, toRaw, inject, watch, provide, Ref, ShallowReactive, onBeforeMount } from "vue";
+import { ref, toRaw, inject, watch, provide, Ref, ShallowReactive, onBeforeMount, unref } from "vue";
 import { I18n, VueI18nTranslation } from "vue-i18n";
 import { Notification } from "@arco-design/web-vue";
+import { Storage } from "webextension-polyfill";
 
 import { IConfig } from "./../types/config";
+import { browser } from "./../utils/browser";
 import { IPreview } from "./../types/preview";
 import { INotebooks, Data_fullTextSearchBlock } from "./../types/siyuan";
 
@@ -114,6 +116,40 @@ onBeforeMount(() => {
     }
 });
 /* 👆 查询内容 👆 */
+
+/* 👇 当前标签页 👇 */
+const tab = ref(1); // 当前激活的标签页
+
+/* 浏览器扩展环境 */
+if (import.meta.env.PROD) {
+    /* 从储存中读取悬浮球位置 */
+    browser.storage.local
+        .get({
+            tab: unref(tab),
+        })
+        .then(items => {
+            if (tab.value !== items.tab) tab.value = items.tab;
+        });
+
+    /* 监听悬浮球位置更改 */
+    browser.storage.local.onChanged.addListener((changes: Storage.StorageAreaOnChangedChangesType) => {
+        if (changes.tab) {
+            if (tab.value !== changes.tab.newValue) tab.value = changes.tab.newValue;
+        }
+    });
+}
+
+function tabsOnChange(key: number | string) {
+    /* 浏览器扩展环境 */
+    if (import.meta.env.PROD) {
+        browser.storage.local.set({
+            tab: key,
+        });
+    }
+}
+
+provide("tab", tab);
+/* 👆 当前标签页 👆 */
 </script>
 
 <template>
@@ -304,9 +340,11 @@ onBeforeMount(() => {
         <!-- REF [Arco Design Vue](https://arco.design/vue/component/tabs) -->
         <a-tabs
             class="tabs"
+            v-model:active-key="tab"
             :type="'card-gutter'"
             :size="'mini'"
             :justify="true"
+            @change="tabsOnChange"
         >
             <tab-search-list />
             <tab-search-tree />

@@ -32,3 +32,4 @@
 - 调整界面样式 | Adjust interface style.
 - 用户配置数据持久化 | User configuration data persistence.
 - 关联搜索引擎 | Associate search engine.
+- 记住当前标签页 | Remember the current tab.

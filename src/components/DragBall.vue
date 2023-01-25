@@ -1,6 +1,6 @@
 <!-- REF [Vue3+TS封装一个可任意拖拽的悬浮球组件，可拓展_codnan的博客-CSDN博客_vue3悬浮球](https://blog.csdn.net/annans/article/details/127427847) -->
 <script lang="ts" setup>
-import { ref, unref, watchEffect } from "vue";
+import { ref, unref } from "vue";
 import { Storage } from "webextension-polyfill";
 
 import { Position } from "./../utils/position";
