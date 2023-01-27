@@ -1,7 +1,9 @@
 <!-- REF [Arco Design Vue](https://arco.design/vue/component/tabs) -->
 <script setup lang="ts">
+import FileTreeSelect from "./FileTreeSelect.vue"
+
 import { inject, watch, ref, ShallowReactive, UnwrapNestedRefs, computed } from "vue";
-import { VueI18nTranslation } from "vue-i18n";
+import { useI18n } from "vue-i18n";
 
 import { Notification } from "@arco-design/web-vue";
 
@@ -12,12 +14,14 @@ import { Method, GroupBy, OrderBy, Leaf, Container, washNotebooks, SiyuanClient 
 import { Theme, THEME_MOD } from "./../utils/theme";
 import { copy, merge } from "./../utils/object";
 
+const { t: $t } = useI18n();
+
 const config = inject("config") as IConfig; // 用户配置
 const notebooks = inject("notebooks") as ShallowReactive<INotebooks>; // 笔记本列表
 const client = inject("client") as InstanceType<typeof SiyuanClient>; // 思源客户端
 
 /* 测试思源服务 */
-async function testSiyuanServer($t: VueI18nTranslation): Promise<void> {
+async function testSiyuanServer(): Promise<void> {
     // console.log(config.server.url);
     try {
         const response = await client.lsNotebooks();
@@ -160,6 +164,9 @@ function onChange(key: string | number | Record<string, unknown> | (string | num
                 v-model:model-value="model_value"
                 @change="onChange"
             >
+                <template #empty>
+                    <a-empty :description="$t('help.settings_empty')" />
+                </template>
             </a-select>
 
             <!-- 保存 -->
@@ -269,7 +276,7 @@ function onChange(key: string | number | Record<string, unknown> | (string | num
                         <!-- 令牌输入框 -->
                         <a-input-search
                             search-button
-                            @search="(_value: string, _e: MouseEvent) => testSiyuanServer($t)"
+                            @search="testSiyuanServer"
                             v-model:model-value="config.server.token"
                             placeholder="0123456789abcdef"
                         >
@@ -312,7 +319,7 @@ function onChange(key: string | number | Record<string, unknown> | (string | num
                     <!-- 排序方案 -->
                     <a-form-item :label="$t('search_config.orderBy.label')">
                         <template #help>{{ $t("search_config.orderBy.details") }}</template>
-
+                        
                         <a-select v-model:model-value="config.search.orderBy">
                             <a-optgroup :label="$t('content')">
                                 <a-option :value="OrderBy.type">{{ $t("search_config.orderBy.type") }}</a-option>
@@ -329,6 +336,12 @@ function onChange(key: string | number | Record<string, unknown> | (string | num
                                 <a-option :value="OrderBy.modifiedASC">{{ $t("search_config.orderBy.modifiedASC") }}</a-option>
                             </a-optgroup>
                         </a-select>
+                    </a-form-item>
+
+                    <!-- 指定搜索路径 -->
+                    <a-form-item :label="$t('search_config.path.label')">
+                        <template #help>{{ $t("search_config.path.details") }}</template>
+                        <file-tree-select />
                     </a-form-item>
 
                     <!-- 块类型筛选 -->

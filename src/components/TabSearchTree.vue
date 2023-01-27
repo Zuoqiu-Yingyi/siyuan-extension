@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { shallowRef, inject, watch, ShallowReactive, ComputedRef, Ref, computed } from "vue";
-import { VueI18nTranslation } from "vue-i18n";
+import { useI18n } from "vue-i18n";
+
 import { Notification, TreeNodeData } from "@arco-design/web-vue";
 
 import { IConfig } from "./../types/config";
@@ -9,6 +10,8 @@ import { Data_fullTextSearchBlock, Data_getBlockBreadcrumb, ID } from "./../type
 
 import { Tree, TreeNode } from "./../utils/tree";
 import { SiyuanClient } from "./../utils/siyuan";
+
+const { t: $t } = useI18n();
 
 /* 查询结果 */
 const config = inject("config") as IConfig; // 用户配置
@@ -30,7 +33,7 @@ watch(
 );
 
 /* 加载块级节点 */
-function load(node: TreeNodeData, $t: VueI18nTranslation): Promise<void> {
+function load(node: TreeNodeData): Promise<void> {
     return new Promise(resolve => {
         if (!(node.key as string).endsWith(".sy")) {
             resolve();
@@ -58,7 +61,6 @@ function load(node: TreeNodeData, $t: VueI18nTranslation): Promise<void> {
                 const keys = tree.updateBlocks(
                     node as TreeNode, // 文档节点
                     breadcrumbs as Data_getBlockBreadcrumb[][], // 每个块的面包屑
-                    $t, // i10n 方法
                 );
                 expanded_keys.value.push(...keys);
                 resolve();
@@ -133,7 +135,7 @@ function mark(html: string): string {
                 :custom-wrap="config.render.breadcrumb.item.wrap"
                 :data="tree.data"
                 :show-line="true"
-                :load-more="(node: TreeNodeData) => load(node, $t)"
+                :load-more="load"
                 v-model:expanded-keys="expanded_keys"
                 @select="onselect"
                 block-node

@@ -3,7 +3,7 @@
 import BreadcrumbPopover from "./BreadcrumbPopover.vue";
 
 import { inject, reactive, shallowReactive, watch, ShallowReactive, ComputedRef } from "vue";
-import { VueI18nTranslation } from "vue-i18n";
+import { useI18n } from "vue-i18n";
 import { Notification } from "@arco-design/web-vue";
 
 import { IPreview } from "./../types/preview";
@@ -12,6 +12,8 @@ import { INotebooks, Block_fullTextSearchBlock, Data_fullTextSearchBlock } from 
 import { SiyuanClient, BlockType, BlockSubType } from "./../utils/siyuan";
 import { IBreadcrumbItem, Separator } from "../utils/breadcrumb";
 import { Icon } from "../utils/icon";
+
+const { t: $t } = useI18n();
 
 /* 查询结果 */
 const results = inject("results") as ShallowReactive<Data_fullTextSearchBlock>; // 查询结果
@@ -86,7 +88,7 @@ watch(
 );
 
 /* 渲染指定的列表 */
-function onchange(index: number, $t: VueI18nTranslation): void {
+function onchange(index: number): void {
     /* 已渲染 */
     if (rendered[index]) return;
 
@@ -195,7 +197,7 @@ function onclick(block: Block_fullTextSearchBlock): void {
                     v-if="grouped"
                     class="content"
                     :bordered="false"
-                    @change="onchange(index, $t)"
+                    @change="onchange(index)"
                 >
                     <a-collapse-item
                         class="collapse-item"

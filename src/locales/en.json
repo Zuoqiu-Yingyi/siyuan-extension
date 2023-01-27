@@ -12,6 +12,7 @@
         "search_empty": "No Search Results",
         "search_march": "Matching Search Result",
         "server": "@:siyuan_server URL Origin",
+        "settings_empty": "No Saved Configurations",
         "token": "Available in @:path.token"
     },
     "hostname": "IP Address {'|'} Domain Name {'|'} Host Name",
@@ -87,6 +88,11 @@
             "sortByRankAsc": "Ascending by Relevance",
             "sortByRankDesc": "Descending by Relevance",
             "type": "Block Type"
+        },
+        "path": {
+            "details": "Search in One or More Directories",
+            "label": "Directories Searched",
+            "placeholder": "Global Search"
         }
     },
     "search_description": {

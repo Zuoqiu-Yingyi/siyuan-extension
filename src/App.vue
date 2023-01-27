@@ -2,7 +2,7 @@
 import DragBall from "./components/DragBall.vue";
 import MainDrawer from "./components/MainDrawer.vue";
 
-import { ref, provide, reactive, unref, inject, watch, shallowReactive, computed } from "vue";
+import { ref, provide, reactive, unref, inject, watch, shallowReactive, computed, WritableComputedRef } from "vue";
 import { I18n } from "vue-i18n";
 import { Storage } from "webextension-polyfill";
 
@@ -19,7 +19,16 @@ import { Icon } from "./utils/icon";
 import { Tree } from "./utils/tree";
 import { copy, merge } from "./utils/object";
 
+/* 国际化 */
 const i18n = inject("i18n") as I18n; // 国际化引擎
+watch(
+    i18n.global.locale as WritableComputedRef<string>,
+    locale => {
+        // REF: [Arco Design Vue](https://arco.design/vue/docs/pro/i18n)
+        localStorage.setItem('arco-locale', unref(locale));
+        console.log(locale);
+    },
+);
 
 /* 笔记本列表 */
 const notebooks = shallowReactive<INotebooks>({
@@ -362,6 +371,7 @@ function onmoveEnd() {
                 <a-layout
                     id="drawerContainer"
                     class="split-panel"
+                    style="background-color: var(--color-mask-bg)"
                 >
                     <!-- 抽屉内容 -->
                     <main-drawer

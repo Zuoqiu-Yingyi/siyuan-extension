@@ -4,7 +4,7 @@ import TabSearchTree from "./TabSearchTree.vue";
 import TabSettings from "./TabSettings.vue";
 
 import { ref, toRaw, inject, watch, provide, Ref, ShallowReactive, onBeforeMount, unref } from "vue";
-import { I18n, VueI18nTranslation } from "vue-i18n";
+import { useI18n } from "vue-i18n";
 import { Notification } from "@arco-design/web-vue";
 import { Storage } from "webextension-polyfill";
 
@@ -18,6 +18,8 @@ import { Method, washNotebooks, SiyuanClient } from "./../utils/siyuan";
 import { Tree } from "./../utils/tree";
 
 import { Engine } from "../engine/Engine";
+
+const { t: $t } = useI18n();
 
 const status = inject("status") as Ref<Status>; // 连接状态
 const message = inject("message") as Ref<string>; // 连接状态消息
@@ -53,7 +55,7 @@ const client = inject("client") as InstanceType<typeof SiyuanClient>; // 客户�
 const notebooks = inject("notebooks") as ShallowReactive<INotebooks>; // 笔记本列表
 
 /* 搜索 */
-async function search($t: VueI18nTranslation, keyword: boolean) {
+async function search(keyword: boolean) {
     try {
         const q = keyword ? keywords2query(keywords.value) : query.value;
         if (q.length === 0) {
@@ -97,7 +99,6 @@ onBeforeMount(() => {
     /* 浏览器扩展环境 */
     if (import.meta.env.PROD) {
         const loaded = inject("loaded") as Ref<boolean>; // 是否加载完成
-        const i18n = inject("i18n") as I18n; // 国际化引擎
 
         const stop = watch(loaded, loaded => {
             if (loaded) {
@@ -106,7 +107,7 @@ onBeforeMount(() => {
                     query.value = q;
                     keywords.value = q.trim().split(/\s+/);
 
-                    search(i18n.global.t, config.search.method === Method.keyword);
+                    search(config.search.method === Method.keyword);
                 });
 
                 provide("engine", engine);
@@ -322,7 +323,7 @@ provide("tab", tab);
                     size="mini"
                     v-model:model-value="keywords"
                     :placeholder="$t('search')"
-                    @change="search($t, true)"
+                    @change="search(true)"
                     allow-clear
                 />
                 <a-input
@@ -331,7 +332,7 @@ provide("tab", tab);
                     size="mini"
                     v-model:model-value="query"
                     :placeholder="$t('search')"
-                    @change="search($t, false)"
+                    @change="search(false)"
                     allow-clear
                 />
             </div>

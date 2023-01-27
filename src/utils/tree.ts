@@ -5,7 +5,7 @@ export {
     Tree,
 };
 
-import { VueI18nTranslation } from "vue-i18n";
+import { useI18n, VueI18nTranslation } from "vue-i18n";
 import {
     h,
     ref,
@@ -41,12 +41,14 @@ import {
 } from "./siyuan";
 
 interface TreeNode extends TreeNodeData {
-    key: string | number;
+    key: string;
     title: string;
     isLeaf: boolean;
 }
 
 class Tree {
+    protected $t: VueI18nTranslation;
+
     constructor(
         results: ShallowReactive<Data_fullTextSearchBlock>,
         protected _notebooks: ShallowReactive<INotebooks>, // 笔记本
@@ -54,6 +56,9 @@ class Tree {
         public map: Map<string, TreeNode> = new Map(), // ID => 树节点]
         public signal = ref(0), // 更新信号, 每次更新时取反, 用于触发组件更新
     ) {
+        const { t: $t } = useI18n();
+        this.$t = $t;
+
         watch(
             () => results.blocks,
             blocks => this._updateDoc(blocks),
@@ -137,13 +142,11 @@ class Tree {
      * 更新块级树
      * @params node: 文档节点
      * @params breadcrumbs: 文档内各块的面包屑
-     * @params $t: 本地化函数
      * @return : 更新的节点 key 列表
      */
     public updateBlocks(
         node: TreeNode,
         breadcrumbs: Data_getBlockBreadcrumb[][],
-        $t: VueI18nTranslation,
     ): string[] {
         const keys: string[] = []; // 更新的节点 key 列表
         breadcrumbs.forEach(breadcrumb => {
@@ -172,7 +175,7 @@ class Tree {
                                 case BlockType.NodeIFrame:
                                 case BlockType.NodeWidget:
                                 case BlockType.NodeBlockQueryEmbed:
-                                    return $t(`types.${child.type}`);
+                                    return this.$t(`types.${child.type}`);
                                 default:
                                     return child.name;
                             }
