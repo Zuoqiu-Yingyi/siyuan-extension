@@ -4,7 +4,8 @@ import {
     OrderBy,
     BlockType,
     BlockSubType,
-} from "../utils/siyuan";
+    SortMode,
+} from "./../utils/siyuan";
 
 export type ID = string; // ID 类型
 
@@ -160,4 +161,44 @@ export interface IResponse_searchDocs {
 	code: number;
 	msg: string;
     data: Data_searchDocs[];
+}
+
+// api/filetree/listDocsByPath
+
+export interface IPayload_listDocsByPath {
+	notebook: string;
+	path: string;
+	sort: number;
+}
+
+export interface File {
+	path: string;
+	name: string;
+	icon: string;
+	name1: string;
+	alias: string;
+	memo: string;
+	bookmark: string;
+	id: string;
+	count: number;
+	size: number;
+	hSize: string;
+	mtime: number;
+	ctime: number;
+	hMtime: string;
+	hCtime: string;
+    sort: SortMode;
+	subFileCount: number;
+}
+
+export interface Data_listDocsByPath {
+	box: string;
+	files: File[];
+	path: string;
+}
+
+export interface IResponse_listDocsByPath {
+	code: number;
+	msg: string;
+    data: Data_listDocsByPath;
 }

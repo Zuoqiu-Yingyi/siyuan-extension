@@ -5,10 +5,11 @@ import { Notification, TreeNodeData } from "@arco-design/web-vue";
 
 import { updateNotebooks, SiyuanClient } from "./../utils/siyuan";
 
-import { INotebooks } from "./../types/siyuan";
+import { INotebooks, IPayload_listDocsByPath } from "./../types/siyuan";
 import { IConfig } from "./../types/config";
 
-import { DocTree } from "./../utils/doctree";
+import { DocTree, Mode } from "./../utils/doctree";
+import { SortMode } from "./../utils/siyuan";
 import { TreeNode } from "./../utils/tree";
 
 const { t: $t } = useI18n();
@@ -20,7 +21,34 @@ const notebooks = inject("notebooks") as ShallowReactive<INotebooks>; // 笔记�
 const doctree = new DocTree(notebooks); // 文档树对象
 
 /* 动态加载文档树 */
-async function onLoadMore(node: TreeNodeData): Promise<void> {}
+async function onLoadMore(node: TreeNode): Promise<void> {
+    // doctree.mode = Mode.default;
+    try {
+        const paths = node.key.split("/");
+        const payload: IPayload_listDocsByPath = {
+            notebook: paths[0],
+            path: "",
+            sort: SortMode.SortModeCustom,
+        };
+        if (paths.length === 1) {
+            // 笔记本
+            payload.path = "/";
+        } else {
+            // 文档
+            payload.path = `/${paths.slice(1).join("/")}`;
+        }
+        const response = await client.listDocsByPath(payload);
+        doctree.updateNode(node, response.data.files, new URL(config.server.url));
+    } catch (error) {
+        console.warn(error);
+        Notification.error({
+            title: $t("search"),
+            content: String(error),
+            closable: true,
+            duration: 3000,
+        });
+    }
+}
 
 /* 清空输入框 */
 async function onclear(): Promise<void> {
@@ -31,11 +59,13 @@ async function onclear(): Promise<void> {
 /* 搜索 */
 async function onsearch(k: string): Promise<void> {
     if (k.length === 0) {
+        // if (doctree.mode === Mode.default) return;
         await onclear();
     } else {
+        // doctree.mode = Mode.search;
         try {
-            const response = await client.searchDocs({ k });
             await updateNotebooks(notebooks, client);
+            const response = await client.searchDocs({ k });
             doctree.parseSearchDocs(response.data);
         } catch (error) {
             console.warn(error);
@@ -64,7 +94,7 @@ function onPopupVisibleChange(visible: boolean) {
         :allow-clear="true"
         :allow-search="true"
         :placeholder="$t('search_config.path.placeholder')"
-        :load-more="onLoadMore"
+        :load-more="(node: TreeNodeData) => onLoadMore(node as TreeNode)"
         :tree-props="{
             showLine: true,
         }"

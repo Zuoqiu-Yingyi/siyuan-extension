@@ -7,6 +7,7 @@ export {
     Method,
     GroupBy,
     OrderBy,
+    SortMode,
 
     washNotebooks,
     updateNotebooks,
@@ -33,6 +34,9 @@ import {
 
     IPayload_searchDocs,
     IResponse_searchDocs,
+
+    IPayload_listDocsByPath,
+    IResponse_listDocsByPath,
 } from "./../types/siyuan";
 
 /* 叶子块 */
@@ -143,6 +147,28 @@ enum MODE {
     desktop = "desktop",
     export = "export",
     mobile = "mobile",
+}
+
+/**
+ * 文档排序方案
+ * REF: [util package - github.com/siyuan-note/siyuan/kernel/util - Go Packages](https://pkg.go.dev/github.com/siyuan-note/siyuan/kernel/util)
+ */
+enum SortMode {
+    SortModeNameASC,         // 0：文件名字母升序
+    SortModeNameDESC,        // 1：文件名字母降序
+    SortModeUpdatedASC,      // 2：文件更新时间升序
+    SortModeUpdatedDESC,     // 3：文件更新时间降序
+    SortModeAlphanumASC,     // 4：文件名自然数升序
+    SortModeAlphanumDESC,    // 5：文件名自然数降序
+    SortModeCustom,          // 6：自定义排序
+    SortModeRefCountASC,     // 7：引用数升序
+    SortModeRefCountDESC,    // 8：引用数降序
+    SortModeCreatedASC,      // 9：文件创建时间升序
+    SortModeCreatedDESC,     // 10：文件创建时间降序
+    SortModeSizeASC,         // 11：文件大小升序
+    SortModeSizeDESC,        // 12：文件大小降序
+    SortModeSubDocCountASC,  // 13：子文档数升序
+    SortModeSubDocCountDESC, // 14：子文档数降序
 }
 
 /**
@@ -273,6 +299,12 @@ class SiyuanClient {
     /* 搜索文档 */
     public async searchDocs(payload: IPayload_searchDocs): Promise<IResponse_searchDocs> {
         const response = await this._request("/api/filetree/searchDocs", payload) as IResponse_searchDocs;
+        return response;
+    }
+
+    /* 查询子文档 */
+    public async listDocsByPath(payload: IPayload_listDocsByPath): Promise<IResponse_listDocsByPath> {
+        const response = await this._request("/api/filetree/listDocsByPath", payload) as IResponse_listDocsByPath;
         return response;
     }
 

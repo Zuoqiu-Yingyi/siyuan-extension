@@ -23,7 +23,10 @@ import {
 
     IPayload_searchDocs,
     IResponse_searchDocs,
-} from "../types/siyuan";
+
+    IPayload_listDocsByPath,
+    IResponse_listDocsByPath,
+} from "./../types/siyuan";
 
 import {
     GroupBy,
@@ -146,5 +149,16 @@ describe("APIs Test", async () => {
         const response = await client.searchDocs(payload);
         expect(response?.code).toEqual(0);
         expectTypeOf(response).toEqualTypeOf<IResponse_searchDocs>();
+    });
+
+    test("/api/filetree/listDocsByPath", async () => {
+        const payload: IPayload_listDocsByPath = {
+            notebook: "20210808180117-czj9bvb",
+            path: "/",
+            sort: 6,
+        };
+        const response = await client.listDocsByPath(payload);
+        expect(response?.code).toEqual(0);
+        expectTypeOf(response).toEqualTypeOf<IResponse_listDocsByPath>();
     });
 });

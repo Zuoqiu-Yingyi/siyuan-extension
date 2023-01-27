@@ -13,7 +13,7 @@ class Icon {
      * @return: 解码后字符串 / span 标签 HTML
      */
     public static utf32Decode(hex: string, wrap = false, className = "icon"): string {
-        const icon = String.fromCodePoint(parseInt(hex, 16));
+        const icon = hex.length > 0 ? String.fromCodePoint(parseInt(hex, 16)) : "🖺";
         return wrap ? `<span class="${className}">${icon}</span>` : icon;
     }
 
@@ -29,7 +29,7 @@ class Icon {
     }
 
     public static icon2emojis(icon: string, url: URL): string {
-        return /^[0-9a-f]+$/.test(icon) ? Icon.utf32Decode(icon, true) : Icon.icon2img(icon, url);
+        return /^[0-9a-f]*$/.test(icon) ? Icon.utf32Decode(icon, true) : Icon.icon2img(icon, url);
     }
 
     public static default = {

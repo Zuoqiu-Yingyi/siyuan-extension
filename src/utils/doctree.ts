@@ -3,10 +3,11 @@ export {
     DocTree,
 };
 
-import { ShallowReactive, reactive, ref, watch, h, unref } from "vue";
+import { ShallowReactive, reactive, ref, watch, h } from "vue";
 import { useI18n, VueI18nTranslation } from "vue-i18n";
 
-import { Data_searchDocs, ID, INotebooks, Notebook } from "./../types/siyuan";
+import { Data_searchDocs, ID, INotebooks, Notebook, File } from "./../types/siyuan";
+import { Icon } from "./icon";
 import { TreeNode } from "./tree";
 
 enum Mode {
@@ -21,8 +22,8 @@ class DocTree {
     constructor(
         protected _notebooks: ShallowReactive<INotebooks>, // 笔记本
         public data = reactive<TreeNode[]>([]), // 树形数据(key: 完整 path)
-        public map: Map<string, TreeNode> = new Map(), // ID => 树节点
-        public mode = ref<Mode>(Mode.default), // 模式
+        public map: Map<ID, TreeNode> = new Map(), // ID => 树节点
+        public mode = Mode.default, // 模式
     ) {
         const { t: $t } = useI18n();
         this.$t = $t;
@@ -53,6 +54,24 @@ class DocTree {
         });
 
         this.data.push(...roots);
+    }
+
+    /* 更新节点 */
+    public updateNode(node: TreeNode, files: File[], url: URL) {
+        const children: TreeNode[] = [];
+        files.forEach(file => {
+            /* 新节点 */
+            const child: TreeNode = {
+                key: `${node.key}/${file.id}`,
+                // title: `${node.title}/${file.name.substring(0, file.name.length - 3)}`,
+                title: file.name.substring(0, file.name.length - 3),
+                icon: () => [h("span", { innerHTML: Icon.icon2emojis(file.icon, url) })],
+                isLeaf: file.subFileCount === 0,
+            };
+            children.push(child);
+            this.map.set(file.id, child);
+        });
+        node.children = children;
     }
 
     /* 解析搜索的文档 */
@@ -99,7 +118,8 @@ class DocTree {
                 /* 新节点 */
                 const child: TreeNode = {
                     key: paths.slice(0, depth + 2).join("/"),
-                    title: hPaths.slice(0, depth + 2).join("/"),
+                    // title: hPaths.slice(0, depth + 2).join("/"),
+                    title: hPaths[depth + 1],
                     isLeaf: true,
                 };
                 this.map.set(paths[depth + 1], child);
