@@ -71,7 +71,7 @@ export interface IPayload_fullTextSearchBlock {
     groupBy: GroupBy; // 搜索结果分组方案
     method: Method; // 搜索方案
     orderBy: OrderBy; // 搜索结果排序方案
-    paths: ID[]; // 指定搜索路径(以 *.sy 结尾不包含子文档)
+    paths: string[]; // 指定搜索路径(以 *.sy 结尾不包含子文档)
     query: string; // 查询语句
     types: BlockTypes; // 搜索块类型
 }
@@ -141,4 +141,23 @@ export interface IResponse_getBlockBreadcrumb {
 	code: number;
 	msg: string;
     data: Data_getBlockBreadcrumb[];
+}
+
+// /api/filetree/searchDocs
+
+export interface IPayload_searchDocs {
+	k: string;
+}
+
+export interface Data_searchDocs {
+	box: string;
+	boxIcon: string;
+	hPath: string;
+	path: string;
+}
+
+export interface IResponse_searchDocs {
+	code: number;
+	msg: string;
+    data: Data_searchDocs[];
 }

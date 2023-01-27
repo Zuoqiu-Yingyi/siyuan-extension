@@ -53,7 +53,7 @@ class Tree {
         results: ShallowReactive<Data_fullTextSearchBlock>,
         protected _notebooks: ShallowReactive<INotebooks>, // 笔记本
         public data: UnwrapNestedRefs<TreeNode[]> = reactive([]), // 树形数据
-        public map: Map<string, TreeNode> = new Map(), // ID => 树节点]
+        public map: Map<string, TreeNode> = new Map(), // ID => 树节点
         public signal = ref(0), // 更新信号, 每次更新时取反, 用于触发组件更新
     ) {
         const { t: $t } = useI18n();
@@ -91,6 +91,7 @@ class Tree {
         });
 
         /* 使用笔记本构造树的根节点列表 */
+        const roots: TreeNode[] = [];
         this._notebooks.list.forEach(notebook => {
             const node: TreeNode = {
                 key: notebook.id,
@@ -99,9 +100,10 @@ class Tree {
                 icon: () => [h("span", { innerHTML: notebook.icon })],
                 children: [],
             };
-            this.data.push(node);
+            roots.push(node);
             this.map.set(notebook.id, node);
         });
+        this.data.push(...roots);
 
         /* 构造文档级别的树 */
         docs.forEach(doc => {
@@ -225,7 +227,7 @@ class Tree {
         const paths = block.path.split("/"); // "ID" 为文件夹(存在子文档), "ID.sy" 为文档(存在子块)
         const hPaths = block.hPath.split("/"); // 可读路径
 
-        if (paths.length !== hPaths.length) throw new Error(`Path length mismatch: path="${block.path}", hPath="${hPaths}"`);
+        if (paths.length !== hPaths.length) throw new Error(`Path length mismatch: path="${block.path}", hPath="${block.hPath}"`);
 
         /* 作为文件夹(存在子文档) */
         for (let i = 1, len = paths.length - 1; i < len; ++i) {

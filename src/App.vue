@@ -170,7 +170,7 @@ const client = new SiyuanClient(new URL(config.server.url), config.server.token,
 watch(
     [() => config.server.protocol, () => config.server.hostname, () => config.server.port, () => config.server.token],
     ([protocol, hostname, port]) => {
-        notebooks.list.length = 0;
+        notebooks.list.length = 0; // 思源服务源更改, 删除原笔记本列表
 
         const url = new URL(`${protocol}://${hostname}:${port}`);
         config.server.url = url.origin;

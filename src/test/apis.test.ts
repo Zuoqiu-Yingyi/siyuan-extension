@@ -11,13 +11,18 @@ import {
 } from "./custom";
 
 import {
-    IPayload_fullTextSearchBlock,
-    IPayload_getBlockBreadcrumb,
-
     IResponse_version,
+
     IResponse_lsNotebooks,
+
+    IPayload_fullTextSearchBlock,
     IResponse_fullTextSearchBlock,
+
+    IPayload_getBlockBreadcrumb,
     IResponse_getBlockBreadcrumb,
+
+    IPayload_searchDocs,
+    IResponse_searchDocs,
 } from "../types/siyuan";
 
 import {
@@ -134,5 +139,12 @@ describe("APIs Test", async () => {
         const response = await client.getBlockBreadcrumb(payload);
         expect(response?.code).toEqual(0);
         expectTypeOf(response).toEqualTypeOf<IResponse_getBlockBreadcrumb>();
+    });
+
+    test("/api/filetree/searchDocs", async () => {
+        const payload: IPayload_searchDocs = { k: "测试" };
+        const response = await client.searchDocs(payload);
+        expect(response?.code).toEqual(0);
+        expectTypeOf(response).toEqualTypeOf<IResponse_searchDocs>();
     });
 });

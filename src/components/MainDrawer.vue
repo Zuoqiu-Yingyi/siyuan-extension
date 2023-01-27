@@ -14,7 +14,7 @@ import { IPreview } from "./../types/preview";
 import { INotebooks, Data_fullTextSearchBlock } from "./../types/siyuan";
 
 import { Status, map } from "./../utils/status";
-import { Method, washNotebooks, SiyuanClient } from "./../utils/siyuan";
+import { Method, updateNotebooks, SiyuanClient } from "./../utils/siyuan";
 import { Tree } from "./../utils/tree";
 
 import { Engine } from "../engine/Engine";
@@ -65,10 +65,7 @@ async function search(keyword: boolean) {
             return;
         }
 
-        if (notebooks.list.length === 0) {
-            const response = await client.lsNotebooks();
-            notebooks.list = washNotebooks(response.data.notebooks);
-        }
+        await updateNotebooks(notebooks, client);
 
         // REF [响应式 API：进阶 toRay() | Vue.js](https://cn.vuejs.org/api/reactivity-advanced.html#toraw)
         // REF [响应式 API：工具函数 unref() | Vue.js](https://cn.vuejs.org/api/reactivity-utilities.html#unref)

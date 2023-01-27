@@ -9,21 +9,30 @@ export {
     OrderBy,
 
     washNotebooks,
+    updateNotebooks,
 
     SiyuanClient,
 };
 
-import { Ref } from "vue";
+import { Ref, ShallowReactive } from "vue";
 import { Status } from "./status";
 import {
     Notebook,
+    INotebooks,
+
     IResponse,
+
     IResponse_version,
     IResponse_lsNotebooks,
+
     IPayload_fullTextSearchBlock,
     IResponse_fullTextSearchBlock,
+
     IPayload_getBlockBreadcrumb,
     IResponse_getBlockBreadcrumb,
+
+    IPayload_searchDocs,
+    IResponse_searchDocs,
 } from "./../types/siyuan";
 
 /* 叶子块 */
@@ -145,6 +154,17 @@ function washNotebooks(notebooks: Notebook[]): Notebook[] {
     return notebooks.filter(notebook => !notebook.closed).sort((a, b) => a.sort - b.sort);
 }
 
+/* 更新笔记本列表 */
+async function updateNotebooks(
+    notebooks: ShallowReactive<INotebooks>,
+    client: InstanceType<typeof SiyuanClient>,
+) {
+    if (notebooks.list.length === 0) {
+        const response = await client.lsNotebooks();
+        notebooks.list = washNotebooks(response.data.notebooks);
+    }
+}
+
 class SiyuanClient {
 
     public readonly method: string = "POST"; // 请求方法
@@ -247,6 +267,12 @@ class SiyuanClient {
     /* 获得指定块的面包屑 */
     public async getBlockBreadcrumb(payload: IPayload_getBlockBreadcrumb): Promise<IResponse_getBlockBreadcrumb> {
         const response = await this._request("/api/block/getBlockBreadcrumb", payload) as IResponse_getBlockBreadcrumb;
+        return response;
+    }
+
+    /* 搜索文档 */
+    public async searchDocs(payload: IPayload_searchDocs): Promise<IResponse_searchDocs> {
+        const response = await this._request("/api/filetree/searchDocs", payload) as IResponse_searchDocs;
         return response;
     }
 
