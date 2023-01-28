@@ -35,3 +35,4 @@
 - 记住当前标签页 | Remember the current tab.
 - 重构 i10n 函数调用方式 | Refactor i10n function invocation method.
 - 支持在指定目录下搜索 | Support searching in a specified directories.
+- 修复在指定目录下搜索时无法正确显示文档问题 | Fix the problem that the document cannot be displayed correctly when searching in a specified directory.

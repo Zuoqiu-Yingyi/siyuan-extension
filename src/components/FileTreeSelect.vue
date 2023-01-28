@@ -1,13 +1,12 @@
 <script setup lang="ts">
-import { inject, ShallowReactive } from "vue";
+import { inject, ref, ShallowReactive } from "vue";
 import { useI18n } from "vue-i18n";
 import { Notification, TreeNodeData } from "@arco-design/web-vue";
-
-import { updateNotebooks, SiyuanClient } from "./../utils/siyuan";
 
 import { INotebooks, IPayload_listDocsByPath } from "./../types/siyuan";
 import { IConfig } from "./../types/config";
 
+import { updateNotebooks, SiyuanClient } from "./../utils/siyuan";
 import { DocTree, Mode } from "./../utils/doctree";
 import { SortMode } from "./../utils/siyuan";
 import { TreeNode } from "./../utils/tree";
@@ -19,6 +18,7 @@ const client = inject("client") as InstanceType<typeof SiyuanClient>; // 客户�
 const notebooks = inject("notebooks") as ShallowReactive<INotebooks>; // 笔记本列表
 
 const doctree = new DocTree(notebooks); // 文档树对象
+const expanded_keys = ref<string[]>([]); // 展开的节点
 
 /* 动态加载文档树 */
 async function onLoadMore(node: TreeNode): Promise<void> {
@@ -60,13 +60,20 @@ async function onclear(): Promise<void> {
 async function onsearch(k: string): Promise<void> {
     if (k.length === 0) {
         // if (doctree.mode === Mode.default) return;
-        await onclear();
+        onclear();
     } else {
         // doctree.mode = Mode.search;
         try {
             await updateNotebooks(notebooks, client);
             const response = await client.searchDocs({ k });
             doctree.parseSearchDocs(response.data);
+            expanded_keys.value = (() => {
+                const keys: string[] = [];
+                for (const node of doctree.map.values()) {
+                    if (!node.disabled ?? false) keys.push(node.key);
+                }
+                return keys;
+            })();
         } catch (error) {
             console.warn(error);
             Notification.error({
@@ -87,16 +94,19 @@ function onPopupVisibleChange(visible: boolean) {
 
 <template>
     <a-tree-select
+        size="mini"
         dropdown-class-name="tree-select-dropdown"
         v-model:model-value="config.search.paths"
         :multiple="true"
         :data="doctree.data"
         :allow-clear="true"
         :allow-search="true"
+        :disable-filter="true"
         :placeholder="$t('search_config.path.placeholder')"
         :load-more="(node: TreeNodeData) => onLoadMore(node as TreeNode)"
         :tree-props="{
             showLine: true,
+            expandedKeys: expanded_keys,
         }"
         @clear="onclear"
         @search="onsearch"
