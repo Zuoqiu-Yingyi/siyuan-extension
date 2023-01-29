@@ -108,7 +108,7 @@ const config_default: IConfig = {
             },
             {
                 tag: "zh-Hant",
-                label: "繁体中文",
+                label: "繁體中文",
             },
         ],
     },
@@ -406,6 +406,7 @@ function onmoveEnd() {
             position: relative;
             width: 100%;
             height: 100%;
+            background-color: var(--color-bg-1);
         }
     }
 }
