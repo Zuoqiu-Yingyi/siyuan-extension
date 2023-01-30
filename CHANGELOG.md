@@ -38,3 +38,4 @@
 - 修复在指定目录下搜索时无法正确显示文档问题 | Fix the problem that the document cannot be displayed correctly when searching in a specified directory.
 - 目录选择框支持自动展开搜索结果 | Directory selection box supports automatic expansion of search results.
 - 优化搜索结果不按文档分组时的渲染样式 | Optimize the rendering style when the search results are not grouped by document.
+- 生产环境构建时使用 `rollup-plugin-clear` 插件清空 `dist` 目录 | Use `rollup-plugin-clear` plugin to empty `dist` directory when building in production environment.

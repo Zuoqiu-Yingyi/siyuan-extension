@@ -15,6 +15,7 @@ specifiers:
   eslint-plugin-vue: ^9.8.0
   less: ^4.1.3
   prettier: ^2.8.2
+  rollup-plugin-clear: ^2.0.7
   rollup-plugin-copy: ^3.4.0
   typescript: ^4.9.3
   vite: ^4.0.0
@@ -43,6 +44,7 @@ devDependencies:
   eslint-plugin-vue: 9.8.0_eslint@8.31.0
   less: 4.1.3
   prettier: 2.8.2
+  rollup-plugin-clear: 2.0.7
   rollup-plugin-copy: 3.4.0
   typescript: 4.9.4
   vite: 4.0.4_less@4.1.3
@@ -2000,11 +2002,24 @@ packages:
     engines: {iojs: '>=1.0.0', node: '>=0.10.0'}
     dev: true
 
+  /rimraf/2.7.1:
+    resolution: {integrity: sha512-uWjbaKIK3T1OSVptzX7Nl6PvQ3qAGtKEtVRjRuazjfL3Bx5eI409VZSqgND+4UNnmzLVdPj9FqFJNPqBZFve4w==}
+    hasBin: true
+    dependencies:
+      glob: 7.2.3
+    dev: true
+
   /rimraf/3.0.2:
     resolution: {integrity: sha512-JZkJMZkAGFFPP2YqXZXPbMlMBgsxzE8ILs4lMIX/2o0L9UBw9O/Y3o6wFw/i9YLapcUJWwqbi3kdxIPdC62TIA==}
     hasBin: true
     dependencies:
       glob: 7.2.3
+    dev: true
+
+  /rollup-plugin-clear/2.0.7:
+    resolution: {integrity: sha512-Hg8NC3JcJBO1ofgyQC0IACpyKn/yhHPGZ3C7R3ubNGWUXy9JXHQrewk4J4hVcZznw6SOKayLsaNae596Rwt8Vg==}
+    dependencies:
+      rimraf: 2.7.1
     dev: true
 
   /rollup-plugin-copy/3.4.0:
