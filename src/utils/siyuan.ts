@@ -9,6 +9,7 @@ export {
     OrderBy,
     SortMode,
 
+    openSiyuanURL,
     washNotebooks,
     updateNotebooks,
 
@@ -37,6 +38,7 @@ import {
 
     IPayload_listDocsByPath,
     IResponse_listDocsByPath,
+    ID,
 } from "./../types/siyuan";
 
 /* 叶子块 */
@@ -169,6 +171,13 @@ enum SortMode {
     SortModeSizeDESC,        // 12：文件大小降序
     SortModeSubDocCountASC,  // 13：子文档数升序
     SortModeSubDocCountDESC, // 14：子文档数降序
+}
+
+/* 打开思源 URL */
+function openSiyuanURL(id: ID, focus = false): void {
+    const url = new URL(`siyuan://blocks/${id}`);
+    if (focus) url.searchParams.set("focus", "1");
+    window.open(url, "_blank");
 }
 
 /**

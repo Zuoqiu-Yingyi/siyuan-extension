@@ -9,7 +9,7 @@ import { Notification } from "@arco-design/web-vue";
 import { IPreview } from "./../types/preview";
 import { INotebooks, Block_fullTextSearchBlock, Data_fullTextSearchBlock } from "./../types/siyuan";
 
-import { SiyuanClient, BlockType, BlockSubType } from "./../utils/siyuan";
+import { SiyuanClient, BlockType, BlockSubType, openSiyuanURL } from "./../utils/siyuan";
 import { IBreadcrumbItem, Separator } from "../utils/breadcrumb";
 import { Icon } from "../utils/icon";
 
@@ -30,7 +30,7 @@ function doc2routes(doc: Block_fullTextSearchBlock): IBreadcrumbItem[] {
     const paths = doc.path.substring(0, doc.path.lastIndexOf(".")).split("/"); // 文档 ID 路径
     const hPaths = doc.hPath.split("/"); // 可读路径
     hPaths[0] = notebooks.map.get(doc.box)?.name as string; // 笔记名
-    hPaths[hPaths.length - 1] = doc.content.toString(); // 当前文档名
+    if (doc.type === BlockType.NodeDocument) hPaths[hPaths.length - 1] = doc.content.toString(); // 当前文档名
 
     /* 路由 */
     const routes: IBreadcrumbItem[] = [];
@@ -174,6 +174,11 @@ function onclick(block: Block_fullTextSearchBlock): void {
     preview.id = block.id;
     preview.display = true;
 }
+
+/* 双击节点-在思源中打开 */
+function ondblclick(block: Block_fullTextSearchBlock) {
+    openSiyuanURL(block.id, preview.focus);
+}
 </script>
 
 <template>
@@ -261,11 +266,44 @@ function onclick(block: Block_fullTextSearchBlock): void {
                 </a-collapse>
 
                 <!-- 未分组 -->
-                <div
+                <!-- 使用文本气泡显示完整内容 -->
+                <a-tooltip
                     v-else
                     class="content"
-                    v-html="item.content"
-                ></div>
+                    position="left"
+                    :mini="true"
+                >
+                    <a-layout
+                        class="content-layout"
+                        @click="onclick(item)"
+                        @dblclick="ondblclick(item)"
+                    >
+                        <!-- 文档面包屑 -->
+                        <a-layout-header>
+                            <breadcrumb-popover
+                                class="doc"
+                                :block="item"
+                                :routes="doc2routes(item)"
+                            />
+                        </a-layout-header>
+
+                        <!-- 文档内容 -->
+                        <a-layout-content>
+                            <span
+                                class="content-ellipsis"
+                                v-html="item.content"
+                            ></span>
+                        </a-layout-content>
+                    </a-layout>
+
+                    <!-- 气泡内容 -->
+                    <template #content>
+                        <span
+                            class="descriptions"
+                            v-html="item.content"
+                        ></span>
+                    </template>
+                </a-tooltip>
             </a-list-item>
         </template>
     </a-list>
@@ -278,8 +316,20 @@ function onclick(block: Block_fullTextSearchBlock): void {
         width: 100%;
         overflow-x: auto;
         scrollbar-width: none;
+        border: 1px solid var(--color-border-3);
+
         &::-webkit-scrollbar {
             display: none;
+        }
+
+        .content-layout {
+            padding: 0.5em;
+
+            .content-ellipsis {
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                width: 100%;
+            }
         }
 
         .collapse-item {

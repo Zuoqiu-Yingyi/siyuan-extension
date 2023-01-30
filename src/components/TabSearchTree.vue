@@ -6,10 +6,10 @@ import { Notification, TreeNodeData } from "@arco-design/web-vue";
 
 import { IConfig } from "./../types/config";
 import { IPreview } from "./../types/preview";
-import { Data_fullTextSearchBlock, Data_getBlockBreadcrumb, ID } from "./../types/siyuan";
+import { Block_fullTextSearchBlock, Data_fullTextSearchBlock, Data_getBlockBreadcrumb, ID } from "./../types/siyuan";
 
 import { Tree, TreeNode } from "./../utils/tree";
-import { SiyuanClient } from "./../utils/siyuan";
+import { openSiyuanURL, SiyuanClient } from "./../utils/siyuan";
 
 const { t: $t } = useI18n();
 
@@ -90,8 +90,8 @@ function onselect(selectedKeys: Array<string | number>, data: { selected?: boole
 }
 
 /* 双击节点-在思源中打开 */
-function ondblclick(id: ID): void {
-    window.open(`siyuan://blocks/${id}`, "_blank");
+function ondblclick(block: Block_fullTextSearchBlock) {
+    openSiyuanURL(block.id, preview.focus);
 }
 
 const keys = computed(() => Array.from(new Set(keywords.value)).sort((a, b) => b.length - a.length)); // 关键字列表(按长度降序, 去重)
@@ -144,7 +144,7 @@ function mark(html: string): string {
                     <span
                         class="title"
                         v-html="mark(node.title)"
-                        @dblclick="ondblclick(node.key)"
+                        @dblclick="ondblclick(node)"
                     ></span>
                 </template>
             </a-tree>
