@@ -8,6 +8,7 @@ import copy from "rollup-plugin-copy"
 import clear from "rollup-plugin-clear"
 
 const OUR_DIR = "dist"; // 输出目录
+const RELEASE_DIR = "release"; // 发布目录
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -48,7 +49,10 @@ export default defineConfig({
             ],
             plugins: [
                 clear({
-                    targets: [OUR_DIR],
+                    targets: [
+                        OUR_DIR,
+                        RELEASE_DIR,
+                    ],
                 }),
                 copy({
                     targets: [
