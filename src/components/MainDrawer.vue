@@ -78,6 +78,15 @@ async function search(keyword: boolean) {
         results.blocks = response.data.blocks;
         results.matchedRootCount = response.data.matchedRootCount;
         results.matchedBlockCount = response.data.matchedBlockCount;
+
+        /* 是否自动展开抽屉 */
+        if (
+            !visible.value && // 当前未展开
+            config.other.open && // 开启自动展开
+            results.matchedBlockCount > 0 // 搜索结果数量非空
+        ) {
+            visible.value = true;
+        }
     } catch (error) {
         console.warn(error);
         Notification.error({

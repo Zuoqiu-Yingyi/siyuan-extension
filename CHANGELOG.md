@@ -40,3 +40,4 @@
 - 优化搜索结果不按文档分组时的渲染样式 | Optimize the rendering style when the search results are not grouped by document.
 - 生产环境构建时使用 `rollup-plugin-clear` 插件清空 `dist` 目录 | Use `rollup-plugin-clear` plugin to empty `dist` directory when building in production environment.
 - 生产环境使用 `archiver` 打包构建产物 | Use `archiver` to package build artifacts in production environment.
+- 更改自动展开抽屉时机为搜索结果加载完成 | Change the time of automatic expansion of the drawer to when the search results are loaded.

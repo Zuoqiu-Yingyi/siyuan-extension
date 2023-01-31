@@ -136,9 +136,6 @@ if (import.meta.env.PROD) {
             /* 加载当前配置 */
             merge(config, items.config ?? {});
 
-            /* 是否自动展开抽屉 */
-            visible.value = config.other.open;
-
             /* 加载配置列表 */
             configs.clear();
             Object.values(items.configs as Record<number, [string, IConfig]>).forEach(([key, value]) => {
