@@ -20,9 +20,9 @@ async function pack(source, target) {
 }
 
 async function release() {
-    fs.mkdirSync(`./${RELEASE_DIR}/`);
-    await pack(`./${OUR_DIR}/chromium`, `./${RELEASE_DIR}/chromium.zip`);
-    await pack(`./${OUR_DIR}/firefox`, `./${RELEASE_DIR}/firefox.zip`);
+    fs.mkdirSync(`./${RELEASE_DIR}/`, { recursive: true }); // 创建发行目录
+    await pack(`./${OUR_DIR}/chromium`, `./${RELEASE_DIR}/chromium.zip`); // 打包 chromium 扩展
+    await pack(`./${OUR_DIR}/firefox`, `./${RELEASE_DIR}/firefox.zip`); // 打包 firefox 扩展
 }
 
 release();

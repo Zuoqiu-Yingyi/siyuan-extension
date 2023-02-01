@@ -33,13 +33,13 @@ export default defineConfig({
             // REF https://rollupjs.org/guide/en/#big-list-of-options
             output: [
                 {
-                    assetFileNames: "firefox/content-script/index[extname]",
-                    entryFileNames: "firefox/content-script/index.js",
+                    assetFileNames: "firefox/content-script/search[extname]",
+                    entryFileNames: "firefox/content-script/search.js",
                     // format: 'iife',
                 },
                 {
-                    assetFileNames: "chromium/content-script/index[extname]",
-                    entryFileNames: "chromium/content-script/index.js",
+                    assetFileNames: "chromium/content-script/search[extname]",
+                    entryFileNames: "chromium/content-script/search.js",
                     // format: 'iife',
                 },
                 {
@@ -71,12 +71,11 @@ export default defineConfig({
                             ],
                         },
                         {
-                            src: "node_modules/webextension-polyfill/dist/browser-polyfill.min.js",
+                            src: "node_modules/webextension-polyfill/dist/browser-polyfill.js",
                             dest: [
-                                "dist/firefox",
-                                "dist/chromium",
+                                "dist/firefox/lib",
+                                "dist/chromium/lib",
                             ],
-                            rename: "webextension-polyfill.js",
                         },
                         {
                             src: "src/manifest.v2.json",
