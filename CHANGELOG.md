@@ -42,3 +42,4 @@
 - 生产环境使用 `archiver` 打包构建产物 | Use `archiver` to package build artifacts in production environment.
 - 更改自动展开抽屉时机为搜索结果加载完成 | Change the time of automatic expansion of the drawer to when the search results are loaded.
 - 调整构建配置 | Adjust build configuration.
+- 新增 API `/api/storage/getRecentDocs` | Add API `/api/storage/getRecentDocs`.

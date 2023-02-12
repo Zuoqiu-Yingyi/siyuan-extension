@@ -15,6 +15,8 @@ import {
 
     IResponse_lsNotebooks,
 
+    IResponse_getRecentDocs,
+
     IPayload_fullTextSearchBlock,
     IResponse_fullTextSearchBlock,
 
@@ -55,6 +57,12 @@ describe("APIs Test", async () => {
         const response = await client.lsNotebooks();
         expect(response?.code).toEqual(0);
         expectTypeOf(response).toEqualTypeOf<IResponse_lsNotebooks>();
+    });
+
+    test("/api/storage/getRecentDocs", async () => {
+        const response = await client.getRecentDocs();
+        expect(response?.code).toEqual(0);
+        expectTypeOf(response).toEqualTypeOf<IResponse_getRecentDocs>();
     });
 
     test.each((() => {

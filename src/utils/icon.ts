@@ -13,7 +13,7 @@ class Icon {
      * @return: 解码后字符串 / span 标签 HTML
      */
     public static utf32Decode(hex: string, wrap = false, className = "icon"): string {
-        const icon = hex.length > 0 ? String.fromCodePoint(parseInt(hex, 16)) : "🖺";
+        const icon = hex.length > 0 ? String.fromCodePoint(parseInt(hex, 16)) : Icon.default.document.text;
         return wrap ? `<span class="${className}">${icon}</span>` : icon;
     }
 
@@ -36,6 +36,10 @@ class Icon {
         notebook: {
             text: "📔",
             wrap: `<span class="icon">📔</span>`,
+        },
+        document: {
+            text: "📄",
+            wrap: `<span class="icon">📄</span>`,
         },
     };
 }

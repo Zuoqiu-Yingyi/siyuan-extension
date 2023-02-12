@@ -2,7 +2,7 @@
     "name": "__MSG_app_name__",
     "description": "__MSG_app_description__",
     "homepage_url": "https://github.com/Zuoqiu-Yingyi/siyuan-extension",
-    "version": "0.1.0",
+    "version": "0.0.0",
     "manifest_version": 3,
     "default_locale": "en",
     "icons": {
