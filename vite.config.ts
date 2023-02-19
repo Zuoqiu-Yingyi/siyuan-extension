@@ -51,7 +51,6 @@ export default defineConfig({
                 clear({
                     targets: [
                         OUR_DIR,
-                        RELEASE_DIR,
                     ],
                 }),
                 copy({

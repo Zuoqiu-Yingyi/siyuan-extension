@@ -2,7 +2,7 @@
     "name": "__MSG_app_name__",
     "description": "__MSG_app_description__",
     "homepage_url": "https://github.com/Zuoqiu-Yingyi/siyuan-extension",
-    "version": "0.0.0",
+    "version": "0.1.0",
     "manifest_version": 2,
     "default_locale": "en",
     "icons": {
@@ -10,7 +10,10 @@
         "128": "assets/siyuan-128.png",
         "512": "assets/siyuan-512.png"
     },
-    "permissions": ["storage", "*://*/*"],
+    "permissions": [
+        "storage",
+        "*://*/*"
+    ],
     "content_scripts": [
         {
             "matches": [
@@ -223,8 +226,13 @@
                 "https://*.yandex.by/search*",
                 "https://searx.be/search*"
             ],
-            "js": ["lib/browser-polyfill.js", "content-script/search.js"],
-            "css": ["content-script/search.css"]
+            "js": [
+                "lib/browser-polyfill.js",
+                "content-script/search.js"
+            ],
+            "css": [
+                "content-script/search.css"
+            ]
         }
     ]
 }
