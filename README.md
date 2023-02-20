@@ -1,20 +1,33 @@
 # siyuan-extension
 
+<center>
+
+[![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/Zuoqiu-Yingyi/siyuan-extension?include_prereleases&style=flat-square)](https://github.com/Zuoqiu-Yingyi/siyuan-extension/releases/latest)
+[![GitHub Release Date](https://img.shields.io/github/release-date/Zuoqiu-Yingyi/siyuan-extension?style=flat-square)](https://github.com/Zuoqiu-Yingyi/siyuan-extension/releases/latest)
+[![GitHub License](https://img.shields.io/github/license/Zuoqiu-Yingyi/siyuan-extension?style=flat-square)](https://github.com/Zuoqiu-Yingyi/siyuan-extension/blob/main/LICENSE)
+[![GitHub last commit](https://img.shields.io/github/last-commit/Zuoqiu-Yingyi/siyuan-extension?style=flat-square)](https://github.com/Zuoqiu-Yingyi/siyuan-extension/commits/main)
+![GitHub repo size](https://img.shields.io/github/repo-size/Zuoqiu-Yingyi/siyuan-extension?style=flat-square)
+![hits](https://hits.b3log.org/Zuoqiu-Yingyi/siyuan-extension.svg)
+[![GitHub all releases](https://img.shields.io/github/downloads/Zuoqiu-Yingyi/siyuan-extension/total?style=flat-square)](https://github.com/Zuoqiu-Yingyi/siyuan-extension/releases)
+
+</center>
+
 A browser extension for SiYuan | 思源笔记浏览器插件
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+## 预览 | PREVIEW
 
-## Recommended IDE Setup
+## 介绍 | INTRODUCTION
 
-- [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+### 功能介绍 | FUNCTIONAL DESCRIPTION
 
-## Type Support For `.vue` Imports in TS
+### 自定义配置 | CUSTOM CONFIG
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin) to make the TypeScript language service aware of `.vue` types.
+## 开始 | START
 
-If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has also implemented a [Take Over Mode](https://github.com/johnsoncodehk/volar/discussions/471#discussioncomment-1361669) that is more performant. You can enable it by the following steps:
+## 参考 & 感谢 | REFERENCE & THANKS
 
-1. Disable the built-in TypeScript Extension
-   1. Run `Extensions: Show Built-in Extensions` from VSCode's command palette
-   2. Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
-2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.
+## 依赖 | DEPENDENCIES
+
+## 更改日志 | CHANGE LOGS
+
+[CHANGELOG](./CHANGELOG.md)
