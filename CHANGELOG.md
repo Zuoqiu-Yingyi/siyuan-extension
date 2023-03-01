@@ -44,3 +44,4 @@
 - 调整构建配置 | Adjust build configuration.
 - 新增 API `/api/storage/getRecentDocs` | Add API `/api/storage/getRecentDocs`.
 - 调整打包配置 | Adjust packaging configuration.
+- 调整抽屉蒙版颜色 | Adjust the color of the drawer mask.

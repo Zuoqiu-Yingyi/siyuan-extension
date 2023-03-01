@@ -350,7 +350,6 @@ function onmoveEnd() {
                 <!-- 模仿抽屉的遮罩 -->
                 <a-layout
                     class="split-panel"
-                    style="background-color: var(--color-mask-bg)"
                     @click.self="visible = !visible"
                 >
                     <a-layout-content v-if="preview.display">
@@ -368,7 +367,6 @@ function onmoveEnd() {
                 <a-layout
                     id="drawerContainer"
                     class="split-panel"
-                    style="background-color: var(--color-mask-bg)"
                 >
                     <!-- 抽屉内容 -->
                     <main-drawer
@@ -398,6 +396,8 @@ function onmoveEnd() {
         width: 100%;
         height: 100%;
         overflow: hidden;
+        // background-color: var(--color-mask-bg);
+        background-color: #2222;
 
         #preview {
             position: relative;
