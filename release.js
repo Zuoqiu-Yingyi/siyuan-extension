@@ -40,8 +40,8 @@ async function pack(source, target) {
 async function release() {
     const version = getVersion();
     fs.mkdirSync(`./${RELEASE_DIR}/`, { recursive: true }); // 创建发行目录
-    await pack(`./${OUR_DIR}/chromium`, `./${RELEASE_DIR}/chromium-v${version}.zip`); // 打包 chromium 扩展
-    await pack(`./${OUR_DIR}/firefox`, `./${RELEASE_DIR}/firefox-v${version}.zip`); // 打包 firefox 扩展
+    await pack(`./${OUR_DIR}/chromium`, `./${RELEASE_DIR}/siyuan-extension-chromium-v${version}.zip`); // 打包 chromium 扩展
+    await pack(`./${OUR_DIR}/firefox`, `./${RELEASE_DIR}/siyuan-extension-firefox-v${version}.zip`); // 打包 firefox 扩展
 }
 
 release();
